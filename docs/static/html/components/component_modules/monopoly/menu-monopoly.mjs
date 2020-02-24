@@ -189,7 +189,7 @@ export default {
                         }
 
                         for (let i = 0; i < 40; i++) {
-                           let sq = payload['square'][i];
+                            let sq = payload['square'][i];
                             if (sq.owner == p.index) {
                                 // Mortgaged properties will be tranfered by bankruptcyUnmortgage();
                                 if (!sq.mortgage) {
@@ -265,9 +265,9 @@ export default {
                             </div>
                             `, action:async function(obj, payload) {
 
-                              await auction['get']({type:'communityChestAction', communityChestIndex: communityChestIndex}, payload);
+                                    await auction['get']({type:'communityChestAction', communityChestIndex: communityChestIndex}, payload);
 
-                              }}, payload)
+                                }}, payload)
                             /*
                             await mInterface['get']({type:'popup', HTML:"<img src='./static/html/components/main-manager/images/community_chest_icon.png' style='height: 6vw; width: 6vw; float: left; margin: 0.781vw 0.781vw 0.781vw 0;' /> <div></div><div style='font-weight: bold; font-size: 3vw; '>Community Chest:</div><div style='text-align: justify;'>" + payload['communityChestCards'][communityChestIndex].text + "</div></div>", action:async function(obj, payload) {
 
@@ -700,7 +700,7 @@ export default {
                     break
                 case 'addPropertyToAuctionQueue':
                     (async (obj,payload, rest)=>{
-                    payload['auctionQueue'].push(obj['propertyIndex']);
+                        payload['auctionQueue'].push(obj['propertyIndex']);
                     })(obj, payload, rest)
                     break
                 case 'showdeed':
@@ -893,15 +893,15 @@ Auction
                     break
                 case'trade':
                     (async (obj,payload, rest)=>{
-                            // console.assert(false, obj)
-                            trade['staticProperty']['initiator'] = obj['initiator']
-                            trade['staticProperty']['recipient'] = obj['recipient']
-                            trade['staticProperty']['property'] =  obj['property']
-                            trade['staticProperty']['money'] = obj['money']
-                            trade['staticProperty']['communityChestJailCard'] = obj['communityChestJailCard']
-                            trade['staticProperty']['chanceJailCard'] = obj['chanceJailCard']
-                            payload['tradeObj'] =  trade['staticProperty']
-                            payload['reversedTrade'] = trade['staticProperty']
+                        // console.assert(false, obj)
+                        trade['staticProperty']['initiator'] = obj['initiator']
+                        trade['staticProperty']['recipient'] = obj['recipient']
+                        trade['staticProperty']['property'] =  obj['property']
+                        trade['staticProperty']['money'] = obj['money']
+                        trade['staticProperty']['communityChestJailCard'] = obj['communityChestJailCard']
+                        trade['staticProperty']['chanceJailCard'] = obj['chanceJailCard']
+                        payload['tradeObj'] =  trade['staticProperty']
+                        payload['reversedTrade'] = trade['staticProperty']
                         await mInterface['get']({type:'setTrade', obj:trade['staticProperty']}, payload)
                         out(payload)
                     })(obj,payload, rest)
@@ -1050,7 +1050,7 @@ Auction
                             if (isNaN(payload['this'].getElementById("trade-leftp-money").value)) {
                                 payload['this'].getElementById("trade-leftp-money").value = "This value must be a number.";
                                 payload['this'].getElementById("trade-leftp-money").style.color = "red";
-                             out(false)
+                                out(false)
                             }else{
 
                                 if (isNaN(payload['this'].getElementById("trade-rightp-money").value)) {
@@ -1244,7 +1244,7 @@ Auction
                                     let cost = property.price;
 
                                     if (p.money >= cost) {
-                                       let auctionQueue = []
+                                        let auctionQueue = []
                                         for(let i =0; i < payload['auctionQueue'].length;i++){
                                             if(payload['auctionQueue'][i] === p['position']){
 
@@ -1464,7 +1464,7 @@ Auction
                         let p = payload['player'][payload['turn']];
                         p.pay(obj['amount'], 0, payload);
                         await mInterface['get']({type:'addAlert', value:`${p.name} lost $ ${obj['amount']} from ${obj['cause']}.`}, payload);
-                      out(payload)
+                        out(payload)
                     })(obj,payload, rest)
                     break
                 case 'gobackthreespaces':
@@ -1617,11 +1617,11 @@ Auction
                     break
                 case 'getDie':
                     (async (obj, payload, rest)=>{
-                            if (obj['value'] === 1) {
-                                 out(  payload['die1'])
-                            } else {
-                                out(  payload['die2'])
-                            }
+                        if (obj['value'] === 1) {
+                            out(  payload['die1'])
+                        } else {
+                            out(  payload['die2'])
+                        }
                     })(obj, payload, rest)
                     break
                 case 'updateDice':
@@ -1631,82 +1631,82 @@ Auction
                         let die1 =   payload['die2'];
 
 
-                    payload['this'].querySelector('#die0').style.display = 'flex'
-                    payload['this'].querySelector('#die1').style.display = 'flex'
+                        payload['this'].querySelector('#die0').style.display = 'flex'
+                        payload['this'].querySelector('#die1').style.display = 'flex'
 
-                    if (payload['this'].images) {
-                        var element0 = payload['this'].getElementById("die0");
-                        var element1 = payload['this'].getElementById("die1");
+                        if (payload['this'].images) {
+                            var element0 = payload['this'].getElementById("die0");
+                            var element1 = payload['this'].getElementById("die1");
 
-                        element0.classList.remove("die-no-img");
-                        element1.classList.remove("die-no-img");
+                            element0.classList.remove("die-no-img");
+                            element1.classList.remove("die-no-img");
 
-                        element0.title = "Die (" + die0 + " spots)";
-                        element1.title = "Die (" + die1 + " spots)";
+                            element0.title = "Die (" + die0 + " spots)";
+                            element1.title = "Die (" + die1 + " spots)";
 
-                        if (element0.firstChild) {
-                            element0 = element0.firstChild;
+                            if (element0.firstChild) {
+                                element0 = element0.firstChild;
+                            } else {
+                                element0 = element0.appendChild(document.createElement("img"));
+                            }
+                            console.assert(false)
+                            element0.src = "/images/Die_" + die0 + ".png";
+                            element0.alt = die0;
+
+                            if (element1.firstChild) {
+                                element1 = element1.firstChild;
+                            } else {
+                                element1 = element1.appendChild(document.createElement("img"));
+                            }
+
+                            element1.src = "images/Die_" + die1 + ".png";
+                            element1.alt = die0;
                         } else {
-                            element0 = element0.appendChild(document.createElement("img"));
+                            payload['this'].getElementById("die0").textContent = die0;
+                            payload['this'].getElementById("die1").textContent = die1;
+
+                            payload['this'].getElementById("die0").title = "Die";
+                            payload['this'].getElementById("die1").title = "Die";
                         }
-                        console.assert(false)
-                        element0.src = "/images/Die_" + die0 + ".png";
-                        element0.alt = die0;
-
-                        if (element1.firstChild) {
-                            element1 = element1.firstChild;
-                        } else {
-                            element1 = element1.appendChild(document.createElement("img"));
-                        }
-
-                        element1.src = "images/Die_" + die1 + ".png";
-                        element1.alt = die0;
-                    } else {
-                        payload['this'].getElementById("die0").textContent = die0;
-                        payload['this'].getElementById("die1").textContent = die1;
-
-                        payload['this'].getElementById("die0").title = "Die";
-                        payload['this'].getElementById("die1").title = "Die";
-                    }
-                    out(payload)
+                        out(payload)
                     })(obj, payload, rest)
                     break
                 case 'updateMoney':
                     (async (obj, payload, rest)=>{
-                    var p = payload['player'][payload['turn']];
+                        var p = payload['player'][payload['turn']];
 
-                    payload['this'].getElementById("pmoney").innerHTML = "$" + p.money;
+                        payload['this'].getElementById("pmoney").innerHTML = "$" + p.money;
 
-                    payload['this'].querySelector('.money-bar-row').style.display = 'none'
+                        payload['this'].querySelector('.money-bar-row').style.display = 'none'
 
 
-                    for (var i = 1; i <= payload['pcount']; i++) {
-                       let p_i = payload['player'][i];
+                        for (var i = 1; i <= payload['pcount']; i++) {
+                            let p_i = payload['player'][i];
 
-                        payload['this'].querySelector(`#moneybarrow${i}`).style.display = 'flex'
-                        payload['this'].getElementById("p" + i + "moneybar").style.border = "2px solid " + p_i.color;
-                        payload['this'].getElementById("p" + i + "money").innerHTML = p_i.money;
-                        payload['this'].getElementById("p" + i + "moneyname").innerHTML = p_i.name;
-                    }
-                    // show("moneybarrow9"); // Don't remove this line or make the first for-loop stop when i <= 8, because this affects how the table is displayed.
+                            payload['this'].querySelector(`#moneybarrow${i}`).style.display = 'flex'
+                            payload['this'].getElementById("p" + i + "moneybar").style.border = "2px solid " + p_i.color;
+                            payload['this'].getElementById("p" + i + "money").innerHTML = p_i.money;
+                            payload['this'].getElementById("p" + i + "moneyname").innerHTML = p_i.name;
+                        }
+                        // show("moneybarrow9"); // Don't remove this line or make the first for-loop stop when i <= 8, because this affects how the table is displayed.
 
-                    if (payload['this'].getElementById("landed").innerHTML === "") {
-                        payload['this'].querySelector('#landed').style.display = 'none'
-                    }
+                        if (payload['this'].getElementById("landed").innerHTML === "") {
+                            payload['this'].querySelector('#landed').style.display = 'none'
+                        }
 
-                    payload['this'].getElementById("quickstats").style.borderColor = p.color;
+                        payload['this'].getElementById("quickstats").style.borderColor = p.color;
 
-                    if (p.money < 0) {
-                        // payload['this'].getElementById("nextbutton").disabled = true;
-                        payload['this'].querySelector('#resignbutton').style.display = 'flex'
-                        payload['this'].querySelector('#nextbutton').style.display = 'none'
-                    } else {
-                        // payload['this'].getElementById("nextbutton").disabled = false;
-                        payload['this'].querySelector('#resignbutton').style.display = 'none'
-                        payload['this'].querySelector('#nextbutton').style.display = 'flex'
-                    }
-                    out(payload)
-            })(obj, payload, rest)
+                        if (p.money < 0) {
+                            // payload['this'].getElementById("nextbutton").disabled = true;
+                            payload['this'].querySelector('#resignbutton').style.display = 'flex'
+                            payload['this'].querySelector('#nextbutton').style.display = 'none'
+                        } else {
+                            // payload['this'].getElementById("nextbutton").disabled = false;
+                            payload['this'].querySelector('#resignbutton').style.display = 'none'
+                            payload['this'].querySelector('#nextbutton').style.display = 'flex'
+                        }
+                        out(payload)
+                    })(obj, payload, rest)
                     break
                 case 'addAlert':
                     (async (obj,payload, rest)=>{
@@ -2428,12 +2428,12 @@ Auction
                                             }else{
                                                 // Allow backspace, tab, delete, arrow keys, or if control was pressed, respectively.
                                                 if (key === 8 || key === 9 || key === 46 || (key >= 35 && key <= 40) || isCtrl) {
-                                                   out(true)
+                                                    out(true)
                                                 }else{
 
 
                                                     if (isShift) {
-                                                     out(false)
+                                                        out(false)
                                                     }else{
 
                                                         // Only allow number keys.

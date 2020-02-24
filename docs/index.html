@@ -26,7 +26,8 @@
     </varan-header>
     <hr>
     <div id="components">
-        <main-manager></main-manager>
+<!--        <manager-main></manager-main>-->
+        <manager-menu></manager-menu>
     </div>
     <hr>
     <div id="info">
@@ -44,8 +45,13 @@
 </body>
 <script type="module" src="./static/html/components/varan-header/varan-header.mjs" async></script>
 <script type="module" src="./static/html/components/varan-footer/varan-footer.mjs" async></script>
-<script type="module" src="./static/html/components/main-manager/main-manager.mjs"></script>
-<script type="module"></script>
+<script type="module" src="./static/html/components/manager-main/manager-main.mjs"></script>
+<script type="module" src="./static/html/components/manager-menu/manager-menu.mjs"></script>
+<script type="module">
+    import tests from '/static/html/components/component_modules/tests/tests.mjs'
+    tests()
+</script>
+
 <style>
     :root {
         --width: 30vw;
@@ -130,7 +136,6 @@
         box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
         box-sizing: border-box;
         padding: 2vw;
-
         text-align: center;
     }
     input.help,  input.time,  input.last,  input#erase, input#help{

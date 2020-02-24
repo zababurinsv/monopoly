@@ -1,7 +1,7 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
 import monopoly from '/static/html/components/component_modules/monopoly/main.mjs'
-
-customElements.define('main-manager',
+import Net from '/static/html/components/component_modules/monopoly/net.mjs'
+customElements.define('manager-main',
     class extends HTMLElement {
         constructor () {
             super()
