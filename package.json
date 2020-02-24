@@ -1,0 +1,66 @@
+{
+  "name": "monopoly",
+  "version": "1.0.0",
+  "description": "game",
+  "main": "server.mjs",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "monopoly": "nodemon --experimental-modules server.mjs",
+    "start": "node --experimental-modules server.mjs",
+    "deploy": "./deploy.sh",
+    "gulp-watch-slyle": "gulp gulp-watch-slyle",
+    "gitHub": "git status && git add -A && git commit -am 'update' && git push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zababurinsv/monopoly.git"
+  },
+  "keywords": [
+    "game",
+    "monopoly"
+  ],
+  "author": "Zababurin Sergey",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/zababurinsv/monopoly/issues"
+  },
+  "homepage": "https://github.com/zababurinsv/monopoly#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "enqueue": "^1.0.2",
+    "express": "^4.17.1",
+    "express-enqueue": "^1.0.0",
+    "express-formidable": "^1.2.0",
+    "github-oauth": "^0.2.2",
+    "is-empty": "^1.2.0",
+    "jimp": "^0.9.3",
+    "webdav": "^3.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
+    "@waves.exchange/provider-web": "0.1.2",
+    "@waves/provider-seed": "^0.1.1",
+    "@waves/signer": "0.1.2",
+    "@waves/waves-transactions": "^3.25.0",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "^7.0.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-sass": "^4.0.2",
+    "node-sass": "^4.13.1",
+    "nodemon": "^2.0.2",
+    "plugin-error": "^1.0.1",
+    "quill": "^1.3.7",
+    "through2": "^3.0.1",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "yargs": "^15.1.0"
+  }
+}

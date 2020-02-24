@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "name": "vk",
+  "github": {
+    "enabled": true,
+    "autoAlias": true
+  },
+  "builds": [
+
+    { "src": "public/static/html/components/social-vk/*", "use": "@now/static" },
+    { "src": "public/static/html/components/social-vk/external/*", "use": "@now/static" },
+    { "src": "public/static/html/components/social-vk/images/*", "use": "@now/static" },
+    { "src": "public/static/html/components/social-vk/icons/*", "use": "@now/static" },
+    { "src": "public/static/html/components/social-vk/shadow/*", "use": "@now/static" },
+    { "src": "public/static/html/components/social-vk/light/*", "use": "@now/static" },
+    { "src": "public/static/html/components/social-vk/template/*", "use": "@now/static" },
+    { "src": "public/static/html/components/component_modules/authtorization/*", "use": "@now/static" },
+
+    { "src": "public/*.html", "use": "@now/static" },
+    { "src": "index.js", "use": "@now/node" }
+
+  ],
+  "routes": [
+    { "src": "/static/html/components/social-vk/social-vk.mjs", "dest": "public/static/html/components/social-vk/social-vk.mjs" },
+    { "src": "/static/html/components/social-vk/social-vk.html", "dest": "public/static/html/components/social-vk/social-vk.html" },
+    { "src": "/static/html/components/social-vk/shadow/social-vk.css", "dest": "public/static/html/components/social-vk/shadow/social-vk.css" },
+    { "src": "/static/html/components/social-vk/shadow/social-vk-custom.css", "dest": "public/static/html/components/social-vk/shadow/social-vk-custom.css" },
+    { "src": "/static/html/components/social-vk/light/social-vk.css", "dest": "public/static/html/components/social-vk/light/social-vk.css" },
+    { "src": "/static/html/components/social-vk/light/social-vk-custom.css", "dest": "public/static/html/components/social-vk/light/social-vk-custom.css" },
+    { "src": "/static/html/components/social-vk/external/social-vk-external.html", "dest": "public/static/html/components/social-vk/external/social-vk-external.html" },
+
+    { "src": "/static/html/components/component_modules/authtorization/authtorization.mjs", "dest": "public/static/html/components/component_modules/authtorization/authtorization.mjs" },
+
+    { "src": "/(.*)", "dest": "public/index.html" },
+    { "src": "/(.*)", "dest": "index.js" }
+
+  ]
+}
