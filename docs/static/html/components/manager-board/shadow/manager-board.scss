@@ -16,17 +16,21 @@ section#manager {
       tr{
         @include display(row, nowrap, space-between, center, stretch);
         width: 100%;
+        padding: 0;
         td {
           width:  calc(100vw / 11);
-          height: 11vw;
+          height: 11.469vw;
           @include fonts(6);
           font-family: arial, sans-serif;
           border: 0.098vw solid black;
           text-align: center;
+          padding: 0;
         }
         td.board-left, td.board-right{
-          width:  calc(100vw / 11.64);
+          width:  calc(100vw / 11.4);
+          padding: 0;
           div#change{
+            display: flex;
             img.change{
               width: 100%;
             }
@@ -34,11 +38,12 @@ section#manager {
         }
         td.board-center{
           flex-grow: 1;
+          padding: 0;
         }
         td.board-corner{
-
+          padding: 0;
           div#jail{
-
+            display: flex;
             img.jail{
               width: 100%;
             }
