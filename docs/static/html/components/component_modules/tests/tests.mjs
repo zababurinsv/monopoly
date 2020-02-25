@@ -6,12 +6,15 @@ export default ( obj ={ _:'default' } ) =>{
             case 'localhost:6040':
                 await tests('/tests/game/monopoly.mjs','tests')
                 break
+            case 'zababurinsv.github.io':
+                await tests('/tests/game/monopoly.mjs','tests')
+                break
             case 'localhost:4999':
                 await tests('/tests/wallet.mjs','tests')
                 break
             default:
                 // await tests('/tests/wallet.mjs','tests')
-                console.warn('неизвестный источник', location.host)
+                console.warn('неизвестный источник', location)
                 break
         }
         let test = document.createElement('script');

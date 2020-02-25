@@ -1,0 +1,79 @@
+@import "/home/sergey/Desktop/telegram/css/fonts_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/media_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/interface";
+
+
+section#manager {
+  display: flex;
+  table#board{
+    @include display(column, nowrap, space-evenly, center, stretch);
+    width: 100%;
+    border-collapse: collapse;
+    tbody{
+      @include display(column, nowrap, space-evenly, center, stretch);
+      width: 100%;
+
+      tr{
+        @include display(row, nowrap, space-between, center, stretch);
+        width: 100%;
+        td {
+          width:  calc(100vw / 11);
+          height: 11vw;
+          @include fonts(6);
+          font-family: arial, sans-serif;
+          border: 0.098vw solid black;
+          text-align: center;
+        }
+        td.board-left, td.board-right{
+          width:  calc(100vw / 11.64);
+          div#change{
+            img.change{
+              width: 100%;
+            }
+          }
+        }
+        td.board-center{
+          flex-grow: 1;
+        }
+        td.board-corner{
+
+          div#jail{
+
+            img.jail{
+              width: 100%;
+            }
+          }
+        }
+      }
+
+    }
+  }
+  //#board {
+  //  display: none;
+  //  border: 0.195vw solid black;
+  //  border-spacing: 0.293vw;
+  //  margin: 0;
+  //  width: 100%;
+  //  box-sizing: border-box;
+  //tbody{
+  //  display: flex;
+  //  flex-direction: column;
+  //  width: 100%;
+  //  margin: 0;
+  //  box-sizing: border-box;
+  //  padding: 0.3vw;
+  //}
+  //tr{
+  //  display: flex;
+  //  flex-direction: row;
+  //  width: 100%;
+  //  td {
+  //    @include fonts(1);
+  //    font-family: arial, sans-serif;
+  //    border: 0.098vw solid black;
+  //    text-align: center;
+  //  }
+  //}
+  //}
+  //}
+}

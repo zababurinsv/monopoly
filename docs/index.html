@@ -28,6 +28,7 @@
     <div id="components">
 <!--        <manager-main></manager-main>-->
         <manager-menu></manager-menu>
+        <manager-board></manager-board>
     </div>
     <hr>
     <div id="info">
@@ -47,6 +48,7 @@
 <script type="module" src="./static/html/components/varan-footer/varan-footer.mjs" async></script>
 <script type="module" src="./static/html/components/manager-main/manager-main.mjs"></script>
 <script type="module" src="./static/html/components/manager-menu/manager-menu.mjs"></script>
+<script type="module" src="./static/html/components/manager-board/manager-board.mjs"></script>
 <script type="module">
     import tests from '/static/html/components/component_modules/tests/tests.mjs'
     tests()
@@ -56,43 +58,6 @@
     :root {
         --width: 30vw;
         --height: 100%;
-    }
-    #mocha-report{
-        font-size: 2.5vw;
-    }
-    #mocha-report > li > ul > li > h2{
-        font-size: 2vw;
-    }
-    ul#mocha-stats > li.progress > canvas{
-        background: #cdcdcd;
-        border-radius: 50%;
-    }
-    ul#mocha-stats{
-        position: absolute;
-        background: black;
-        border-radius: 0.5vw;
-        display: flex;
-        color: white;
-        font-size: 2vw;
-        align-items: center;
-        box-sizing: border-box;
-        padding: 1vw;
-        top: auto;
-        margin-top: 1.5vw;
-    }
-    ul#mocha-stats > li{
-        padding: 0;
-        box-sizing: border-box;
-    }
-    ul#mocha-stats > li.progress{
-        display: flex;
-    }
-    #mocha-report > li > ul > li.suite > ul > li > h2{
-
-        font-size: 1.8vw;
-    }
-    ul#mocha-stats > li.passes > em, ul#mocha-stats > li.failures > em, ul#mocha-stats > li.duration > em{
-        color: white;
     }
     p{
         justify-content: center;
