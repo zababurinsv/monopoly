@@ -47,11 +47,16 @@ export let add = (url, target)=>{
 
 export default (url, name)=>{
     return new Promise(function (resolve, reject) {
-        let load = document.createElement('script');
-        load.src = url
-        document.body.appendChild(load)
-        load.onload = (out) =>{
+        if( isEmpty(window[name])){
+            let load = document.createElement('script');
+            load.src = url
+            document.body.appendChild(load)
+            load.onload = (out) =>{
+                resolve(window[name])
+            }
+        }else{
             resolve(window[name])
         }
+
     })
 }

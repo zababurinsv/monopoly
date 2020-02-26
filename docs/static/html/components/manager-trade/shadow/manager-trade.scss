@@ -1,0 +1,183 @@
+@import "/home/sergey/Desktop/telegram/css/fonts_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/media_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/interface";
+@mixin size(){
+  width: calc(100vw / 11.2);
+  height: auto;
+}
+@mixin border() {
+  width: 100%;
+  box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  box-sizing: border-box;
+  padding: 0.25vw;
+  text-align: center;
+  cursor: pointer;
+  background-color: transparent;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align-last:center;
+}
+@mixin palyer() {
+
+  label{
+    @include display(column, nowrap, space-evenly, center, stretch);
+    width: 100%;
+    //align-items: center;
+    @include fonts(8);
+    font-family: Roboto,serif;
+    margin: 0.25vw;
+    p{
+      @include border();
+      margin-top: 0;
+    }
+  }
+  div.option{
+    @include display(row, nowrap, space-evenly, center, stretch);
+    input{
+      flex-grow: 1;
+      @include fonts(8);
+      @include border();
+      font-family: Roboto,serif;
+      margin: 0.25vw;
+      cursor: text;
+    }
+    select{
+      flex-grow: 1;
+      @include fonts(8);
+      @include border();
+      font-family: Roboto,serif;
+      margin: 0.25vw;
+    }
+    section{
+
+
+    }
+  }
+}
+
+section#manager-trade{
+  #trade {
+    @include border();
+    table.trade{
+      @include display(column, nowrap, space-evenly, center, stretch);
+      tbody{
+        @include display(column, nowrap, space-evenly, center, stretch);
+        tr{
+          @include display(row, nowrap, space-between, center, stretch);
+          @include size();
+          height: auto;
+          @include border();
+          td {
+            @include palyer();
+            @include fonts(8);
+            font-family: arial, sans-serif;
+            border: 0.098vw solid black;
+            text-align: center;
+            @include border();
+            @include size();
+            width: 100%;
+            box-sizing: border-box;
+            margin: 1vw;
+          }
+          td.trade-cell{
+            @include display(row, nowrap, space-between, center, stretch);
+            input{
+              @include border();
+              padding: 2vw;
+              margin: 2vw;
+            }
+            div#trade-leftp-name, div#trade-rightp-name{
+              width: 100%;
+            }
+          }
+        }
+      }
+    }
+    //border: 0.195vw solid black;
+    //display: none;
+    //margin: 1.465vw auto;
+    //background-color: white;
+    //border-radius: 0.781vw;
+    //padding: 0.195vw;
+    //position: absolute;
+    //top: 39%;
+    //left: 0;
+    //width: 100%;
+    //box-sizing: border-box;
+    //z-index: 100000;
+    //table{
+    //  width: 100%;
+    //  tbody{
+    //    tr{
+    //      td.trade-cell{
+    //        justify-content: center;
+    //        align-items: center;
+    //        @include fonts(6);
+    //        input#trade-leftp-money{
+    //          @include fonts(8);
+    //          width: 90%;
+    //        }
+    //        input#trade-rightp-money{
+    //          @include fonts(8);
+    //          width: 90%;
+    //        }
+    //        input#proposetradebutton{
+    //          @include fonts(1);
+    //          margin-right: 9vw;
+    //          cursor: pointer;
+    //        }
+    //        input#canceltradebutton{
+    //          @include fonts(1);
+    //          margin-left: 9vw;
+    //          cursor: pointer;
+    //        }
+    //        input#accepttradebutton{
+    //          @include fonts(1);
+    //          cursor: pointer;
+    //          margin-right: 10vw;
+    //        }
+    //        input#rejecttradebutton{
+    //          @include fonts(1);
+    //          cursor: pointer;
+    //          margin-left: 10vw;
+    //        }
+    //        div#trade-leftp-name{
+    //          font-weight: bold;
+    //          @include fonts(1);
+    //          option {
+    //            @include fonts(1);
+    //            font-weight: normal;
+    //          }
+    //        }
+    //        div#trade-rightp-name{
+    //          font-weight: bold;
+    //          @include fonts(1);
+    //          select{
+    //            width: 19vw;
+    //            @include fonts(1);
+    //            text-align-last: center;
+    //            cursor: pointer;
+    //          }
+    //        }
+    //      }
+    //    }
+    //  }
+    //}
+  }
+
+
+
+  #trade-rightp-name {
+    @include fonts(1);
+    font-weight: bold;
+  }
+
+  #trade-rightp-name option {
+    @include fonts(1);
+    font-weight: normal;
+  }
+
+
+}

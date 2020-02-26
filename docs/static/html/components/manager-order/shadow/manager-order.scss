@@ -1,0 +1,189 @@
+@import "/home/sergey/Desktop/telegram/css/fonts_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/media_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/interface";
+
+@mixin borderClean() {
+  width: 100%;
+  box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  box-sizing: border-box;
+  padding: 0.25vw;
+  text-align: center;
+  cursor: pointer;
+  background-color: transparent;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align-last:center;
+}
+
+@mixin border() {
+  width: 100%;
+  box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  box-sizing: border-box;
+  padding: 1vw;
+  text-align: center;
+  cursor: pointer;
+  @include fonts(8);
+  font-family: Roboto,serif;
+  background-color: transparent;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align-last:center;
+  margin: auto;
+}
+
+@mixin palyer() {
+
+  label{
+  @include display(column, nowrap, space-evenly, center, stretch);
+    width: 100%;
+    //align-items: center;
+    @include fonts(8);
+    font-family: Roboto,serif;
+    margin: 0.25vw;
+    p{
+      @include borderClean();
+      margin-top: 0;
+    }
+  }
+  div.option{
+    @include display(row, nowrap, space-evenly, center, stretch);
+    input{
+      flex-grow: 1;
+      @include fonts(8);
+      @include borderClean();
+      font-family: Roboto,serif;
+      margin: 0.25vw;
+      cursor: text;
+    }
+    select{
+      flex-grow: 1;
+      @include fonts(8);
+      @include borderClean();
+      font-family: Roboto,serif;
+      margin: 0.25vw;
+
+    }
+  }
+}
+@mixin images() {
+  width: 100%;
+  box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  box-sizing: border-box;
+  padding: 1vw;
+  text-align: center;
+  cursor: pointer;
+  @include fonts(8);
+  font-family: Roboto,serif;
+  background-color: transparent;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align-last:center;
+  margin: auto;
+}
+section#manager-player{
+  display: flex;
+  box-sizing: border-box;
+  padding: 1vw;
+  div.playerImage{
+    @include display(row, nowrap, space-evenly, center, stretch);
+    img{
+      width: 50%;
+    }
+  }
+  div.playerInfo{
+    @include display(column, nowrap, space-evenly, center, stretch);
+    @include fonts(8);
+    font-family: Roboto,serif;
+    font-weight: normal;
+  }
+  //div#setup{
+  //  @include display(column, nowrap, space-evenly, center, stretch);
+  //  @include border();
+  //  padding: 5vw;
+  //  div.setup{
+  //    @include display(column, nowrap, space-evenly, center, stretch);
+  //    @include border();
+  //    width: 60vw;
+  //    padding: 5vw;
+  //    cursor: default;
+  //    margin-bottom: 3vw;
+  //    div#player1Input{
+  //      @include display(row, nowrap, space-evenly, center, stretch);
+  //      @include palyer();
+  //
+  //      width: 100%;
+  //      box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  //      box-sizing: border-box;
+  //      padding: 1vw;
+  //      text-align: center;
+  //      cursor: pointer;
+  //      background-color: transparent;
+  //      position: relative;
+  //      -webkit-appearance: none;
+  //      -moz-appearance: none;
+  //      appearance: none;
+  //      text-align-last:center;
+  //      margin-bottom: 1vw;
+  //      margin-top: 1vw;
+  //    }
+  //    h1{
+  //      margin-top: 0;
+  //    }
+  //    select#playernumber{
+  //      @include border();
+  //      margin: 0;
+  //      width: 100%;
+  //      option{
+  //        text-align: center;
+  //        cursor: pointer;
+  //        text-align-last:center;
+  //      }
+  //    }
+  //  }
+  //  div.options{
+  //    @include display(column, nowrap, space-evenly, center, stretch);
+  //    @include border();
+  //    width: 60vw;
+  //    padding: 5vw;
+  //    cursor: default;
+  //    margin-bottom: 3vw;
+  //    div#player2input,div#player3input,div#player4input,div#player5input,div#player6input,div#player7input,div#player8input{
+  //      @include display(row, nowrap, space-evenly, center, stretch);
+  //      @include palyer();
+  //
+  //      width: 100%;
+  //      box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  //      box-sizing: border-box;
+  //      padding: 1vw;
+  //      text-align: center;
+  //      cursor: pointer;
+  //      background-color: transparent;
+  //      position: relative;
+  //      -webkit-appearance: none;
+  //      -moz-appearance: none;
+  //      appearance: none;
+  //      text-align-last:center;
+  //      margin-bottom: 1vw;
+  //      margin-top: 1vw;
+  //    }
+  //  }
+  //  div.playGame{
+  //    @include display(column, nowrap, space-evenly, center, stretch);
+  //    @include border();
+  //    width: 60vw;
+  //    padding: 5vw;
+  //    cursor: default;
+  //    margin-bottom: 3vw;
+  //    input#playGame{
+  //      @include border();
+  //    }
+  //  }
+  //}
+
+}

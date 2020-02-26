@@ -1,10 +1,8 @@
 import conf from '/static/html/components/component_modules/matcher/matcher/this/database/config/index.mjs'
-import template from '/static/html/components/component_modules/template/template.mjs'
-import utils from '/static/html/components/component_modules/utils/utils.mjs'
+import loader from '/static/html/components/component_modules/loader/loader.mjs'
 function server(obj, path,node, method) {
-    return new Promise((resolve, reject) => {
-        bundle['default'](obj,'export', async function (error, config) {
-
+    return new Promise(async (resolve, reject) => {
+        let axios = await loader('https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js','axios')
             function setData( data) {
                 return new Promise((resolve, reject) => {
                     let formData  = new FormData();
@@ -17,7 +15,7 @@ function server(obj, path,node, method) {
             switch (method) {
                 case 'GET':
                     console.log('~~~~~~~~~~~~GET~~~~~~~~~~~~~~~~',`${node}${path}`)
-                    config['axios'].get(`${node}${path}`)
+                    axios.get(`${node}${path}`)
                         .then(function (response) {
                             obj = {}
                             obj['get_n'] = []
@@ -110,9 +108,6 @@ function server(obj, path,node, method) {
                     console.warn(`необрабатываемый тип запроса`, obj[props])
                     break
             }
-
-        })
-
     })
 }
 

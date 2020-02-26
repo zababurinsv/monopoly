@@ -27,8 +27,16 @@
     <hr>
     <div id="components">
 <!--        <manager-main></manager-main>-->
-        <manager-menu></manager-menu>
-        <manager-board></manager-board>
+<!--        <manager-menu></manager-menu>-->
+<!--        <manager-board></manager-board>-->
+        <manager-trade>
+            <varan-card-news></varan-card-news>
+            <manager-player slot="player-left"></manager-player>
+            <manager-player slot="player-right"></manager-player>
+            <manager-order slot="order-left"></manager-order>
+            <manager-order slot="order-right"></manager-order>
+        </manager-trade>
+
     </div>
     <hr>
     <div id="info">
@@ -49,6 +57,7 @@
 <script type="module" src="./static/html/components/manager-main/manager-main.mjs"></script>
 <script type="module" src="./static/html/components/manager-menu/manager-menu.mjs"></script>
 <script type="module" src="./static/html/components/manager-board/manager-board.mjs"></script>
+<script type="module" src="./static/html/components/manager-trade/manager-trade.mjs"></script>
 <script type="module">
     import tests from '/static/html/components/component_modules/tests/tests.mjs'
     tests()

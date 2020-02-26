@@ -30,7 +30,6 @@ function msConversion(millis) {
 }
 export default async (obj, func, ...args)=>{
     return new Promise(async function (resolve, reject) {
-        bundle['default'](obj,null, async function (error, config) {
             let out = (obj) => {
                 // //console.log('~~~ out router ~~~')
                 resolve(obj)
@@ -584,6 +583,5 @@ export default async (obj, func, ...args)=>{
                     err(`новая функция ${func}`)
                     break
             }
-        })
     })
 }
