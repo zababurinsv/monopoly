@@ -7,10 +7,11 @@
     <link rel="stylesheet" href="./static/html/components/component_modules/mocha/mocha.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/7.0.1/mocha.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js"></script>
+    <link rel="preload" href="./static/html/components/component_modules/cell-index/jason.css" as="style" onload="this.rel='stylesheet'">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
     <script>
         mocha.setup('bdd');
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
     <script>
         let assert = chai.assert;
     </script>
@@ -26,16 +27,23 @@
     </varan-header>
     <hr>
     <div id="components">
-<!--        <manager-main></manager-main>-->
-<!--        <manager-menu></manager-menu>-->
+        <page-external data-url="https://selecttransform.github.io/playground/">
+            <style>
+                page-external{
+                    width: 100%;
+                    height: 50vw;
+                }
+            </style>
+        </page-external>
+        <manager-menu></manager-menu>
         <manager-board></manager-board>
-<!--        <manager-trade>-->
-<!--            <varan-card-news></varan-card-news>-->
-<!--            <manager-player slot="player-left"></manager-player>-->
-<!--            <manager-player slot="player-right"></manager-player>-->
-<!--            <manager-order slot="order-left"></manager-order>-->
-<!--            <manager-order slot="order-right"></manager-order>-->
-<!--        </manager-trade>-->
+        <manager-trade>
+            <varan-card-news></varan-card-news>
+            <manager-player slot="player-left"></manager-player>
+            <manager-player slot="player-right"></manager-player>
+            <manager-order slot="order-left"></manager-order>
+            <manager-order slot="order-right"></manager-order>
+        </manager-trade>
             <manager-deed></manager-deed>
 <!--            <manager-community></manager-community>-->
 <!--        <manager-control></manager-control>-->
@@ -62,6 +70,7 @@
 <script type="module" src="./static/html/components/manager-trade/manager-trade.mjs"></script>
 <script type="module" src="./static/html/components/manager-control/manager-control.mjs"></script>
 <script type="module" src="./static/html/components/manager-deed/manager-deed.mjs"></script>
+<script type="module" src="./static/html/components/page-external/page-external.mjs"></script>
 <script type="module">
     import tests from '/static/html/components/component_modules/tests/tests.mjs'
     tests()

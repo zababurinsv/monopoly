@@ -665,8 +665,6 @@ customElements.define('manager-menu',
                 }, 'set', 'type')
                 let menu = new (await Menu(obj))['class'](obj)
                 menu.self.menu = await menu.menu({_:'init', this:obj['this']})
-
-               // console.assert(false, new Menu.class(obj))
                // await Menu(obj)
                // await monopoly(obj)
 
