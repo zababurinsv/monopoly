@@ -24,7 +24,6 @@
   label{
     @include display(column, nowrap, space-evenly, center, stretch);
     width: 100%;
-    //align-items: center;
     @include fonts(8);
     font-family: Roboto,serif;
     margin: 0.25vw;

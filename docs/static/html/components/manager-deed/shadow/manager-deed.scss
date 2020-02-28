@@ -1,0 +1,130 @@
+@import "/home/sergey/Desktop/telegram/css/fonts_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/media_new.scss";
+@import "/home/sergey/Desktop/telegram/css/util/interface";
+@mixin size(){
+  width: calc(100vw / 11.2);
+  height: auto;
+}
+@mixin border() {
+  width: 100%;
+  box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+  box-sizing: border-box;
+  padding: 0.25vw;
+  text-align: center;
+  cursor: pointer;
+  background-color: transparent;
+  position: relative;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  text-align-last:center;
+}
+@mixin palyer() {
+
+  label{
+    @include display(column, nowrap, space-evenly, center, stretch);
+    width: 100%;
+    //align-items: center;
+    @include fonts(8);
+    font-family: Roboto,serif;
+    margin: 0.25vw;
+    p{
+      @include border();
+      margin-top: 0;
+    }
+  }
+  div.option{
+    @include display(row, nowrap, space-evenly, center, stretch);
+    input{
+      flex-grow: 1;
+      @include border();
+      @include fonts(8);
+      font-family: Roboto,serif;
+      margin: 0.25vw;
+      cursor: text;
+    }
+    select{
+      flex-grow: 1;
+      @include fonts(8);
+      @include border();
+      font-family: Roboto,serif;
+      margin: 0.25vw;
+    }
+    section{
+
+
+    }
+  }
+}
+@mixin padding($padding, $margin) {
+  box-sizing: border-box;
+  padding: $padding;
+  margin: $margin;
+}
+section#manager-deed {
+  @include border();
+  div#deed {
+    @include padding(2vw, 0);
+    div#deed-normal{
+      @include border();
+      text-align: -webkit-center;
+      div#deed-header{
+        @include border();
+        @include display(column, nowrap, space-evenly, center, stretch);
+        @include fonts(8);
+        width: 95%;
+        @include padding(2vw, 1vw);
+
+        background-color: yellow;
+        text-transform: uppercase;
+        text-align: center;
+        font-family: Roboto,serif;
+        div#preview{
+          @include fonts(8);
+          font-family: Roboto,serif;
+        }
+        div#deed-name{
+          @include fonts(8);
+          font-family: Roboto,serif;
+        }
+      }
+      table#deed-table{
+        @include border();
+        @include display(row, nowrap, space-evenly, center, stretch);
+        width: 95%;
+        @include padding(2vw, 1vw);
+        tbody{
+          @include display(column, nowrap, space-evenly, flex-start, stretch);
+          @include border();
+          width: 100%;
+          text-align: center;
+          tr.preview{
+            justify-content: center;
+            box-sizing: border-box;
+            padding: 1vw;
+          }
+          tr{
+            @include display(row, nowrap, space-evenly, flex-start, stretch);
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.25vw;
+            td{
+              @include display(row, nowrap, stretch, flex-start, stretch);
+
+              div{
+                @include display(row, nowrap, stretch, flex-start, stretch);
+              }
+            }
+            td.options{
+              @include display(column, nowrap, space-evenly, flex-start, stretch);
+              width: 25%;
+              div{
+                align-self: center;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

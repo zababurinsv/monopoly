@@ -34,10 +34,11 @@ section#manager {
         td.board-left, td.board-right, td.board-top{
           @include size();
           padding: 0;
-          div#chance,div#marvin{
+          div#chance,div#marvin,div#kentuky{
             display: flex;
-            img.chance, img.marvin{
+            img.chance, img.marvin,img.kentuky{
               width: 100%;
+              height: auto;
             }
           }
         }
@@ -55,35 +56,6 @@ section#manager {
           }
         }
       }
-
     }
   }
-  //#board {
-  //  display: none;
-  //  border: 0.195vw solid black;
-  //  border-spacing: 0.293vw;
-  //  margin: 0;
-  //  width: 100%;
-  //  box-sizing: border-box;
-  //tbody{
-  //  display: flex;
-  //  flex-direction: column;
-  //  width: 100%;
-  //  margin: 0;
-  //  box-sizing: border-box;
-  //  padding: 0.3vw;
-  //}
-  //tr{
-  //  display: flex;
-  //  flex-direction: row;
-  //  width: 100%;
-  //  td {
-  //    @include fonts(1);
-  //    font-family: arial, sans-serif;
-  //    border: 0.098vw solid black;
-  //    text-align: center;
-  //  }
-  //}
-  //}
-  //}
 }
