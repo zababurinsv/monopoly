@@ -57,7 +57,7 @@ section#codemirror-main{
       }
     }
 
-    div.result{
+    div#result{
       @include fonts(8);
       font-family: Roboto,serif;
 

@@ -724,17 +724,32 @@ customElements.define('codemirror-main',
                     let value = editor.editor.getValue()
                     let runScript = document.createElement('script');
                     runScript.type = 'module';
-                    runScript.innerHTML =  (()=>{
+                    let test = `
+                    (async (d)=>{
+                    ${value}
+                    let result = document.body.querySelector('codemirror-main').shadowRoot.querySelector('#result')
+                    result.innerHTML = object
+                    document.dispatchEvent(new CustomEvent('CodeMirror', {
+                        detail: {
+                            _:'response'
+                        }
+                    }))
+                    })()`
 
-                        console.log('########################')
-                        codemirror.self.CodeMirror.runMode(value, "module", result);
+                    // console.assert(false, document.body.querySelector('codemirror-main').shadowRoot.querySelector('#result'))
 
-                        document.dispatchEvent(new CustomEvent('CodeMirror', {
-                            detail: {
-                               _:'response'
-                            }
-                        }))
-                    })();
+                    runScript.innerHTML = test
+                    // runScript.innerHTML =  ((input)=>{
+                    //     console.log('############<<<------------->>>############', input.codemirror)
+                    //
+                    //     input.codemirror.runMode(value, "module", result);
+                    //
+                    //
+
+                    // })({
+                    //     codemirror:codemirror.self.CodeMirror,
+                    //     editor: editor.editor
+                    // });
 
                     script.appendChild(runScript)
 
@@ -742,7 +757,6 @@ customElements.define('codemirror-main',
 
                 document.addEventListener('CodeMirror',async (event)=>{
 
-                    console.log('$$$$$$$$$$$$$$#######################')
                     script.innerHTML = ''
                 })
                // console.assert(false, editor)
