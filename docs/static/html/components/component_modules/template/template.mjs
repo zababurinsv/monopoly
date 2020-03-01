@@ -1,4 +1,6 @@
 import utils from '/static/html/components/component_modules/utils/utils.mjs'
+import Monopoly from '/static/html/components/component_modules/template/monopoly.mjs'
+import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty.mjs'
 function msConversion(millis) {
     let sec = Math.floor(millis / 1000);
     let hrs = Math.floor(sec / 3600);
@@ -27,6 +29,26 @@ function msConversion(millis) {
         }
         return '00:'+min + ":" + sec;
     }
+}
+export let monopoly = (obj={_:undefined,data:{}})=>{
+    return new Promise(async function (resolve, reject) {
+        let out = (obj) => {
+            resolve(obj)
+        }
+        let err = (error) => {
+            reject(error)
+        }
+        switch (obj['_']) {
+            case 'button':
+                (async (obj)=>{
+                   resolve(await Monopoly({_:'button', data:obj.data}))
+                })(obj)
+                break
+            default:
+                console.warn('неизвестный темплейт', obj['_'],'---->', obj)
+                break
+        }
+    })
 }
 export default async (obj, func, ...args)=>{
     return new Promise(async function (resolve, reject) {

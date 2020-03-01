@@ -27,14 +27,6 @@
     </varan-header>
     <hr>
     <div id="components">
-        <page-external data-url="https://selecttransform.github.io/playground/">
-            <style>
-                page-external{
-                    width: 100%;
-                    height: 50vw;
-                }
-            </style>
-        </page-external>
         <manager-menu></manager-menu>
         <manager-board></manager-board>
         <manager-trade>
@@ -45,15 +37,14 @@
             <manager-order slot="order-right"></manager-order>
         </manager-trade>
             <manager-deed></manager-deed>
-<!--            <manager-community></manager-community>-->
+<!--        <manager-community></manager-community>-->
 <!--        <manager-control></manager-control>-->
     </div>
     <hr>
     <div id="info">
         Console
         <div class="container">
-            <input type="button" value="erase" id="erase">
-            <input type="button" value="help" id="help">
+            <codemirror-main></codemirror-main>
         </div>
     </div>
     <div id="tests">
@@ -64,18 +55,18 @@
 </body>
 <script type="module" src="./static/html/components/varan-header/varan-header.mjs" async></script>
 <script type="module" src="./static/html/components/varan-footer/varan-footer.mjs" async></script>
-<script type="module" src="./static/html/components/manager-main/manager-main.mjs"></script>
-<script type="module" src="./static/html/components/manager-menu/manager-menu.mjs"></script>
-<script type="module" src="./static/html/components/manager-board/manager-board.mjs"></script>
-<script type="module" src="./static/html/components/manager-trade/manager-trade.mjs"></script>
-<script type="module" src="./static/html/components/manager-control/manager-control.mjs"></script>
-<script type="module" src="./static/html/components/manager-deed/manager-deed.mjs"></script>
-<script type="module" src="./static/html/components/page-external/page-external.mjs"></script>
+<script type="module" src="./static/html/components/manager-main/manager-main.mjs" async></script>
+<script type="module" src="./static/html/components/manager-menu/manager-menu.mjs" async></script>
+<script type="module" src="./static/html/components/manager-board/manager-board.mjs" async></script>
+<script type="module" src="./static/html/components/manager-trade/manager-trade.mjs" async></script>
+<script type="module" src="./static/html/components/manager-control/manager-control.mjs" async></script>
+<script type="module" src="./static/html/components/manager-deed/manager-deed.mjs" async></script>
+<script type="module" src="./static/html/components/page-external/page-external.mjs" async></script>
+<script type="module" src="./static/html/components/codemirror-main/codemirror-main.mjs" async></script>
 <script type="module">
     import tests from '/static/html/components/component_modules/tests/tests.mjs'
     tests()
 </script>
-
 <style>
     :root {
         --width: 30vw;
@@ -109,6 +100,10 @@
         box-sizing: border-box;
         border: .1vw solid #acb2b5;
         margin: 0.3vw;
+    }
+    page-external{
+        width: 100%;
+        height: 50vw;
     }
     varan-header{
         width: 100%;
@@ -148,12 +143,27 @@
         /*color: #acb2b5;*/
         background: transparent;
     }
-    label.name, label.address, label.account, div.container, label.runmethod{
+    div#options{
         display: flex;
         align-self: center;
         box-sizing: border-box;
         padding: 1vw;
         flex-direction: row;
+        width: 100%;
+        border: .1vw solid #acb2b5;
+        border-radius: 0.5vw;
+        margin: auto;
+        margin-top: 1vw;
+        margin-bottom: 1vw;
+        outline: none;
+        justify-content: center;
+    }
+    label.name, label.address, label.account, div.container, label.runmethod{
+        display: flex;
+        align-self: center;
+        box-sizing: border-box;
+        padding: 1vw;
+        flex-direction: column;
         width: 37vw;
         border: .1vw solid #acb2b5;
         border-radius: 0.5vw;

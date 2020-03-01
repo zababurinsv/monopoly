@@ -36,28 +36,30 @@ export default {
                         let allGroupUninproved;
                         let currentName;
 
-                        let tableRowOnClickLeftp = function(e) {
-                            payload['this'].querySelector('#proposetradebutton').style.display = 'flex'
-                            payload['this'].querySelector('#canceltradebutton').style.display = 'flex'
-                            payload['this'].querySelector('#accepttradebutton').style.display = 'none'
-                            payload['this'].querySelector('#rejecttradebutton').style.display = 'none'
-                        };
+                        // let tableRowOnClickLeftp = function(e) {
+                        //     payload['this'].querySelector('#proposetradebutton').style.display = 'flex'
+                        //     payload['this'].querySelector('#canceltradebutton').style.display = 'flex'
+                        //     payload['this'].querySelector('#accepttradebutton').style.display = 'none'
+                        //     payload['this'].querySelector('#rejecttradebutton').style.display = 'none'
+                        // };
 
-                        let tableRowOnClick = function(e) {
+                        // let tableRowOnClick = function(e) {
+                        //
+                        //     let item = e.target.parentNode
+                        //     item = item.querySelector('input')
+                        //
+                        //     payload['checkboxElement'] = item
+                        //     if (payload['checkboxElement'] !== e.srcElement) {
+                        //         payload['checkboxElement'].checked = !payload['checkboxElement'].checked;
+                        //     }
+                        //
+                        //     payload['this'].querySelector('#proposetradebutton').style.display = 'flex'
+                        //     payload['this'].querySelector('#canceltradebutton').style.display = 'flex'
+                        //     payload['this'].querySelector('#accepttradebutton').style.display = 'none'
+                        //     payload['this'].querySelector('#rejecttradebutton').style.display = 'none'
+                        // };
 
-                            let item = e.target.parentNode
-                            item = item.querySelector('input')
-
-                            payload['checkboxElement'] = item
-                            if (payload['checkboxElement'] !== e.srcElement) {
-                                payload['checkboxElement'].checked = !payload['checkboxElement'].checked;
-                            }
-
-                            payload['this'].querySelector('#proposetradebutton').style.display = 'flex'
-                            payload['this'].querySelector('#canceltradebutton').style.display = 'flex'
-                            payload['this'].querySelector('#accepttradebutton').style.display = 'none'
-                            payload['this'].querySelector('#rejecttradebutton').style.display = 'none'
-                        };
+                        console.assert(false, payload['this'])
 
                         let initiatorProperty = payload['this'].getElementById("trade-leftp-property");
                         let recipientProperty = payload['this'].getElementById("trade-rightp-property");
@@ -336,6 +338,7 @@ export default {
                     })(obj, payload, rest)
                     break
                 case 'monopoly':
+                    let monopoly = {}
                     let payload = {}
                     payload['tradeObj'] = {}
                     payload['die1'] = null
@@ -362,22 +365,151 @@ export default {
                     payload['this'] = obj['this'].shadowRoot
                     payload['checkedproperty'] = -1
 
-                    // let htmlManager = obj['this'].shadowRoot
-                    // htmlManager.querySelector("#trade-leftp-money").onkeydown = tradeMoneyOnKeyDown;
-                    // htmlManager.querySelector("#trade-rightp-money").onkeydown = tradeMoneyOnKeyDown;
-                    // htmlManager.querySelector("#trade-leftp-money").onfocus = tradeMoneyOnFocus;
-                    // htmlManager.querySelector("#trade-rightp-money").onfocus = tradeMoneyOnFocus;
-                    // htmlManager.querySelector("#trade-leftp-money").onchange = tradeMoneyOnChange;
-                    // htmlManager.querySelector("#trade-rightp-money").onchange = tradeMoneyOnChange;
+                    monopoly['cards'] = {
+                        _:'cards',
+                        type: 'default',
+                        communityChestCards: [],
+                        chanceCards: undefined
+                    }
+                    monopoly['auction'] = {
+                        _:'auction',
+                        type: 'default',
+                        auctionQueue: [],
+                        highestbidder: undefined,
+                        highestbid: 0,
+                        currentbidder: 1,
+                        auctionproperty: undefined
+                    }
+                    monopoly['trade'] = {
+                        _:'trade',
+                        type: 'default',
+                        currentInitiator: [],
+                        currentRecipient: undefined,
+                        initiator: undefined,
+                        recipient: undefined
+                    }
+                    monopoly['button'] ={
+                        _:'button',
+                        type:'default',
+                        items: ['trade-leftp-money','trade-rightp-money'],
+                        methods:['onkeydown', 'onfocus', 'onchange'],
+                        actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
+                        onkeydown:{
+                            _:'onkeydown',
+                            'trade-leftp-money': undefined,
+                            'trade-rightp-money': undefined
+                        },
+                        onfocus:{
+                            _:'onfocus',
+                            'trade-leftp-money': undefined,
+                            'trade-rightp-money': undefined
+                        },
+                        onchange:{
+                            _:'onfocus',
+                            'trade-leftp-money': undefined,
+                            'trade-rightp-money': undefined
+                        },
+                        tradeMoneyOnKeyDown: async ()=>{
+                                console.log('~~~~~~~ tradeMoneyOnKeyDown ~~~~ menu-game.mjs ~~~')
+                            let key = 0;
+                            let isCtrl = false;
+                            let isShift = false;
 
+                            if (window.Event) {
+                                key = window.Event.keyCode;
+                                isCtrl = window.Event.ctrlKey;
+                                isShift = window.Event.shiftKey;
+                            } else if (e) {
+                                key = e.keyCode;
+                                isCtrl = e.ctrlKey;
+                                isShift = e.shiftKey;
+                            }
+
+                            if (Number.isNaN(key)) {
+                                return true;
+                            }
+
+                            if (key === 13) {
+                                return false;
+                            }
+                            // Allow backspace, tab, delete, arrow keys, or if control was pressed, respectively.
+                            if (key === 8 || key === 9 || key === 46 || (key >= 35 && key <= 40) || isCtrl) {
+                                return true;
+                            }
+
+                            if (isShift) {
+                                return false;
+                            }
+                            return (key >= 48 && key <= 57) || (key >= 96 && key <= 105);
+                        },
+                        tradeMoneyOnFocus:async () => {
+                            console.log('~~~~~~~ tradeMoneyOnFocus ~~ menu-game.mjs ~~~~~')
+                            this.style.color = "black";
+                            if (Number.isNaN(this.value) || this.value === "0") {
+                                this.value = "";
+                            }
+                        },
+                        tradeMoneyOnChange: async (e) => {
+                        console.log('~~~~~~~tradeMoneyOnChange~~~ menu-game.mjs ~~~~')
+                        console.assert(false, e)
+                        payload['this'].querySelector('#proposetradebutton').style.display = 'flex'
+                        payload['this'].querySelector('#canceltradebutton').style.display = 'flex'
+                        payload['this'].querySelector('#accepttradebutton').style.display = 'none'
+                        payload['this'].querySelector('#rejecttradebutton').style.display = 'none'
+                        let amount = this.value;
+
+                        if (Number.isNaN(amount)) {
+                            this.value = "This value must be a number.";
+                            this.style.color = "red";
+                            return false;
+                        }
+
+                        amount = Math.round(amount) || 0;
+                        this.value = amount;
+
+                        if (amount < 0) {
+                            this.value = "This value must be greater than 0.";
+                            this.style.color = "red";
+                            return false;
+                        }
+
+                        return true;
+                        }
+                    }
+                    monopoly['property'] ={
+                        _:'property',
+                        type:'default',
+                        die1: undefined,
+                        die2: undefined,
+                        areDiceRolled: false,
+                        turn: undefined,
+                        doublecount: 0,
+                        groupPropertyArray:[],
+                        groupNumber: {}
+                    }
+                    monopoly['player'] = {
+                        _:'player',
+                        player: [],
+                        items: ['bank','player 1','player 2','player 3','player 4','player 5','player 6','player 7','player 8'],
+                        methods:['onkeydown', 'onfocus', 'onchange'],
+                        actions:['playernumber_onchange', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
+                        addEventListener:['playernumber_onchange'],
+                        name: 'the bank',
+                        type: 'default',
+                        pcount: undefined,
+                        currentCell: 0,
+                        currentCellAnchor: 0,
+                        currentCellPositionHolder: 0,
+                        currentCellName: 0,
+                        currentCellOwner: 0,
+                        jail: false,
+                        cell:0
+                    }
                     // for (let i = 0; i < 8; i++) {
                     //     payload['player'][i] = await mInterface['get']({type:'player', color:''})
                     //     payload['player'][i].index = i;
                     // }
 
-
-                    // payload['groupPropertyArray'] = []
-                    // payload['groupNumber'] = {};
                     // payload = await square['get']({type:'classic'}, payload)
                     // for (let i = 0; i < 40; i++) {
                     //     payload['groupNumber'] = payload['square'][i].groupNumber;
@@ -930,81 +1062,7 @@ export default {
                     //     await gameplay['get']({type:'trade', tradeObj:null}, payload)
                     //
                     // });
-                    // var tradeMoneyOnChange = function(e) {
-                    //     console.log('~~~~~~~tradeMoneyOnChange~~~~~~~')
-                        //console.assert(false, e)
-                        // $("#proposetradebutton").show();
-                        // $("#canceltradebutton").show();
-                        // $("#accepttradebutton").hide();
-                        // $("#rejecttradebutton").hide();
-                        // payload['this'].querySelector('#proposetradebutton').style.display = 'flex'
-                        // payload['this'].querySelector('#canceltradebutton').style.display = 'flex'
-                        // payload['this'].querySelector('#accepttradebutton').style.display = 'none'
-                        // payload['this'].querySelector('#rejecttradebutton').style.display = 'none'
-                        // var amount = this.value;
-                        //
-                        // if (isNaN(amount)) {
-                        //     this.value = "This value must be a number.";
-                        //     this.style.color = "red";
-                        //     return false;
-                        // }
-                        //
-                        // amount = Math.round(amount) || 0;
-                        // this.value = amount;
-                        //
-                        // if (amount < 0) {
-                        //     this.value = "This value must be greater than 0.";
-                        //     this.style.color = "red";
-                        //     return false;
-                        // }
-                        //
-                        // return true;
-                    // };
-                    //
-                    // var tradeMoneyOnFocus = function () {
-                    //     console.log('~~~~~~~tradeMoneyOnFocus~~~~~~~')
-                    //     this.style.color = "black";
-                    //     if (isNaN(this.value) || this.value === "0") {
-                    //         this.value = "";
-                    //     }
-                    // };
-                    // var tradeMoneyOnKeyDown = function (e) {
-                    //     console.log('~~~~~~~tradeMoneyOnKeyDown~~~~~~~')
-                    //     var key = 0;
-                    //     var isCtrl = false;
-                    //     var isShift = false;
-                    //
-                    //     if (window.event) {
-                    //         key = window.event.keyCode;
-                    //         isCtrl = window.event.ctrlKey;
-                    //         isShift = window.event.shiftKey;
-                    //     } else if (e) {
-                    //         key = e.keyCode;
-                    //         isCtrl = e.ctrlKey;
-                    //         isShift = e.shiftKey;
-                    //     }
-                    //
-                    //     if (isNaN(key)) {
-                    //         return true;
-                    //     }
-                    //
-                    //     if (key === 13) {
-                    //         return false;
-                    //     }
-                    //
-                        // Allow backspace, tab, delete, arrow keys, or if control was pressed, respectively.
-                        // if (key === 8 || key === 9 || key === 46 || (key >= 35 && key <= 40) || isCtrl) {
-                        //     return true;
-                        // }
-                        //
-                        // if (isShift) {
-                        //     return false;
-                        // }
-                        //
-                        // Only allow number keys.
-                        // return (key >= 48 && key <= 57) || (key >= 96 && key <= 105);
-                    // };
-                    out(payload)
+                    out(monopoly)
                     break
                 default:
                     break

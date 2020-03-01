@@ -1,7 +1,7 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
-import Net from '/static/html/components/component_modules/monopoly/net.mjs'
-import Menu from '/static/html/components/component_modules/monopoly/menu.mjs'
-customElements.define('manager-menu',
+import Codemirror from '/static/html/components/component_modules/codemirror/codemirror.mjs'
+import stjs from '/static/html/components/component_modules/stjs/st.mjs'
+customElements.define('codemirror-main',
     class extends HTMLElement {
         constructor () {
             super()
@@ -663,10 +663,89 @@ customElements.define('manager-menu',
                     obj: obj,
                     type:'obj'
                 }, 'set', 'type')
-                let menu = new (await Menu(obj))['class'](obj)
-                menu.self.menu = await menu.menu({_:'init', this:obj['this']})
 
-                // console.assert(false, menu)
+                let codemirror = new (await Codemirror({_:'codemirror', this:obj.this.shadowRoot}))['class']()
+                let editor = await codemirror.init({_:'init', this:obj.this.shadowRoot})
+                let ST = await stjs.ST({_:'ST', this:obj['this']})
+                let btnsearch = obj.this.shadowRoot.querySelector('#search'),
+                    fnext = obj.this.shadowRoot.querySelector('#fnext'),
+                    fprev = obj.this.shadowRoot.querySelector('#fprev'),
+                    repl = obj.this.shadowRoot.querySelector('#replace'),
+                    replall = obj.this.shadowRoot.querySelector('#replall'),
+                    goto = obj.this.shadowRoot.querySelector('#goto'),
+                    undo = obj.this.shadowRoot.querySelector('#undo'),
+                    redo = obj.this.shadowRoot.querySelector('#redo'),
+                    save = obj.this.shadowRoot.querySelector('#save'),
+                    getLast = obj.this.shadowRoot.querySelector('#getLast'),
+                    run = obj.this.shadowRoot.querySelector('#run'),
+                    result  = obj.this.shadowRoot.querySelector('#result'),
+                    script =  obj.this.shadowRoot.querySelector('#script');
+
+
+
+                // console.assert(false, editor.editor.getValue())
+                btnsearch.addEventListener('click', function() {
+                    codemirror.self.CodeMirror.commands.find(editor.editor)
+                }, false);
+                fnext.addEventListener('click', function() {
+                    codemirror.self.CodeMirror.commands.findNext(editor.editor);
+                }, false);
+                fprev.addEventListener('click', function() {
+                    codemirror.self.CodeMirror.commands.findPrev(editor.editor);
+                }, false);
+                repl.addEventListener('click', function() {
+                    codemirror.self.CodeMirror.commands.replace(editor.editor);
+                }, false);
+                replall.addEventListener('click', function() {
+                    codemirror.self.CodeMirror.commands.replaceAll(editor.editor);
+                }, false);
+                goto.addEventListener('click', function() {
+                    codemirror.self.CodeMirror.commands.jumpToLine(editor.editor);
+                }, false);
+                undo.addEventListener('click', function(){
+                    editor.editor.undo();
+                }, false);
+                redo.addEventListener('click', function(){
+                    editor.editor.redo();
+                },false);
+                save.addEventListener('click', function(){
+                    let value = editor.editor.getValue()
+                    sessionStorage.setItem('CodeMirror', value);
+
+                    // ST.select(data)
+                    //     .transformWith(template)
+                    //     .root()
+                },false);
+                getLast.addEventListener('click', function(){
+                    let value = sessionStorage.getItem('CodeMirror');
+                    editor.editor.setValue(value)
+                },false);
+                run.addEventListener('click', function(){
+                    let value = editor.editor.getValue()
+                    let runScript = document.createElement('script');
+                    runScript.type = 'module';
+                    runScript.innerHTML =  (()=>{
+
+                        console.log('########################')
+                        codemirror.self.CodeMirror.runMode(value, "module", result);
+
+                        document.dispatchEvent(new CustomEvent('CodeMirror', {
+                            detail: {
+                               _:'response'
+                            }
+                        }))
+                    })();
+
+                    script.appendChild(runScript)
+
+                },false);
+
+                document.addEventListener('CodeMirror',async (event)=>{
+
+                    console.log('$$$$$$$$$$$$$$#######################')
+                    script.innerHTML = ''
+                })
+               // console.assert(false, editor)
                // await Menu(obj)
                // await monopoly(obj)
 
