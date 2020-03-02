@@ -1,22 +1,15 @@
 import loader from '/static/html/components/component_modules/loader/loader.mjs'
-import stjs from '/static/html/components/component_modules/stjs/st.mjs'
 import {style} from '/static/html/components/component_modules/loader/loader.mjs'
 let object = {}
 export default (obj = {_:'codemirror'})=>{
     return new Promise( async (resolve, reject) =>{
         let CodeMirror = await loader('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.js','CodeMirror')
-        let st = await stjs.ST({_:'ST', this:obj['this']})
         await loader('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/search/search.js','plugin')
         await loader('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/search/searchcursor.js','plugin')
         await loader('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/search/match-highlighter.js','plugin')
         await loader('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/search/jump-to-line.js','plugin')
         await loader('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/addon/dialog/dialog.js','plugin')
         await loader('https://codemirror.net/addon/runmode/runmode.js')
-
-        // await style('https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.21.0/codemirror.css', obj.this)
-
-
-        object['ST'] = st
         object['CodeMirror'] = CodeMirror
         let out = (obj) => {
             // console.log('~~~ out  ~~~', obj['input'])

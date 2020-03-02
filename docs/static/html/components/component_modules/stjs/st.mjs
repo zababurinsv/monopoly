@@ -671,6 +671,7 @@ export default {
             },
             // returns the object itself
             select: function(obj, filter, serialized) {
+                // console.assert(false,obj )
                 // iterate '$selected'
                 //
                 /*

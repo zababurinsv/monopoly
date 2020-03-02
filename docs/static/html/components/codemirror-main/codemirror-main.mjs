@@ -1,6 +1,7 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
 import Codemirror from '/static/html/components/component_modules/codemirror/codemirror.mjs'
-import stjs from '/static/html/components/component_modules/stjs/st.mjs'
+import Stjs from '/static/html/components/component_modules/stjs/st.mjs'
+import Json from '/static/html/components/component_modules/stjs/json.mjs'
 customElements.define('codemirror-main',
     class extends HTMLElement {
         constructor () {
@@ -666,7 +667,6 @@ customElements.define('codemirror-main',
 
                 let codemirror = new (await Codemirror({_:'codemirror', this:obj.this.shadowRoot}))['class']()
                 let editor = await codemirror.init({_:'init', this:obj.this.shadowRoot})
-                let ST = await stjs.ST({_:'ST', this:obj['this']})
                 let btnsearch = obj.this.shadowRoot.querySelector('#search'),
                     fnext = obj.this.shadowRoot.querySelector('#fnext'),
                     fprev = obj.this.shadowRoot.querySelector('#fprev'),
@@ -682,6 +682,109 @@ customElements.define('codemirror-main',
                     script =  obj.this.shadowRoot.querySelector('#script');
 
 
+                let ST = await Stjs.ST({_:'ST', this:obj['this']})
+                // var data = {
+                //     "links": [
+                //         { "remote_url": "http://localhost" },
+                //         { "file_url": "file://documents" },
+                //         { "remote_url": "https://blahblah.com" }
+                //     ],
+                //     "preview": "https://image",
+                //     "metadata": "This is a link collection"
+                // }
+                //
+                // var sel = ST.select(data, async (key, val) => {
+                //
+                //     console.log('~~~~~~~~~~~>>>', key, val)
+                //
+                //     return /https?:/.test(val);
+                // })
+                // var keys = sel.keys();
+                // var values = sel.values();
+                // var paths = sel.paths();
+                // var objects = sel.objects();
+                // var root = sel.root();
+
+                var data = {
+                    items: [1,2,3,100,10,19],
+                    action: [1,2,3,100,10,19]
+                };
+                var template = {
+                    labels: {
+                        "{{#each items}}": {
+                            type: "label",
+                            text: "{{this}}"
+                        }
+                    }
+                }
+                let json = new (await Json())['class']()
+                let selected = await json.select({ "items": [1,2,3,4] })
+                // console.assert(false,  selected)
+                let jsonTemplate = await json.transformWith(template, false, selected)
+
+
+                let out = ST.select(data)
+                console.log(jsonOut,'--->>>')
+
+                // var parsed = ST.select({ "items": [1,2,3,4] })
+                //     .transformWith({
+                //         "{{#each items}}": {
+                //             "type": "label", "text": "{{this}}"
+                //         }
+                //     })
+                //     .root();
+
+
+                // console.assert(false, parsed)
+                // ST.select(data, async (key,val)=>{
+                //     console.log('<<<<~~~~~ items ~~~~~>>>>', key,'--->', val)
+                // }).transformWith((template)=>{
+                //
+                //     console.log(template)
+                //     return template
+                // })
+                // ST.select((data)=>{
+                //
+                //     console.log('$$$$$$$ data $$$$$$$$$$$', data)
+                //     return data
+                // })
+                //     .transformWith(template)
+                //     .root()
+                // console.assert(false, objects)
+
+
+                 // data = {
+                 //    "title": "List of websites",
+                 //    "description": "This is a list of popular websites"
+                 //    "data": {
+                 //        "sites": [{
+                 //            "name": "Google",
+                 //            "url": "https://google.com"
+                 //        }, {
+                 //            "name": "Facebook",
+                 //            "url": "https://facebook.com"
+                 //        }, {
+                 //            "name": "Twitter",
+                 //            "url": "https://twitter.com"
+                 //        }, {
+                 //            "name": "Github",
+                 //            "url": "https://github.com"
+                 //        }]
+                 //    }
+                // }
+                //
+                //  sel = ST.select(data, function(key, val){
+                //     return key === 'sites';
+                // }).transformWith({
+                //         "items": {
+                //             "{{#each sites}}": {
+                //                 "tag": "<a href='{{url}}'>{{name}}</a>"
+                //             }
+                //         }
+                //     })
+                //
+                //  objects = sel.objects();
+                // console.assert(false, objects)
 
                 // console.assert(false, editor.editor.getValue())
                 btnsearch.addEventListener('click', function() {
@@ -735,22 +838,7 @@ customElements.define('codemirror-main',
                         }
                     }))
                     })()`
-
-                    // console.assert(false, document.body.querySelector('codemirror-main').shadowRoot.querySelector('#result'))
-
                     runScript.innerHTML = test
-                    // runScript.innerHTML =  ((input)=>{
-                    //     console.log('############<<<------------->>>############', input.codemirror)
-                    //
-                    //     input.codemirror.runMode(value, "module", result);
-                    //
-                    //
-
-                    // })({
-                    //     codemirror:codemirror.self.CodeMirror,
-                    //     editor: editor.editor
-                    // });
-
                     script.appendChild(runScript)
 
                 },false);
