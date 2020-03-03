@@ -34,11 +34,11 @@ section#manager {
         td.board-left, td.board-right, td.board-top{
           @include size();
           padding: 0;
-          div#chance,div#marvin,div#kentuky,div#waterWorks, div#ventnor{
+          div#chance,div#marvin,div#kentuky,div#waterWorks, div#ventnor, div#indiana{
             display: flex;
             width: 100%;
             height: calc(100vw * 0.101);
-            img.chance, img.marvin,img.kentuky, img.waterWorks, img.ventnor{
+            img.chance, img.marvin,img.kentuky, img.waterWorks, img.ventnor, img.indiana{
               width: 100%;
               height: calc(100vw * 0.101);
             }
