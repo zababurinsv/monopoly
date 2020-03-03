@@ -707,7 +707,7 @@ customElements.define('codemirror-main',
 
                 var data = {
                     items: [1,2,3,100,10,19],
-                    action: [1,2,3,100,10,19]
+                    action: [(obj)=>{return 'test'},2,3,100,10,19]
                 };
                 var template = {
                     labels: {
@@ -715,16 +715,20 @@ customElements.define('codemirror-main',
                             type: "label",
                             text: "{{this}}"
                         }
+                    },
+                    action: {
+                        "{{#each action}}": {
+                            type: "action",
+                            action: "{{this}}"
+                        }
                     }
                 }
                 let json = new (await Json())['class']()
-                let selected = await json.select({ "items": [1,2,3,4] })
-                // console.assert(false,  selected)
+                let selected = await json.select(data)
                 let jsonTemplate = await json.transformWith(template, false, selected)
-
-
+                // console.assert(false, jsonTemplate)
                 let out = ST.select(data)
-                console.log(jsonOut,'--->>>')
+                // console.log(jsonOut,'--->>>')
 
                 // var parsed = ST.select({ "items": [1,2,3,4] })
                 //     .transformWith({
