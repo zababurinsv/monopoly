@@ -1,5 +1,4 @@
 import loader from '/static/html/components/component_modules/loader/loader.mjs'
-import {style} from '/static/html/components/component_modules/loader/loader.mjs'
 let object = {}
 export default (obj = {_:'codemirror'})=>{
     return new Promise( async (resolve, reject) =>{
@@ -39,14 +38,13 @@ export default (obj = {_:'codemirror'})=>{
                                     break
                                 case'init':
                                     try {
-                                        let editor = CodeMirror.fromTextArea(obj.this.querySelector('#code'), {
-                                            mode:  "javascript",
+                                        let editor = CodeMirror.fromTextArea(obj.this, {
+                                            mode:  `${obj.mode}`,
+                                            theme: 'one-dark',
                                             lineNumbers: true,
                                             smartIndent: true,
                                             searchMode: 'popup',
-                                            // theme: 'default',
-                                            lineWrapping: true,
-                                            theme: "dracula"
+                                            lineWrapping: true
                                         });
                                         obj['editor'] = editor
                                         out(obj)

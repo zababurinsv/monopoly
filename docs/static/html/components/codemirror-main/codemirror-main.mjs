@@ -665,8 +665,9 @@ customElements.define('codemirror-main',
                     type:'obj'
                 }, 'set', 'type')
 
+
                 let codemirror = new (await Codemirror({_:'codemirror', this:obj.this.shadowRoot}))['class']()
-                let editor = await codemirror.init({_:'init', this:obj.this.shadowRoot})
+                let editor = await codemirror.init({_:'init', mode:'javascript',this:obj.this.shadowRoot.querySelector('#code')})
                 let btnsearch = obj.this.shadowRoot.querySelector('#search'),
                     fnext = obj.this.shadowRoot.querySelector('#fnext'),
                     fprev = obj.this.shadowRoot.querySelector('#fprev'),
@@ -682,6 +683,8 @@ customElements.define('codemirror-main',
                     script =  obj.this.shadowRoot.querySelector('#script');
 
 
+                let codemirrorResult = new (await Codemirror({_:'codemirror', this:obj.this.shadowRoot}))['class']()
+                let editorResult = await codemirror.init({_:'init',mode:'application/json', this:obj.this.shadowRoot.querySelector('#result')})
                 let ST = await Stjs.ST({_:'ST', this:obj['this']})
                 // var data = {
                 //     "links": [
@@ -705,92 +708,30 @@ customElements.define('codemirror-main',
                 // var objects = sel.objects();
                 // var root = sel.root();
 
-                var data = {
-                    items: [1,2,3,100,10,19],
-                    action: [(obj)=>{return 'test'},2,3,100,10,19]
-                };
-                var template = {
-                    labels: {
-                        "{{#each items}}": {
-                            type: "label",
-                            text: "{{this}}"
-                        }
-                    },
-                    action: {
-                        "{{#each action}}": {
-                            type: "action",
-                            action: "{{this}}"
-                        }
-                    }
-                }
+
                 let json = new (await Json())['class']()
-                let selected = await json.select(data)
-                let jsonTemplate = await json.transformWith(template, false, selected)
-                // console.assert(false, jsonTemplate)
-                let out = ST.select(data)
-                // console.log(jsonOut,'--->>>')
-
-                // var parsed = ST.select({ "items": [1,2,3,4] })
-                //     .transformWith({
-                //         "{{#each items}}": {
-                //             "type": "label", "text": "{{this}}"
-                //         }
-                //     })
-                //     .root();
 
 
-                // console.assert(false, parsed)
-                // ST.select(data, async (key,val)=>{
-                //     console.log('<<<<~~~~~ items ~~~~~>>>>', key,'--->', val)
-                // }).transformWith((template)=>{
-                //
-                //     console.log(template)
-                //     return template
-                // })
-                // ST.select((data)=>{
-                //
-                //     console.log('$$$$$$$ data $$$$$$$$$$$', data)
-                //     return data
-                // })
-                //     .transformWith(template)
-                //     .root()
-                // console.assert(false, objects)
 
-
-                 // data = {
-                 //    "title": "List of websites",
-                 //    "description": "This is a list of popular websites"
-                 //    "data": {
-                 //        "sites": [{
-                 //            "name": "Google",
-                 //            "url": "https://google.com"
-                 //        }, {
-                 //            "name": "Facebook",
-                 //            "url": "https://facebook.com"
-                 //        }, {
-                 //            "name": "Twitter",
-                 //            "url": "https://twitter.com"
-                 //        }, {
-                 //            "name": "Github",
-                 //            "url": "https://github.com"
-                 //        }]
-                 //    }
-                // }
-                //
-                //  sel = ST.select(data, function(key, val){
-                //     return key === 'sites';
-                // }).transformWith({
-                //         "items": {
-                //             "{{#each sites}}": {
-                //                 "tag": "<a href='{{url}}'>{{name}}</a>"
-                //             }
-                //         }
-                //     })
-                //
+                // JSON.stringify($scope.code, null, 4);
                 //  objects = sel.objects();
                 // console.assert(false, objects)
 
                 // console.assert(false, editor.editor.getValue())
+
+                editor.editor.on('drop', function(data, e) {
+                    var file;
+                    var files;
+                    // Check if files were dropped
+                    files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        file = files[0];
+                        alert('File: ' + file.name);
+                        return false;
+                    }
+                })
                 btnsearch.addEventListener('click', function() {
                     codemirror.self.CodeMirror.commands.find(editor.editor)
                 }, false);
@@ -827,27 +768,60 @@ customElements.define('codemirror-main',
                     let value = sessionStorage.getItem('CodeMirror');
                     editor.editor.setValue(value)
                 },false);
-                run.addEventListener('click', function(){
+                run.addEventListener('click', async ()=>{
                     let value = editor.editor.getValue()
                     let runScript = document.createElement('script');
                     runScript.type = 'module';
+
+                    // let result = document.body.querySelector('codemirror-main').shadowRoot.querySelector('#result')
+                    // result.innerHTML = object
+
                     let test = `
-                    (async (d)=>{
-                    ${value}
-                    let result = document.body.querySelector('codemirror-main').shadowRoot.querySelector('#result')
-                    result.innerHTML = object
-                    document.dispatchEvent(new CustomEvent('CodeMirror', {
-                        detail: {
-                            _:'response'
-                        }
-                    }))
-                    })()`
+(async ()=>{
+    ${value}
+    let verifyData = false;
+    let verifyTemplate = false;
+    if(typeof data !== "undefined"){
+        verifyData = true;
+    }
+    if(typeof template !== "undefined"){
+        verifyTemplate = true
+    }
+    if(verifyData === true && verifyTemplate === true){
+
+        document.dispatchEvent(new CustomEvent('CodeMirror', {
+            detail: {
+                _:'transform',
+                data:data,
+                template:template
+            }
+        }))
+    }else{
+
+        document.dispatchEvent(new CustomEvent('CodeMirror', {
+            detail: {
+                _:'response',
+                data:${value}
+            }
+        }))
+        
+    }
+})()`;
                     runScript.innerHTML = test
                     script.appendChild(runScript)
 
                 },false);
 
                 document.addEventListener('CodeMirror',async (event)=>{
+                  if(event.detail._ === 'transform'){
+                      let selected = await json.select(event.detail.data)
+                      let jsonTemplate = await json.transformWith(event.detail.template, false, selected)
+                      let root = await json.root(jsonTemplate)
+                      editorResult.editor.setValue(JSON.stringify(root,null, 4))
+
+                  }else{
+                      editorResult.editor.setValue(`${event.detail.data()}`)
+                  }
 
                     script.innerHTML = ''
                 })
@@ -857,4 +831,4 @@ customElements.define('codemirror-main',
 
             }
         }
-    })
+    });

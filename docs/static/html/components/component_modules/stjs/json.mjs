@@ -30,8 +30,156 @@ Helper['is_template'] = (str)=>{
 }
 let TRANSFORM = {}
 let object = {}
-object['Helper'] = proxy(Helper)
-object['SELECT'] = proxy(SELECT)
+object['Helper'] = Helper
+object['SELECT'] = SELECT
+
+SELECT.exec = (current, path, filter) => {
+    return  new Promise(async function (resolve, reject) {
+        let out = (obj) => {
+            resolve(obj)
+        }
+        let err = (error) => {
+            console.log('~~~ err ~~~', error)
+            reject(error)
+        }
+        try {
+
+            // if current matches the pattern, put it in the selected array
+            if (typeof current === 'string') {
+                // leaf node should be ignored
+                // we're lookin for keys only
+            } else if (await Helper.is_array(current)) {
+                for (var i=0; i<current.length; i++) {
+                   await SELECT.exec(current[i], path+'['+i+']', filter);
+                }
+            } else {
+                // object
+                for (var key in current) {
+                    // '$root' is a special key that links to the root node
+                    // so shouldn't be used to iterate
+                    if (key !== '$root') {
+                        if (filter(key, current[key])) {
+                            let index = SELECT.$selected.length;
+                            SELECT.$selected.push({
+                                index: index,
+                                key: key,
+                                path: path,
+                                object: current,
+                                value: current[key],
+                            });
+                        }
+                       await SELECT.exec(current[key], path+'["'+key+'"]', filter);
+                    }
+                }
+            }
+
+
+        }catch (e) {
+            err({
+                _:'exec',
+                error: e
+            })
+        }
+    })
+}
+
+// Terminal methods
+SELECT.objects = (obj = {_:'SELECT', SELECT:undefined}) =>{
+    return  new Promise(async function (resolve, reject) {
+        if(isEmpty(obj.SELECT)){
+        }else{
+            SELECT = obj.SELECT
+        }
+
+        SELECT.$progress = null;
+        if (SELECT.$selected) {
+            resolve(SELECT.$selected.map(function(item) { return item.object; }));
+        } else {
+            resolve([SELECT.$selected_root]);
+        }
+
+
+    })
+}
+SELECT.keys = (obj = {_:'SELECT', SELECT:undefined}) => {
+    return  new Promise(async function (resolve, reject) {
+        if(isEmpty(obj.SELECT)){
+        }else{
+            SELECT = obj.SELECT
+        }
+
+
+        SELECT.$progress = null;
+        if (SELECT.$selected) {
+            resolve(SELECT.$selected.map(function(item) { return item.key; }));
+        } else {
+            if (Array.isArray(SELECT.$selected_root)) {
+                resolve(Object.keys(SELECT.$selected_root).map(function(key) { return parseInt(key); }));
+            } else {
+                resolve(Object.keys(SELECT.$selected_root));
+            }
+        }
+
+
+    })
+
+}
+SELECT.paths = (obj = {_:'SELECT', SELECT:undefined}) => {
+    return  new Promise(async function (resolve, reject) {
+        if(isEmpty(obj.SELECT)){
+        }else{
+            SELECT = obj.SELECT
+        }
+
+        SELECT.$progress = null;
+        if (SELECT.$selected) {
+            resolve(SELECT.$selected.map(function(item) { return item.path; }));
+        } else {
+            if (Array.isArray(SELECT.$selected_root)) {
+                resolve(Object.keys(SELECT.$selected_root).map(function(item) {
+                    // key is integer
+                    return '[' + item + ']';
+                }))
+            } else {
+                resolve( Object.keys(SELECT.$selected_root).map(function(item) {
+                    // key is string
+                    return '["' + item + '"]';
+                }))
+            }
+        }
+
+    })
+}
+SELECT.values = (obj = {_:'SELECT', SELECT:undefined}) => {
+    return  new Promise(async function (resolve, reject) {
+        if(isEmpty(obj.SELECT)){
+        }else{
+            SELECT = obj.SELECT
+        }
+        SELECT.$progress = null;
+        if (SELECT.$selected) {
+            resolve(SELECT.$selected.map(function(item) { return item.value; }));
+        } else {
+            resolve(Object.values(SELECT.$selected_root));
+        }
+
+
+    })
+},
+SELECT.root = (obj = {_:'SELECT', SELECT:undefined}) =>{
+    return  new Promise(async function (resolve, reject) {
+        if(isEmpty(obj.SELECT)){
+        }else{
+            SELECT = obj.SELECT
+        }
+        SELECT.$progress = null;
+        resolve(SELECT.$selected_root)
+    })
+
+}
+
+
+
 Helper['is_array'] = (item)=>{
     return  new Promise(async function (resolve, reject) {
         resolve(
@@ -302,7 +450,7 @@ TRANSFORM.run = (template, data) => {
                         fun = await TRANSFORM.tokenize(template);
                         if (fun.expression) {
                             // if #include has arguments, evaluate it before attaching
-                            result = TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true);
+                            result = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true);
                         } else {
                             // shouldn't happen =>
                             // {'wrapper': '{{#include}}'}
@@ -310,7 +458,7 @@ TRANSFORM.run = (template, data) => {
                         }
                     } else {
                         // non-#include
-                        result = TRANSFORM.fillout(data, template);
+                        result = await TRANSFORM.fillout(data, template);
                     }
                 } else {
                     result = template;
@@ -694,35 +842,202 @@ Conditional.is = (template) => {
         }
     })
 }
-// {
-//     is_template: function(str) {
-//         let re = /\{\{(.+)\}\}/g;
-//         return re.test(str);
-//     },
-//     is_array: function(item) {
-//         return (
-//             Array.isArray(item) ||
-//             (!!item &&
-//                 typeof item === 'object' && typeof item.length === 'number' &&
-//                 (item.length === 0 || (item.length > 0 && (item.length - 1) in item))
-//             )
-//         );
-//     },
-//     resolve: function(o, path, new_val) {
-        // 1. Takes any object
-        // 2. Finds subtree based on path
-        // 3. Sets the value to new_val
-        // 4. Returns the object;
-        // if (path && path.length > 0) {
-        //     let func = Function('new_val', 'with(this) {this' + path + '=new_val; return this;}').bind(o);
-        //     return func(new_val);
-        // } else {
-        //     o = new_val;
-        //     return o;
-        // }
-    // }
-// };
 
+SELECT.select = (obj,filter, serialized) =>{
+    return new Promise(async function (resolve, reject) {
+        let out = (obj) => {
+            resolve(obj)
+        }
+        let err = (error) => {
+            reject(error)
+        }
+        try{
+            if(!isEmpty(filter)){
+                obj.filter = filter
+            }
+            if(!isEmpty(serialized)){
+                obj.serialized = serialized
+            }
+            // console.assert(false,obj )
+            // iterate '$selected'
+            //
+            /*
+            SELECT.$selected = [{
+              value {
+                '{{#include}}': {
+                  '{{#each items}}': {
+                    'type': 'label',
+                    'text': '{{name}}'
+                  }
+                }
+              },
+              path: '$jason.head.actions.$load'
+              ...
+            }]
+            */
+            let json = {}
+            if(isEmpty(obj.this)){
+                json = obj;
+            }else{
+                json = obj.this
+            }
+
+            try {
+                if (serialized){
+                    json = JSON.parse(obj);
+                }
+            } catch (error) { }
+
+            if (filter) {
+                SELECT.$selected = [];
+                await SELECT.exec(json, '', filter);
+            } else {
+                SELECT.$selected = null;
+            }
+
+            if (json && (Helper.is_array(json) || typeof json === 'object')) {
+                if (!SELECT.$progress) {
+                    // initialize
+                    if (Helper.is_array(json)) {
+                        SELECT.$val = [];
+                        SELECT.$selected_root = [];
+                    } else {
+                        SELECT.$val = {};
+                        SELECT.$selected_root = {};
+                    }
+                }
+                Object.keys(json).forEach(function(key) {
+                    //for (let key in json) {
+                    SELECT.$val[key] = json[key];
+                    SELECT.$selected_root[key] = json[key];
+                });
+            } else {
+                SELECT.$val = json;
+                SELECT.$selected_root = json;
+            }
+            SELECT.$progress = true; // set the 'in progress' flag
+
+            out(SELECT);
+
+        }catch (e) {
+            err({
+                _:'error menu',
+                error: e
+            })
+        }
+    })
+}
+
+SELECT.transformWith = (obj,serialized, selected) => {
+    return new Promise(async function (resolve, reject) {
+        let out = (obj) => {
+            resolve(obj)
+        }
+        let err = (error) => {
+            reject(error)
+        }
+        try{
+            // console.assert(false, SELECT.$progress)
+            if(isEmpty(SELECT.$progress)){
+                SELECT.$progress = null;
+            }
+            if(isEmpty(SELECT.$parsed)){
+                SELECT.$parsed = [];
+            }
+            if(isEmpty(selected)){
+            }else{
+                SELECT = Object.assign(SELECT,selected);
+                console.warn('нужно проверить работоспособность при совпадении двух свойств', SELECT)
+            }
+
+            let template = {}
+            if(isEmpty(obj.template)){
+                template = obj;
+            }else{
+                template = obj.template;
+            }
+            if(isEmpty(serialized)){
+                obj.serialized = serialized
+            }
+            try {
+                if (serialized){
+                    template = JSON.parse(obj);
+                }
+            } catch (error) { }
+            SELECT.$template_root = template;
+            String.prototype.$root = SELECT.$selected_root;
+            Number.prototype.$root = SELECT.$selected_root;
+            Function.prototype.$root = SELECT.$selected_root;
+            Array.prototype.$root = SELECT.$selected_root;
+            Boolean.prototype.$root = SELECT.$selected_root;
+            let root = SELECT.$selected_root;
+            // generate new $selected_root
+            if (SELECT.$selected && SELECT.$selected.length > 0) {
+
+                let sort =  SELECT.$selected.sort(function(a, b) {
+                    // sort by path length, so that deeper level items will be replaced first
+                    // TODO: may need to look into edge cases
+                    return b.path.length - a.path.length;
+                })
+
+                // .forEach((selection) => {
+                //SELECT.$selected.forEach(function(selection) {
+                // parse selected
+                // let parsed_object = TRANSFORM.run(template, selection.object);
+                // apply the result to root
+                // SELECT.$selected_root =  Helper.resolve(SELECT.$selected_root, selection.path, parsed_object);
+                // update selected object with the parsed result
+                // selection.object = parsed_object;
+                // });
+                SELECT.$selected.sort(function(a, b) {
+                    return a.index - b.index;
+                });
+            } else {
+                // console.assert(false, template, SELECT.$selected_root)
+                let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root);
+                // apply the result to root
+                SELECT.$selected_root = await Helper.resolve(SELECT.$selected_root, '', parsed_object);
+                out({
+                    _:'transformWith',
+                    parsedObject: parsed_object,
+                    SELECT:SELECT
+                })
+            }
+        }catch (e) {
+            err({
+                _:'error menu',
+                error: e
+            })
+        }
+    })
+
+}
+// Native JSON object override
+let _stringify = JSON.stringify;
+JSON.stringify = function(val, replacer, spaces) {
+    var t = typeof val;
+    if (['number', 'string', 'boolean'].indexOf(t) !== -1) {
+        return _stringify(val, replacer, spaces);
+    }
+    if (!replacer) {
+        return _stringify(val, function(key, val) {
+            if (SELECT.$injected && SELECT.$injected.length > 0 && SELECT.$injected.indexOf(key) !== -1) { return undefined; }
+            if (key === '$root' || key === '$index') {
+                return undefined;
+            }
+            if (key in TRANSFORM.memory) {
+                return undefined;
+            }
+            if (typeof val === 'function') {
+                return '(' + val.toString() + ')';
+            } else {
+                return val;
+            }
+        }, spaces);
+    } else {
+        return _stringify(val, replacer, spaces);
+    }
+};
 export default (obj = {_:'json'})=>{
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
@@ -738,96 +1053,13 @@ export default (obj = {_:'json'})=>{
             constructor(self) {
                 this.select = this.select.bind(this)
                 this.transformWith = this.transformWith.bind(this)
-
+                this.root = this.root.bind(this)
             }
-            transformWith(obj ={
-                _:'select',
-                template:undefined,
-                serialized:false,
-                SELECT: undefined
-            },serialized, selected){
-                return new Promise(async function (resolve, reject) {
-                    let out = (obj) => {
-                        resolve(obj)
-                    }
-                    let err = (error) => {
-                        reject(error)
-                    }
-                    try{
-                        // console.assert(false, SELECT.$progress)
-                        if(isEmpty(SELECT.$progress)){
-                            SELECT.$progress = null;
-                        }
-                        if(isEmpty(SELECT.$parsed)){
-                            SELECT.$parsed = [];
-                        }
-                        if(isEmpty(selected)){
-                        }else{
-                            SELECT = Object.assign(SELECT,selected);
-                            console.warn('нужно проверить работоспособность при совпадении двух свойств', SELECT)
-                        }
-
-                        let template = {}
-                        if(isEmpty(obj.template)){
-                            template = obj;
-                        }else{
-                            template = obj.template;
-                        }
-                        if(!isEmpty(serialized)){
-                            obj.serialized = serialized
-                        }
-                        try {
-                            if (serialized){
-                                template = JSON.parse(obj);
-                            }
-                        } catch (error) { }
-                        SELECT.$template_root = template;
-                        String.prototype.$root = SELECT.$selected_root;
-                        Number.prototype.$root = SELECT.$selected_root;
-                        Function.prototype.$root = SELECT.$selected_root;
-                        Array.prototype.$root = SELECT.$selected_root;
-                        Boolean.prototype.$root = SELECT.$selected_root;
-                        let root = SELECT.$selected_root;
-                        // generate new $selected_root
-                        if (SELECT.$selected && SELECT.$selected.length > 0) {
-                            console.assert(false, SELECT.$selected)
-                           let sort =  SELECT.$selected.sort(function(a, b) {
-                                // sort by path length, so that deeper level items will be replaced first
-                                // TODO: may need to look into edge cases
-                                return b.path.length - a.path.length;
-                            })
-                              console.assert(false, sort)
-                               // .forEach((selection) => {
-                                //SELECT.$selected.forEach(function(selection) {
-                                // parse selected
-                                // let parsed_object = TRANSFORM.run(template, selection.object);
-                                // apply the result to root
-                                // SELECT.$selected_root =  Helper.resolve(SELECT.$selected_root, selection.path, parsed_object);
-                                // update selected object with the parsed result
-                                // selection.object = parsed_object;
-                            // });
-                            SELECT.$selected.sort(function(a, b) {
-                                return a.index - b.index;
-                            });
-                        } else {
-                            // console.assert(false, template, SELECT.$selected_root)
-                            let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root);
-                            // apply the result to root
-                            SELECT.$selected_root = await Helper.resolve(SELECT.$selected_root, '', parsed_object);
-                        out({
-                            _:'transformWith',
-                            parsedObject: parsed_object,
-                            SELECT:SELECT
-                        })
-                        }
-                    }catch (e) {
-                        err({
-                            _:'error menu',
-                            error: e
-                        })
-                    }
-                })
-
+            root(obj){
+                return SELECT.root(obj)
+            }
+            transformWith(obj,serialized, selected){
+               return SELECT.transformWith(obj,serialized, selected)
             }
             select(obj ={
                 _:'select',
@@ -835,86 +1067,7 @@ export default (obj = {_:'json'})=>{
                 filter:false,
                 serialized:false
             },filter, serialized){
-                return new Promise(async function (resolve, reject) {
-                    let out = (obj) => {
-                        resolve(obj)
-                    }
-                    let err = (error) => {
-                        reject(error)
-                    }
-                    try{
-                        if(!isEmpty(filter)){
-                            obj.filter = filter
-                        }
-                        if(!isEmpty(serialized)){
-                            obj.serialized = serialized
-                        }
-                        // console.assert(false,obj )
-                        // iterate '$selected'
-                        //
-                        /*
-                        SELECT.$selected = [{
-                          value {
-                            '{{#include}}': {
-                              '{{#each items}}': {
-                                'type': 'label',
-                                'text': '{{name}}'
-                              }
-                            }
-                          },
-                          path: '$jason.head.actions.$load'
-                          ...
-                        }]
-                        */
-                        let json = {}
-                        if(isEmpty(obj.this)){
-                            json = obj;
-                        }else{
-                            json = obj.this
-                        }
-
-                        try {
-                            if (serialized) json = JSON.parse(obj);
-                        } catch (error) { }
-
-                        if (filter) {
-                            SELECT.$selected = [];
-                            SELECT.exec(json, '', filter);
-                        } else {
-                            SELECT.$selected = null;
-                        }
-
-                        if (json && (Helper.is_array(json) || typeof json === 'object')) {
-                            if (!SELECT.$progress) {
-                                // initialize
-                                if (Helper.is_array(json)) {
-                                    SELECT.$val = [];
-                                    SELECT.$selected_root = [];
-                                } else {
-                                    SELECT.$val = {};
-                                    SELECT.$selected_root = {};
-                                }
-                            }
-                            Object.keys(json).forEach(function(key) {
-                                //for (let key in json) {
-                                SELECT.$val[key] = json[key];
-                                SELECT.$selected_root[key] = json[key];
-                            });
-                        } else {
-                            SELECT.$val = json;
-                            SELECT.$selected_root = json;
-                        }
-                        SELECT.$progress = true; // set the 'in progress' flag
-
-                        out(SELECT);
-
-                    }catch (e) {
-                        err({
-                            _:'error menu',
-                            error: e
-                        })
-                    }
-                })
+                return SELECT.select(obj,filter, serialized)
             }
             get self() {
                 return object
