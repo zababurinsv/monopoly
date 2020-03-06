@@ -4,7 +4,7 @@ import square from '/static/html/components/component_modules/monopoly/square.mj
 import classicedition from '/static/html/components/component_modules/monopoly/classicedition.mjs'
 import gameplay from '/static/html/components/component_modules/monopoly/gameplay.mjs'
 import ai from '/static/html/components/component_modules/monopoly/ai.mjs'
-
+import Json from '/static/html/components/component_modules/stjs/json.mjs'
 export default {
     get:async (obj, type, ...rest)=>{
         return  new Promise(async (resolve, reject) => {
@@ -505,6 +505,32 @@ export default {
                         jail: false,
                         cell:0
                     }
+                    let data  ={
+                        _:'button',
+                        type:'default',
+                        items: ['trade-leftp-money','trade-rightp-money'],
+                        event:['onkeydown', 'onfocus', 'onchange'],
+                        actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
+                    }
+
+                    let templateItem = {
+                        button: {
+                            "{{#each items}}": {
+                                _: "button",
+                                type: "{{this}}"
+                            }
+                        }
+                    }
+                    // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                    // console.assert(false)
+                    let json = new (await Json())['class']()
+                    let selected = await json.select(data)
+                    let jsonTemplate = await json.transformWith(templateItem, false, selected)
+                    let outItem = await json.root(jsonTemplate)
+                    // console.assert(false, jsonTemplate)
+                    // console.assert(false, selected)
+                    //
+                    // console.assert(false, jsonTemplate)
                     // for (let i = 0; i < 8; i++) {
                     //     payload['player'][i] = await mInterface['get']({type:'player', color:''})
                     //     payload['player'][i].index = i;

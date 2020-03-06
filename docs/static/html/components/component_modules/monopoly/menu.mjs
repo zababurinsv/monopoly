@@ -1,5 +1,5 @@
-import game from "/static/html/components/component_modules/monopoly/menu-game.mjs";
-import monopoly from "/static/html/components/component_modules/monopoly/menu-monopoly.mjs";
+import menuGame from "/static/html/components/component_modules/monopoly/menu-game.mjs";
+import Monopoly from "/static/html/components/component_modules/monopoly/menu-monopoly.mjs";
 let object = {}
 object['menu'] = undefined
 export default (obj)=>{
@@ -32,7 +32,7 @@ export default (obj)=>{
                                     break
                                 case'init':
                                     try {
-                                        let monopoly = await game['get']({
+                                        let monopoly = await menuGame['get']({
                                             input:'main',
                                             type:'monopoly',
                                             this:obj.this

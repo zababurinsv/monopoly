@@ -14,7 +14,7 @@ function server(obj, path,node, method) {
             }
             switch (method) {
                 case 'GET':
-                    console.log('~~~~~~~~~~~~GET~~~~~~~~~~~~~~~~',`${node}${path}`)
+                    // console.log('~~~~~~~~~~~~GET~~~~~~~~~~~~~~~~',`${node}${path}`)
                     axios.get(`${node}${path}`)
                         .then(function (response) {
                             obj = {}
@@ -125,7 +125,7 @@ export default  (obj, func, ...args)=>{
             case 'set':
                 (async (obj, props,data) => {
                     try {
-                        console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                        // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                         switch (obj[props]) {
                             case 'auction':
                                 (async (obj, props,data) => {
@@ -155,7 +155,7 @@ export default  (obj, func, ...args)=>{
             case 'post':
                     (async (obj, props,data) => {
                         try {
-                            console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                            // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                             switch (obj[props]) {
                                 case 'account':
                                     (async (obj, props,data) => {
@@ -175,7 +175,7 @@ export default  (obj, func, ...args)=>{
             case 'get':
                 (async (obj, props,data) => {
                     try {
-                        console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                        // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                         switch (obj[props]) {
                             case 'auctions':
                                 (async (obj, props,data) => {
@@ -231,7 +231,7 @@ export default  (obj, func, ...args)=>{
             case 'update':
                 (async (obj, props,data) => {
                     try {
-                        console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                        // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                         switch (obj[props]) {
                             case 'account':
                                 if(!obj['path']){
@@ -250,7 +250,7 @@ export default  (obj, func, ...args)=>{
             case 'checked':
                 (async (obj, props,data) => {
                     try {
-                        console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                        // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                         switch (obj[props]) {
                             case 'account':
                                 if(!obj['path']){
@@ -269,7 +269,7 @@ export default  (obj, func, ...args)=>{
             case 'delete':
                 (async (obj, props,data) => {
                     try {
-                        console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                        // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                         switch (obj[props]) {
                             case 'item':
                                 if(!obj['path']){

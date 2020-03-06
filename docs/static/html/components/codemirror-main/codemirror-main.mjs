@@ -1,7 +1,7 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
 import Codemirror from '/static/html/components/component_modules/codemirror/codemirror.mjs'
-import Stjs from '/static/html/components/component_modules/stjs/st.mjs'
-import Json from '/static/html/components/component_modules/stjs/json.mjs'
+// import Stjs from '/static/html/components/component_modules/stjs/st.mjs'
+// import Json from '/static/html/components/component_modules/stjs/json.mjs'
 customElements.define('codemirror-main',
     class extends HTMLElement {
         constructor () {
@@ -685,39 +685,20 @@ customElements.define('codemirror-main',
 
                 let codemirrorResult = new (await Codemirror({_:'codemirror', this:obj.this.shadowRoot}))['class']()
                 let editorResult = await codemirror.init({_:'init',mode:'application/json', this:obj.this.shadowRoot.querySelector('#result')})
-                let ST = await Stjs.ST({_:'ST', this:obj['this']})
-                // var data = {
-                //     "links": [
-                //         { "remote_url": "http://localhost" },
-                //         { "file_url": "file://documents" },
-                //         { "remote_url": "https://blahblah.com" }
-                //     ],
-                //     "preview": "https://image",
-                //     "metadata": "This is a link collection"
-                // }
-                //
-                // var sel = ST.select(data, async (key, val) => {
-                //
-                //     console.log('~~~~~~~~~~~>>>', key, val)
-                //
-                //     return /https?:/.test(val);
-                // })
-                // var keys = sel.keys();
-                // var values = sel.values();
-                // var paths = sel.paths();
-                // var objects = sel.objects();
-                // var root = sel.root();
+                // let ST = await Stjs.ST({_:'ST', this:obj['this']})
 
+                // let json = new (await Json())['class']()
 
-                let json = new (await Json())['class']()
-
-
-
+                // console.assert(false)
+                // let selected = await json.select(data)
+                // let jsonTemplate = await json.transformWith(template, false, selected)
+                // console.assert(false, jsonTemplate)
+                // let root = await json.root(jsonTemplate)
+                // console.assert(false,root)
                 // JSON.stringify($scope.code, null, 4);
                 //  objects = sel.objects();
                 // console.assert(false, objects)
 
-                // console.assert(false, editor.editor.getValue())
 
                 editor.editor.on('drop', function(data, e) {
                     var file;
@@ -814,9 +795,9 @@ customElements.define('codemirror-main',
 
                 document.addEventListener('CodeMirror',async (event)=>{
                   if(event.detail._ === 'transform'){
-                      let selected = await json.select(event.detail.data)
-                      let jsonTemplate = await json.transformWith(event.detail.template, false, selected)
-                      let root = await json.root(jsonTemplate)
+                      // let selected = await json.select(event.detail.data)
+                      // let jsonTemplate = await json.transformWith(event.detail.template, false, selected)
+                      // let root = await json.root(jsonTemplate)
                       editorResult.editor.setValue(JSON.stringify(root,null, 4))
 
                   }else{

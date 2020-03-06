@@ -1,6 +1,5 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
 import Net from '/static/html/components/component_modules/monopoly/net.mjs'
-import Menu from '/static/html/components/component_modules/monopoly/menu.mjs'
 customElements.define('manager-order',
     class extends HTMLElement {
         constructor () {
@@ -663,9 +662,6 @@ customElements.define('manager-order',
                     obj: obj,
                     type:'obj'
                 }, 'set', 'type')
-                let menu = new (await Menu(obj))['class'](obj)
-                menu.self.menu = await menu.menu({_:'init', this:obj['this']})
-
                // console.assert(false, new Menu.class(obj))
                // await Menu(obj)
                // await monopoly(obj)

@@ -1,37 +1,29 @@
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
+import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
+// import SELECT from '/static/html/components/component_modules/stjs/module-select.mjs'
+// import Helper from '/static/html/components/component_modules/stjs/module-helper.mjs'
+// import TRANSFORM from '/static/html/components/component_modules/stjs/module-transform.mjs'
+// import Conditional from '/static/html/components/component_modules/stjs/module-conditional.mjs'
+import Performance from '/static/html/components/component_modules/performance/performance.mjs'
+let performance = Performance()
+let object = {}
 let SELECT = {}
 SELECT['$progress'] = false
 SELECT['$selected'] = false
-let root; // root context;
+let Conditional = {}
+let root;
 
-const handler = {
-    get: (obj, prop) => {
-        console.log('~~~ get ~~~',prop,'--->', obj[prop])
-        return obj[prop]
-    },
-    set: (obj, prop, value) => {
-        console.log('~~~ set ~~~',prop,'--->', value)
-        obj[prop] = value
-        return obj
-    }
-}
-
-function proxy (obj) {
-    obj = new Proxy(obj, handler)
-    return obj
-}
 
 let Helper = {}
+let TRANSFORM = {}
+
 Helper['is_template'] = (str)=>{
    return  new Promise(async function (resolve, reject) {
     let re = /\{\{(.+)\}\}/g;
         resolve(re.test(str))
    })
 }
-let TRANSFORM = {}
-let object = {}
-object['Helper'] = Helper
-object['SELECT'] = SELECT
+
 
 SELECT.exec = (current, path, filter) => {
     return  new Promise(async function (resolve, reject) {
@@ -44,19 +36,22 @@ SELECT.exec = (current, path, filter) => {
         }
         try {
 
+            colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current,path, filter )
             // if current matches the pattern, put it in the selected array
             if (typeof current === 'string') {
                 // leaf node should be ignored
                 // we're lookin for keys only
             } else if (await Helper.is_array(current)) {
-                for (var i=0; i<current.length; i++) {
+                for (let i=0; i<current.length; i++) {
+                    colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current[i], path+'['+i+']', filter )
                    await SELECT.exec(current[i], path+'['+i+']', filter);
                 }
             } else {
                 // object
-                for (var key in current) {
+                for (let key in current) {
                     // '$root' is a special key that links to the root node
                     // so shouldn't be used to iterate
+                    colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current, key,current[key])
                     if (key !== '$root') {
                         if (filter(key, current[key])) {
                             let index = SELECT.$selected.length;
@@ -68,6 +63,7 @@ SELECT.exec = (current, path, filter) => {
                                 value: current[key],
                             });
                         }
+                        colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current[key], path+'["'+key+'"]', filter)
                        await SELECT.exec(current[key], path+'["'+key+'"]', filter);
                     }
                 }
@@ -165,7 +161,7 @@ SELECT.values = (obj = {_:'SELECT', SELECT:undefined}) => {
 
 
     })
-},
+}
 SELECT.root = (obj = {_:'SELECT', SELECT:undefined}) =>{
     return  new Promise(async function (resolve, reject) {
         if(isEmpty(obj.SELECT)){
@@ -173,12 +169,11 @@ SELECT.root = (obj = {_:'SELECT', SELECT:undefined}) =>{
             SELECT = obj.SELECT
         }
         SELECT.$progress = null;
+        colorlog('>~~~~~~~~~ SELECT.root ~~~$selected_root_out~~~~<','red',SELECT.$selected_root)
         resolve(SELECT.$selected_root)
     })
 
 }
-
-
 
 Helper['is_array'] = (item)=>{
     return  new Promise(async function (resolve, reject) {
@@ -202,6 +197,7 @@ Helper.resolve =(o, path, new_val)=> {
             reject(error)
         }
         try {
+            colorlog('>~~~~~~~~~ SELECT.root ~~~resolve~~~~<','#348feb',SELECT.$selected_root)
             // 1. Takes any object
             // 2. Finds subtree based on path
             // 3. Sets the value to new_val
@@ -325,6 +321,7 @@ TRANSFORM._fillout = (options) =>{
         }
     })
 }
+
 TRANSFORM.fillout = (data, template, raw) =>{
     return  new Promise(async function (resolve, reject) {
         let out = (obj) => {
@@ -335,6 +332,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
             reject(error)
         }
         try {
+            colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~in~~~~~~<','#9beb34',data, template, raw)
             // 1. fill out if possible
             // 2. otherwise return the original
             let replaced = template;
@@ -347,6 +345,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
                 let variables = template.match(re);
 
                 if (variables) {
+                    colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables~~1~~~~<','#9beb34',variables)
                     if (raw) {
                         // 'raw' is true only for when this is called from #each
                         // Because #each is expecting an array, it shouldn't be stringified.
@@ -358,8 +357,10 @@ TRANSFORM.fillout = (data, template, raw) =>{
                             data: data,
                             template: null,
                         });
+                        colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~_fillout~~~~~~<','#9beb34',replaced)
                     } else {
                         // Fill out the template for each variable
+
                         for (let i = 0; i < variables.length; i++) {
                             let variable = variables[i];
                             replaced = await TRANSFORM._fillout({
@@ -368,11 +369,13 @@ TRANSFORM.fillout = (data, template, raw) =>{
                                 template: replaced,
                             });
                         }
+                        colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables_fillout~~2~~~~<','#9beb34',replaced)
                     }
                 } else {
                     console.warn('здесь был return пока не вижу зачем он')
                 }
             }
+            colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~out~~~~<','red',replaced)
             out(replaced);
 
 
@@ -387,6 +390,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
 
     })
 }
+
 TRANSFORM.tokenize =(str) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
@@ -428,6 +432,7 @@ TRANSFORM.tokenize =(str) => {
         }
     })
 }
+
 TRANSFORM.run = (template, data) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
@@ -441,11 +446,12 @@ TRANSFORM.run = (template, data) => {
         try {
             let result;
             let fun;
+            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~template~~~~~~<','#c203fc', template)
             if (typeof template === 'string') {
                 // Leaf node, so call TRANSFORM.fillout()
                 if (await Helper.is_template(template)) {
                     let include_string_re = /\{\{([ ]*#include)[ ]*([^ ]*)\}\}/g;
-                    console.log('include_string_re', include_string_re.test(template))
+                    colorlog('>~~~~~~~~~ TRANSFORM.run ~~~include_string_re~~~~~~<','#c203fc', include_string_re)
                     if (include_string_re.test(template)) {
                         fun = await TRANSFORM.tokenize(template);
                         if (fun.expression) {
@@ -578,6 +584,7 @@ TRANSFORM.run = (template, data) => {
                                     }
                                 }
                             } else if (fun.name === '#each') {
+                                colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc', data, '{{' + fun.expression + '}}', true)
                                 // newData will be filled with parsed results
                                 let newData = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true);
 
@@ -586,6 +593,7 @@ TRANSFORM.run = (template, data) => {
                                     result = [];
                                     for (let index = 0; index < newData.length; index++) {
                                         // temporarily set $index
+                                        colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc',newData[index])
                                         if(typeof newData[index] === 'object') {
                                             newData[index]["$index"] = index;
                                             // #let handling
@@ -593,6 +601,7 @@ TRANSFORM.run = (template, data) => {
                                                 newData[index][declared_vars] = TRANSFORM.memory[declared_vars];
                                             }
                                         } else {
+                                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',TRANSFORM.memory)
                                             String.prototype.$index = index;
                                             Number.prototype.$index = index;
                                             Function.prototype.$index = index;
@@ -609,6 +618,7 @@ TRANSFORM.run = (template, data) => {
                                         }
 
                                         // run
+                                        colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',template[key], newData[index])
                                         let loop_item = await TRANSFORM.run(template[key], newData[index]);
 
                                         // clean up $index
@@ -619,6 +629,7 @@ TRANSFORM.run = (template, data) => {
                                                 delete newData[index][declared_vars];
                                             }
                                         } else {
+                                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#delete~~~~~~<','#c203fc',template[key], newData[index])
                                             delete String.prototype.$index;
                                             delete Number.prototype.$index;
                                             delete Function.prototype.$index;
@@ -638,6 +649,7 @@ TRANSFORM.run = (template, data) => {
                                             // only push when the result is not null
                                             // null could mean #if clauses where nothing matched => In this case instead of rendering 'null', should just skip it completely
                                             result.push(loop_item);
+                                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result~~~~~~<','#c203fc',loop_item,result)
                                         }
                                     }
                                 } else {
@@ -647,16 +659,21 @@ TRANSFORM.run = (template, data) => {
                                     // But don't get rid of it,
                                     // Instead, just leave it as template
                                     // So some other parse run could fill it in later.
+                                    colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result = template~~~~~~<','#c203fc',template)
+
                                     result = template;
                                 }
                             } // end of #each
                         } else { // end of if (fun)
                             // If the key is a template expression but aren't either #include or #each,
                             // it needs to be parsed
+                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, key)
+                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, template[key])
                             let k = await TRANSFORM.fillout(data, key);
                             let v = await TRANSFORM.fillout(data, template[key]);
                             if (k !== undefined && v !== undefined) {
                                 result[k] = v;
+                                colorlog('>~~~~~~~~~ TRANSFORM.run ~~~ result[k] = v;~~~~~~<','#c203fc',result,  result[k], k, v)
                             }
                         }
                     } else {
@@ -694,9 +711,10 @@ TRANSFORM.run = (template, data) => {
                     }
                 }
             } else {
+                colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~template~~~<','red', template)
                 out(template)
             }
-
+            // colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~result~~~<','red', result)
             out(result)
 
 
@@ -708,7 +726,6 @@ TRANSFORM.run = (template, data) => {
         }
     })
 }
-let Conditional = {}
 
 Conditional.is = (template) => {
     return new Promise( async (resolve, reject) => {
@@ -721,7 +738,7 @@ Conditional.is = (template) => {
             reject(error)
         }
         try {
-
+            colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', template)
             // TRUE ONLY IF it's in a correct format.
             // Otherwise return the original template
             // Condition 0. Must be an array
@@ -732,11 +749,13 @@ Conditional.is = (template) => {
             // Condition 5. in case there's more than two items, the last one should be either '#else' or '#elseif'
             if (!await Helper.is_array(template)) {
                 // Condition 0, it needs to be an array to be a conditional
+                colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                 out(false);
             }else{
                 // Condition 1.
                 // Must have at least one item
                 if (template.length === 0) {
+                    colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                     out(false);
                 }else{
 
@@ -748,6 +767,7 @@ Conditional.is = (template) => {
                     for (let i = 0; i < template.length; i++) {
                         let item = template[0];
                         if (typeof item !== 'object') {
+                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', item)
                             containsValidObjects = false;
                             break;
                         }
@@ -769,16 +789,20 @@ Conditional.is = (template) => {
                         for (let key in first) {
                             func = await TRANSFORM.tokenize(key);
                             if (!func) {
+                                colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                 out(false);
                             }else {
                                 if (!func.name) {
+                                    colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                     out(false);
                                 }else {
                                     // '{{#if }}'
                                     if (!func.expression || func.expression.length === 0) {
+                                        colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                         out(false);
                                     }else{
                                         if (func.name.toLowerCase() !== '#if') {
+                                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                             out(false);
                                         }
 
@@ -789,16 +813,17 @@ Conditional.is = (template) => {
                         if (template.length === 1) {
                             // If we got this far and the template has only one item, it means
                             // template had one item which was '#if' so it's valid
+                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~true~~~~<','red', template)
                             out(true);
                         }else{
-
+                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~else~~~~<','red', template)
                             // Condition 4.
                             // in case there's more than two items, everything between the first and the last item should be #elseif
                             let they_are_all_elseifs = true;
                             for (let template_index = 1; template_index < template.length-1; template_index++) {
                                 let template_item = template[template_index];
                                 for (let template_key in template_item) {
-                                    func = TRANSFORM.tokenize(template_key);
+                                    func = await TRANSFORM.tokenize(template_key);
                                     if (func.name.toLowerCase() !== '#elseif') {
                                         they_are_all_elseifs = false;
                                         break;
@@ -820,12 +845,14 @@ Conditional.is = (template) => {
                                 let last = template[template.length-1];
                                 let verify = true
                                 for (let last_key in last) {
-                                    func = TRANSFORM.tokenize(last_key);
+                                    func = await TRANSFORM.tokenize(last_key);
+                                    colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', func)
                                     if (['#else', '#elseif'].indexOf(func.name.toLowerCase()) === -1) {
                                         verify = false
 
                                     }
                                 }
+                                colorlog('>~~~~~~~~~ Conditional.is ~~~~~verify~~~~<','red', verify)
                                 // Congrats, if you've reached this point, it's valid
                                 out(verify);
 
@@ -852,6 +879,7 @@ SELECT.select = (obj,filter, serialized) =>{
             reject(error)
         }
         try{
+            colorlog('>~~~~~~~~~ SELECT.select ~~~~~~~~~<','#0362fc', SELECT)
             if(!isEmpty(filter)){
                 obj.filter = filter
             }
@@ -897,6 +925,7 @@ SELECT.select = (obj,filter, serialized) =>{
 
             if (json && (Helper.is_array(json) || typeof json === 'object')) {
                 if (!SELECT.$progress) {
+                    colorlog('>~~~~~~~~~ SELECT.select ~~~~$progress~~~~~<','#0362fc')
                     // initialize
                     if (Helper.is_array(json)) {
                         SELECT.$val = [];
@@ -908,6 +937,7 @@ SELECT.select = (obj,filter, serialized) =>{
                 }
                 Object.keys(json).forEach(function(key) {
                     //for (let key in json) {
+                    colorlog('>~~~~~~~~~ SELECT.select ~~~~$progress~~~~~<','#0362fc', json[key])
                     SELECT.$val[key] = json[key];
                     SELECT.$selected_root[key] = json[key];
                 });
@@ -916,7 +946,7 @@ SELECT.select = (obj,filter, serialized) =>{
                 SELECT.$selected_root = json;
             }
             SELECT.$progress = true; // set the 'in progress' flag
-
+            colorlog('>~~~~~~~~~ SELECT.select ~~~~out~~~~~<','red', SELECT)
             out(SELECT);
 
         }catch (e) {
@@ -929,7 +959,7 @@ SELECT.select = (obj,filter, serialized) =>{
 }
 
 SELECT.transformWith = (obj,serialized, selected) => {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
         let out = (obj) => {
             resolve(obj)
         }
@@ -937,6 +967,9 @@ SELECT.transformWith = (obj,serialized, selected) => {
             reject(error)
         }
         try{
+            performance['now'](true)
+            colorlog('>~~~~~~~~~ SELECT.transformWith ~~~~~~~~~<','#6203fc', SELECT)
+            performance['now'](true)
             // console.assert(false, SELECT.$progress)
             if(isEmpty(SELECT.$progress)){
                 SELECT.$progress = null;
@@ -947,16 +980,18 @@ SELECT.transformWith = (obj,serialized, selected) => {
             if(isEmpty(selected)){
             }else{
                 SELECT = Object.assign(SELECT,selected);
-                console.warn('нужно проверить работоспособность при совпадении двух свойств', SELECT)
+                // console.warn('нужно проверить работоспособность при совпадении двух свойств', SELECT)
             }
 
             let template = {}
             if(isEmpty(obj.template)){
                 template = obj;
             }else{
+                colorlog('>~~~~~~~~~ SELECT.transformWith ~~~template~~~~~~<','#6203fc', SELECT)
                 template = obj.template;
             }
             if(isEmpty(serialized)){
+                colorlog('>~~~~~~~~~ SELECT.transformWith ~~~serialized~~~~~~<','#6203fc', SELECT)
                 obj.serialized = serialized
             }
             try {
@@ -970,39 +1005,40 @@ SELECT.transformWith = (obj,serialized, selected) => {
             Function.prototype.$root = SELECT.$selected_root;
             Array.prototype.$root = SELECT.$selected_root;
             Boolean.prototype.$root = SELECT.$selected_root;
-            let root = SELECT.$selected_root;
+            root = SELECT.$selected_root;
             // generate new $selected_root
             if (SELECT.$selected && SELECT.$selected.length > 0) {
-
-                let sort =  SELECT.$selected.sort(function(a, b) {
+                SELECT.$selected.sort(function(a, b) {
                     // sort by path length, so that deeper level items will be replaced first
                     // TODO: may need to look into edge cases
                     return b.path.length - a.path.length;
-                })
+                }).forEach(function(selection) {
+                    console.assert(false)
+                    //SELECT.$selected.forEach(function(selection) {
+                    // parse selected
+                    var parsed_object = TRANSFORM.run(template, selection.object);
 
-                // .forEach((selection) => {
-                //SELECT.$selected.forEach(function(selection) {
-                // parse selected
-                // let parsed_object = TRANSFORM.run(template, selection.object);
-                // apply the result to root
-                // SELECT.$selected_root =  Helper.resolve(SELECT.$selected_root, selection.path, parsed_object);
-                // update selected object with the parsed result
-                // selection.object = parsed_object;
-                // });
+                    // apply the result to root
+                    SELECT.$selected_root =  Helper.resolve(SELECT.$selected_root, selection.path, parsed_object);
+
+                    // update selected object with the parsed result
+                    selection.object = parsed_object;
+                });
                 SELECT.$selected.sort(function(a, b) {
                     return a.index - b.index;
                 });
             } else {
-                // console.assert(false, template, SELECT.$selected_root)
-                let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root);
+                var parsed_object = await TRANSFORM.run(template, SELECT.$selected_root);
                 // apply the result to root
                 SELECT.$selected_root = await Helper.resolve(SELECT.$selected_root, '', parsed_object);
-                out({
-                    _:'transformWith',
-                    parsedObject: parsed_object,
-                    SELECT:SELECT
-                })
             }
+            delete String.prototype.$root;
+            delete Number.prototype.$root;
+            delete Function.prototype.$root;
+            delete Array.prototype.$root;
+            delete Boolean.prototype.$root;
+            performance['now'](true)
+            out(SELECT);
         }catch (e) {
             err({
                 _:'error menu',
@@ -1051,9 +1087,12 @@ export default (obj = {_:'json'})=>{
 
         object['class'] = class Json {
             constructor(self) {
+                performance['now'](true)
                 this.select = this.select.bind(this)
                 this.transformWith = this.transformWith.bind(this)
                 this.root = this.root.bind(this)
+                colorlog(true, '~~~~~~~~~ constructor ~~~~~~~~~','constructor', this)
+                performance['now'](true)
             }
             root(obj){
                 return SELECT.root(obj)

@@ -12,7 +12,7 @@ export default  (obj, func, ...args)=>{
             case 'default':
                 (async (obj, props,data) => {
                     try {
-                        console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
+                        // console.log(`app(${func}[(${obj['input']})${obj[props]}]property)`)
                         switch (obj[props]) {
                             case 'default':
                                 (async (obj, props,data) => {
