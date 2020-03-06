@@ -967,9 +967,7 @@ SELECT.transformWith = (obj,serialized, selected) => {
             reject(error)
         }
         try{
-            performance['now'](true)
             colorlog('>~~~~~~~~~ SELECT.transformWith ~~~~~~~~~<','#6203fc', SELECT)
-            performance['now'](true)
             // console.assert(false, SELECT.$progress)
             if(isEmpty(SELECT.$progress)){
                 SELECT.$progress = null;
@@ -1087,12 +1085,25 @@ export default (obj = {_:'json'})=>{
 
         object['class'] = class Json {
             constructor(self) {
-                performance['now'](true)
                 this.select = this.select.bind(this)
                 this.transformWith = this.transformWith.bind(this)
                 this.root = this.root.bind(this)
-                colorlog(true, '~~~~~~~~~ constructor ~~~~~~~~~','constructor', this)
-                performance['now'](true)
+                colorlog(true, {
+                    key:'value'
+                } ,'constructor', this, 'performance')
+                colorlog(true, `свойство2` ,'constructor', this.transformWith, 'performance')
+                colorlog(true, `свойство3` ,'success', this.select, 'performance2')
+                colorlog(true, `свойство5` ,'constructor', this, 'performance')
+                colorlog(true, `свойство6` ,'success', this, 'performance2')
+                colorlog(true, `свойство7` ,'constructor', this, 'performance')
+                colorlog(true, `свойство8` ,'success', this, 'performance2')
+                colorlog(true, `end` ,'constructor', this, 'performance')
+                colorlog(true, `end` ,'success', this, 'performance2')
+                // colorlog(true, `свойства3` ,'constructor', this, 'performance')
+                // colorlog(true, `свойство4` ,'constructor', this, 'performance')
+                // colorlog(true, `end` ,'constructor', this, 'performance')
+
+                console.log(performance.allMark)
             }
             root(obj){
                 return SELECT.root(obj)

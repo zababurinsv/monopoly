@@ -1,5 +1,6 @@
 import Performance from '/static/html/components/component_modules/performance/performance.mjs'
-export default (show, message, color, ...args) =>{
+let performance = Performance()
+export default (show, message='time', color ='success', ...args) =>{
     if(show === true){
         color = color || 'black'
         switch (color) {
@@ -27,6 +28,13 @@ export default (show, message, color, ...args) =>{
 
             default:
         }
-        console.log('%c' + message, 'color:' + color, ...args)
+        if(typeof args[args.length-1] === 'string'){
+            let end = false
+            if(message === 'end'){end = true}
+            // console.log(`%c string ${args[args.length-1]} ${performance['now'](true, args[args.length-1])} [(${args.slice(0, args.length-1)} *) ${message}]`, 'color:' + color)
+            console.log('%c%O' + ' '+ args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
+        }else{
+            console.log('%c' + message, 'color:' + color,'--->', ...args)
+        }
     }
 }
