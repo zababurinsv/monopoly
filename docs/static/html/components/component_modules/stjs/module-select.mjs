@@ -11,14 +11,14 @@ SELECT.exec = (current, path, filter) => {
         }
         try {
 
-            colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current,path, filter )
+            //colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current,path, filter )
             // if current matches the pattern, put it in the selected array
             if (typeof current === 'string') {
                 // leaf node should be ignored
                 // we're lookin for keys only
             } else if (await Helper.is_array(current)) {
                 for (let i=0; i<current.length; i++) {
-                    colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current[i], path+'['+i+']', filter )
+                    //colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current[i], path+'['+i+']', filter )
                     await SELECT.exec(current[i], path+'['+i+']', filter);
                 }
             } else {
@@ -26,7 +26,7 @@ SELECT.exec = (current, path, filter) => {
                 for (let key in current) {
                     // '$root' is a special key that links to the root node
                     // so shouldn't be used to iterate
-                    colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current, key,current[key])
+                    //colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current, key,current[key])
                     if (key !== '$root') {
                         if (filter(key, current[key])) {
                             let index = SELECT.$selected.length;
@@ -38,7 +38,7 @@ SELECT.exec = (current, path, filter) => {
                                 value: current[key],
                             });
                         }
-                        colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current[key], path+'["'+key+'"]', filter)
+                        //colorlog('>~~~~~~~~~ SELECT.exec ~~~exec~~~~<','#eb3456',current[key], path+'["'+key+'"]', filter)
                         await SELECT.exec(current[key], path+'["'+key+'"]', filter);
                     }
                 }
@@ -144,7 +144,7 @@ SELECT.root = (obj = {_:'SELECT', SELECT:undefined}) =>{
             SELECT = obj.SELECT
         }
         SELECT.$progress = null;
-        colorlog('>~~~~~~~~~ SELECT.root ~~~$selected_root_out~~~~<','red',SELECT.$selected_root)
+        // //colorlog('>~~~~~~~~~ SELECT.root ~~~$selected_root_out~~~~<','red',SELECT.$selected_root)
         resolve(SELECT.$selected_root)
     })
 

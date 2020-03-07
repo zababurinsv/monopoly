@@ -11,7 +11,7 @@ Conditional.is = (template) => {
             reject(error)
         }
         try {
-            colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', template)
+            //colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', template)
             // TRUE ONLY IF it's in a correct format.
             // Otherwise return the original template
             // Condition 0. Must be an array
@@ -22,13 +22,13 @@ Conditional.is = (template) => {
             // Condition 5. in case there's more than two items, the last one should be either '#else' or '#elseif'
             if (!await Helper.is_array(template)) {
                 // Condition 0, it needs to be an array to be a conditional
-                colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
+                //colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                 out(false);
             }else{
                 // Condition 1.
                 // Must have at least one item
                 if (template.length === 0) {
-                    colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
+                    //colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                     out(false);
                 }else{
 
@@ -40,7 +40,7 @@ Conditional.is = (template) => {
                     for (let i = 0; i < template.length; i++) {
                         let item = template[0];
                         if (typeof item !== 'object') {
-                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', item)
+                            //colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', item)
                             containsValidObjects = false;
                             break;
                         }
@@ -62,20 +62,20 @@ Conditional.is = (template) => {
                         for (let key in first) {
                             func = await TRANSFORM.tokenize(key);
                             if (!func) {
-                                colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
+                                //colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                 out(false);
                             }else {
                                 if (!func.name) {
-                                    colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
+                                    //colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                     out(false);
                                 }else {
                                     // '{{#if }}'
                                     if (!func.expression || func.expression.length === 0) {
-                                        colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
+                                        //colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                         out(false);
                                     }else{
                                         if (func.name.toLowerCase() !== '#if') {
-                                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
+                                            //colorlog('>~~~~~~~~~ Conditional.is ~~~~~false~~~~<','red', template)
                                             out(false);
                                         }
 
@@ -86,10 +86,10 @@ Conditional.is = (template) => {
                         if (template.length === 1) {
                             // If we got this far and the template has only one item, it means
                             // template had one item which was '#if' so it's valid
-                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~true~~~~<','red', template)
+                            //colorlog('>~~~~~~~~~ Conditional.is ~~~~~true~~~~<','red', template)
                             out(true);
                         }else{
-                            colorlog('>~~~~~~~~~ Conditional.is ~~~~~else~~~~<','red', template)
+                            //colorlog('>~~~~~~~~~ Conditional.is ~~~~~else~~~~<','red', template)
                             // Condition 4.
                             // in case there's more than two items, everything between the first and the last item should be #elseif
                             let they_are_all_elseifs = true;
@@ -119,13 +119,13 @@ Conditional.is = (template) => {
                                 let verify = true
                                 for (let last_key in last) {
                                     func = await TRANSFORM.tokenize(last_key);
-                                    colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', func)
+                                    //colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', func)
                                     if (['#else', '#elseif'].indexOf(func.name.toLowerCase()) === -1) {
                                         verify = false
 
                                     }
                                 }
-                                colorlog('>~~~~~~~~~ Conditional.is ~~~~~verify~~~~<','red', verify)
+                                //colorlog('>~~~~~~~~~ Conditional.is ~~~~~verify~~~~<','red', verify)
                                 // Congrats, if you've reached this point, it's valid
                                 out(verify);
 

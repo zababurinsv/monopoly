@@ -17,15 +17,26 @@ mark.set = (obj={mark: 'performance',end:false, message:''})=>{
         mark.staticProperty[`${obj.mark}`]['message'].push(obj.message)
         mark.staticProperty[`${obj.mark}`]['sample'].push(0)
         Mark = mark.staticProperty[`${obj.mark}`]
+        document.dispatchEvent( new CustomEvent('performance-run', {
+            detail: {
+                _:obj.mark,
+                data: {
+                    time:mark.staticProperty[`${obj.mark}`],
+                    mark:performanceEntries
+                }
+            }
+        }))
     }else{
+
         time = performanceEntries[performanceEntries.length - 1].startTime - performanceEntries[performanceEntries.length - 2].startTime
         mark.staticProperty[`${obj.mark}`]['sample'].push(time)
         mark.staticProperty[`${obj.mark}`]['message'].push(obj.message)
         mark.staticProperty[`${obj.mark}`]['all'] = mark.staticProperty[`${obj.mark}`]['all'] + time
         Mark = mark.staticProperty[`${obj.mark}`]
         if(obj.end){
+            // console.assert(false, obj.mark)
             mark.staticProperty[`${obj.mark}`]['end'] = `${performanceEntries[performanceEntries.length - 1].startTime}:${0 + time}`
-            document.dispatchEvent( new CustomEvent('Performance', {
+            document.dispatchEvent( new CustomEvent('performance-end', {
                 detail: {
                     _:obj.mark,
                     data: {
@@ -46,15 +57,6 @@ mark.set = (obj={mark: 'performance',end:false, message:''})=>{
 mark.getAll = (obj={mark: 'performance'})=>{
     // .
     const allEntries = performance.getEntriesByType("mark");
-
-
-    const performanceEntries = performance.getEntriesByName(obj.mark);
-    console.log(performanceEntries.length);
-
-
-    colorlog(true, 'Get all of the PerformanceMark entrie','#3e32a8', performanceEntries.length, '--->', performanceEntries )
-
-    colorlog(true, 'Get all of the PerformanceMark entries','#3e32a8', allEntries.length, '--->', allEntries )
 
     return allEntries
 }

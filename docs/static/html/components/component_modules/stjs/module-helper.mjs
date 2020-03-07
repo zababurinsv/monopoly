@@ -29,7 +29,7 @@ Helper.resolve =(o, path, new_val)=> {
             reject(error)
         }
         try {
-            colorlog('>~~~~~~~~~ SELECT.root ~~~resolve~~~~<','#348feb',SELECT.$selected_root)
+            //colorlog('>~~~~~~~~~ SELECT.root ~~~resolve~~~~<','#348feb',SELECT.$selected_root)
             // 1. Takes any object
             // 2. Finds subtree based on path
             // 3. Sets the value to new_val

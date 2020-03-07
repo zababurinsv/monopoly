@@ -30,9 +30,23 @@ export default (show, message='time', color ='success', ...args) =>{
         }
         if(typeof args[args.length-1] === 'string'){
             let end = false
+            switch (message) {
+                case "end":
+                    end = true
+                    break
+                case "stat":
+                    end = true
+                    break
+                default:
+                    break
+            }
             if(message === 'end'){end = true}
-            // console.log(`%c string ${args[args.length-1]} ${performance['now'](true, args[args.length-1])} [(${args.slice(0, args.length-1)} *) ${message}]`, 'color:' + color)
-            console.log('%c%O' + ' '+ args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
+
+            if(message === 'stat'){
+               console.log('%c статистика', 'color:' + color,'--->', performance.allMark)
+            }else{
+                console.log('%c%O' + ' '+ args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
+            }
         }else{
             console.log('%c' + message, 'color:' + color,'--->', ...args)
         }

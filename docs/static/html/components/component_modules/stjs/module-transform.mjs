@@ -112,7 +112,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
             reject(error)
         }
         try {
-            colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~in~~~~~~<','#9beb34',data, template, raw)
+            //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~in~~~~~~<','#9beb34',data, template, raw)
             // 1. fill out if possible
             // 2. otherwise return the original
             let replaced = template;
@@ -125,7 +125,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
                 let variables = template.match(re);
 
                 if (variables) {
-                    colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables~~1~~~~<','#9beb34',variables)
+                    //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables~~1~~~~<','#9beb34',variables)
                     if (raw) {
                         // 'raw' is true only for when this is called from #each
                         // Because #each is expecting an array, it shouldn't be stringified.
@@ -137,7 +137,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
                             data: data,
                             template: null,
                         });
-                        colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~_fillout~~~~~~<','#9beb34',replaced)
+                        //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~_fillout~~~~~~<','#9beb34',replaced)
                     } else {
                         // Fill out the template for each variable
 
@@ -149,13 +149,13 @@ TRANSFORM.fillout = (data, template, raw) =>{
                                 template: replaced,
                             });
                         }
-                        colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables_fillout~~2~~~~<','#9beb34',replaced)
+                        //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables_fillout~~2~~~~<','#9beb34',replaced)
                     }
                 } else {
                     console.warn('здесь был return пока не вижу зачем он')
                 }
             }
-            colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~out~~~~<','red',replaced)
+            //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~out~~~~<','red',replaced)
             out(replaced);
 
 
@@ -224,12 +224,12 @@ TRANSFORM.run = (template, data) => {
         try {
             let result;
             let fun;
-            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~template~~~~~~<','#c203fc', template)
+            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~template~~~~~~<','#c203fc', template)
             if (typeof template === 'string') {
                 // Leaf node, so call TRANSFORM.fillout()
                 if (await Helper.is_template(template)) {
                     let include_string_re = /\{\{([ ]*#include)[ ]*([^ ]*)\}\}/g;
-                    colorlog('>~~~~~~~~~ TRANSFORM.run ~~~include_string_re~~~~~~<','#c203fc', include_string_re)
+                    //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~include_string_re~~~~~~<','#c203fc', include_string_re)
                     if (include_string_re.test(template)) {
                         fun = await TRANSFORM.tokenize(template);
                         if (fun.expression) {
@@ -362,7 +362,7 @@ TRANSFORM.run = (template, data) => {
                                     }
                                 }
                             } else if (fun.name === '#each') {
-                                colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc', data, '{{' + fun.expression + '}}', true)
+                                //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc', data, '{{' + fun.expression + '}}', true)
                                 // newData will be filled with parsed results
                                 let newData = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true);
 
@@ -371,7 +371,7 @@ TRANSFORM.run = (template, data) => {
                                     result = [];
                                     for (let index = 0; index < newData.length; index++) {
                                         // temporarily set $index
-                                        colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc',newData[index])
+                                        //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc',newData[index])
                                         if(typeof newData[index] === 'object') {
                                             newData[index]["$index"] = index;
                                             // #let handling
@@ -379,7 +379,7 @@ TRANSFORM.run = (template, data) => {
                                                 newData[index][declared_vars] = TRANSFORM.memory[declared_vars];
                                             }
                                         } else {
-                                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',TRANSFORM.memory)
+                                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',TRANSFORM.memory)
                                             String.prototype.$index = index;
                                             Number.prototype.$index = index;
                                             Function.prototype.$index = index;
@@ -396,7 +396,7 @@ TRANSFORM.run = (template, data) => {
                                         }
 
                                         // run
-                                        colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',template[key], newData[index])
+                                        //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',template[key], newData[index])
                                         let loop_item = await TRANSFORM.run(template[key], newData[index]);
 
                                         // clean up $index
@@ -407,7 +407,7 @@ TRANSFORM.run = (template, data) => {
                                                 delete newData[index][declared_vars];
                                             }
                                         } else {
-                                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#delete~~~~~~<','#c203fc',template[key], newData[index])
+                                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#delete~~~~~~<','#c203fc',template[key], newData[index])
                                             delete String.prototype.$index;
                                             delete Number.prototype.$index;
                                             delete Function.prototype.$index;
@@ -427,7 +427,7 @@ TRANSFORM.run = (template, data) => {
                                             // only push when the result is not null
                                             // null could mean #if clauses where nothing matched => In this case instead of rendering 'null', should just skip it completely
                                             result.push(loop_item);
-                                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result~~~~~~<','#c203fc',loop_item,result)
+                                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result~~~~~~<','#c203fc',loop_item,result)
                                         }
                                     }
                                 } else {
@@ -437,7 +437,7 @@ TRANSFORM.run = (template, data) => {
                                     // But don't get rid of it,
                                     // Instead, just leave it as template
                                     // So some other parse run could fill it in later.
-                                    colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result = template~~~~~~<','#c203fc',template)
+                                    //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result = template~~~~~~<','#c203fc',template)
 
                                     result = template;
                                 }
@@ -445,13 +445,13 @@ TRANSFORM.run = (template, data) => {
                         } else { // end of if (fun)
                             // If the key is a template expression but aren't either #include or #each,
                             // it needs to be parsed
-                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, key)
-                            colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, template[key])
+                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, key)
+                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, template[key])
                             let k = await TRANSFORM.fillout(data, key);
                             let v = await TRANSFORM.fillout(data, template[key]);
                             if (k !== undefined && v !== undefined) {
                                 result[k] = v;
-                                colorlog('>~~~~~~~~~ TRANSFORM.run ~~~ result[k] = v;~~~~~~<','#c203fc',result,  result[k], k, v)
+                                //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~ result[k] = v;~~~~~~<','#c203fc',result,  result[k], k, v)
                             }
                         }
                     } else {
@@ -489,10 +489,10 @@ TRANSFORM.run = (template, data) => {
                     }
                 }
             } else {
-                colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~template~~~<','red', template)
+                //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~template~~~<','red', template)
                 out(template)
             }
-            // colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~result~~~<','red', result)
+            // //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~result~~~<','red', result)
             out(result)
 
 
