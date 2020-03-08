@@ -28,13 +28,13 @@ export default (obj = {_:'performance'})=>{
         return module.mark.set({mark:mark, end:end, message:message})
       }
       run(event){
-        if(isEmpty(object.staticProperty.mark[`${event['detail']['_']}`])){
+        if(object.staticProperty.mark.hasOwnProperty(`${event['detail']['_']}`) === false){
           object.staticProperty.mark[`${event['detail']['_']}`] = []
         }
         object.staticProperty.mark[`${event['detail']['_']}`].push('in progress')
       }
       end(event){
-        if(isEmpty(object.staticProperty.mark[`${event['detail']['_']}`])){
+        if(object.staticProperty.mark.hasOwnProperty(`${event['detail']['_']}`)){
           object.staticProperty.mark[`${event['detail']['_']}`] = []
         }
         let verify = true

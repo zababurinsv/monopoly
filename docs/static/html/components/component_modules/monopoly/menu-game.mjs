@@ -5,6 +5,7 @@ import classicedition from '/static/html/components/component_modules/monopoly/c
 import gameplay from '/static/html/components/component_modules/monopoly/gameplay.mjs'
 import ai from '/static/html/components/component_modules/monopoly/ai.mjs'
 import Json from '/static/html/components/component_modules/stjs/json.mjs'
+import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
 export default {
     get:async (obj, type, ...rest)=>{
         return  new Promise(async (resolve, reject) => {
@@ -521,12 +522,13 @@ export default {
                             }
                         }
                     }
-                    // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                    // console.assert(false)
-                    let json = new (await Json())['class']()
+                    let json = (await Json())
+                    colorlog(true, '~~~~~~~~~~~~~~~~~~~~json start','7',json, 'json-transform')
                     let selected = await json.select(data)
                     let jsonTemplate = await json.transformWith(templateItem, false, selected)
                     let outItem = await json.root(jsonTemplate)
+                    colorlog(true, 'end','7',outItem, 'json-transform')
+                    colorlog(true, 'stat','stat',outItem, 'json')
                     // console.assert(false, jsonTemplate)
                     // console.assert(false, selected)
                     //

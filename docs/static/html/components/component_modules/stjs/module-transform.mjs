@@ -1,4 +1,8 @@
-let  TRANSFORM ={}
+import Helper from '/static/html/components/component_modules/stjs/module-helper.mjs'
+import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
+import  Conditional from '/static/html/components/component_modules/stjs/module-conditional.mjs'
+let  TRANSFORM = { }
+let root = { }
 TRANSFORM._fillout = (options) =>{
     return  new Promise(async function (resolve, reject) {
         let out = (obj) => {
@@ -9,6 +13,7 @@ TRANSFORM._fillout = (options) =>{
             reject(error)
         }
         try {
+            colorlog(true, 'TRANSFORM._fillout', '3', options, 'TRANSFORM')
             // Given a template and fill it out with passed slot and its corresponding data
             let re = /\{\{(.*?)\}\}/g;
             let full_re = /^\{\{((?!\}\}).)*\}\}$/;
@@ -157,10 +162,6 @@ TRANSFORM.fillout = (data, template, raw) =>{
             }
             //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~out~~~~<','red',replaced)
             out(replaced);
-
-
-
-
         }catch (e) {
             err({
                 _:'error menu',
@@ -211,7 +212,7 @@ TRANSFORM.tokenize =(str) => {
         }
     })
 }
-TRANSFORM.run = (template, data) => {
+TRANSFORM.run = (template, data, selectRoot) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
             // console.log('~~~ out  ~~~', obj['input'])
@@ -221,6 +222,7 @@ TRANSFORM.run = (template, data) => {
             console.log('~~~ err ~~~', error)
             reject(error)
         }
+        root = selectRoot
         try {
             let result;
             let fun;
@@ -276,7 +278,7 @@ TRANSFORM.run = (template, data) => {
                     fun = await TRANSFORM.tokenize(include_keys[0]);
                     if (fun.expression) {
                         // if #include has arguments, evaluate it before attaching
-                        result =await TRANSFORM.fillout(template[include_keys[0]], '{{' + fun.expression + '}}', true);
+                        result = await TRANSFORM.fillout(template[include_keys[0]], '{{' + fun.expression + '}}', true);
                     } else {
                         // no argument, simply attach the child
                         result = template[include_keys[0]];
