@@ -27,7 +27,7 @@ mark.set = (obj={mark: 'performance',end:false, message:''})=>{
             }
         }))
     }else{
-
+        // console.log('~~~~~~~~~~~~~~~~', Object.keys(mark.staticProperty).length, performanceEntries)
         time = performanceEntries[performanceEntries.length - 1].startTime - performanceEntries[performanceEntries.length - 2].startTime
         mark.staticProperty[`${obj.mark}`]['sample'].push(time)
         mark.staticProperty[`${obj.mark}`]['message'].push(obj.message)

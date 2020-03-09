@@ -1,5 +1,5 @@
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
-import Class from '/static/html/components/component_modules/stjs/module-class.mjs'
+import Class from '/static/html/components/component_modules/json/module-class.mjs'
 let object = { }
 object.staticProperty = {}
 object.staticProperty.class = undefined

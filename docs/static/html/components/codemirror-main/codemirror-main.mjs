@@ -1,7 +1,7 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
 import Codemirror from '/static/html/components/component_modules/codemirror/codemirror.mjs'
-// import Stjs from '/static/html/components/component_modules/stjs/st.mjs'
-// import Json from '/static/html/components/component_modules/stjs/json.mjs'
+// import Stjs from '/static/html/components/component_modules/json/st.mjs'
+// import Json from '/static/html/components/component_modules/json/json.mjs'
 customElements.define('codemirror-main',
     class extends HTMLElement {
         constructor () {

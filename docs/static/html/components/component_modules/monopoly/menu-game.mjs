@@ -4,8 +4,9 @@ import square from '/static/html/components/component_modules/monopoly/square.mj
 import classicedition from '/static/html/components/component_modules/monopoly/classicedition.mjs'
 import gameplay from '/static/html/components/component_modules/monopoly/gameplay.mjs'
 import ai from '/static/html/components/component_modules/monopoly/ai.mjs'
-import Json from '/static/html/components/component_modules/stjs/json.mjs'
+import Json from '/static/html/components/component_modules/json/json.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
+import monopolyObject from '/static/html/components/component_modules/monopoly/monopoly-object.mjs'
 export default {
     get:async (obj, type, ...rest)=>{
         return  new Promise(async (resolve, reject) => {
@@ -523,12 +524,18 @@ export default {
                         }
                     }
                     let json = (await Json())
-                    colorlog(true, '~~~~~~~~~~~~~~~~~~~~json start','7',json, 'json-transform')
+                    colorlog(true, 'json start','7',json, 'json-transform')
                     let selected = await json.select(data)
                     let jsonTemplate = await json.transformWith(templateItem, false, selected)
-                    let outItem = await json.root(jsonTemplate)
-                    colorlog(true, 'end','7',outItem, 'json-transform')
-                    colorlog(true, 'stat','stat',outItem, 'json')
+                    let outRoot = await json.root(jsonTemplate)
+                    let outtt =  await monopolyObject(true, {
+                        key:'value',
+                        data:'items'
+                    },'7',outRoot, 'relation')
+                    await monopolyObject(true, 'end','7',outRoot, 'relation')
+                    // console.assert(false, outItem)
+                    colorlog(true, 'end','7',outRoot, 'json-transform')
+                    colorlog(true, 'stat','stat',outRoot, 'json')
                     // console.assert(false, jsonTemplate)
                     // console.assert(false, selected)
                     //

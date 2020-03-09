@@ -1,3 +1,4 @@
+import Helper from '/static/html/components/component_modules/json/module-helper.mjs'
 let Conditional = {}
 
 Conditional.is = (template) => {

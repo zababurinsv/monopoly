@@ -1,6 +1,6 @@
-import Helper from '/static/html/components/component_modules/stjs/module-helper.mjs'
+import Helper from '/static/html/components/component_modules/json/module-helper.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
-import  Conditional from '/static/html/components/component_modules/stjs/module-conditional.mjs'
+import  Conditional from '/static/html/components/component_modules/json/module-conditional.mjs'
 let  TRANSFORM = { }
 let root = { }
 TRANSFORM._fillout = (options) =>{

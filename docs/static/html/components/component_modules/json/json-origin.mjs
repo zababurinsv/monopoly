@@ -1,9 +1,9 @@
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
-// import SELECT from '/static/html/components/component_modules/stjs/module-select.mjs'
-// import Helper from '/static/html/components/component_modules/stjs/module-helper.mjs'
-// import TRANSFORM from '/static/html/components/component_modules/stjs/module-transform.mjs'
-// import Conditional from '/static/html/components/component_modules/stjs/module-conditional.mjs'
+// import SELECT from '/static/html/components/component_modules/json/module-select.mjs'
+// import Helper from '/static/html/components/component_modules/json/module-helper.mjs'
+// import TRANSFORM from '/static/html/components/component_modules/json/module-transform.mjs'
+// import Conditional from '/static/html/components/component_modules/json/module-conditional.mjs'
 // import Performance from '/static/html/components/component_modules/performance/performance.mjs'
 // let performance = Performance()
 
