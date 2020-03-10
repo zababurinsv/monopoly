@@ -122,7 +122,7 @@ export default (...args)=>{
                 case 'player':
                     object.description.substrate.queue.push({
                         _:object.description.substrate._,
-                        end: true,
+                        end: false,
                         console:object.description.console,
                         property:object.description.property + '11',
                         color: object.description.color,
@@ -131,7 +131,7 @@ export default (...args)=>{
                     })
                     object.description.substrate.queue.push({
                         _:object.description.substrate._,
-                        end: true,
+                        end: false,
                         console:object.description.console,
                         property:object.description.property + '12',
                         color: object.description.color,
@@ -140,7 +140,7 @@ export default (...args)=>{
                     })
                     object.description.substrate.queue.push({
                         _:object.description.substrate._,
-                        end: true,
+                        end: false,
                         console:object.description.console,
                         property:object.description.property + '13',
                         color: object.description.color,
@@ -149,7 +149,7 @@ export default (...args)=>{
                     })
                     object.description.substrate.queue.push({
                         _:object.description.substrate._,
-                        end: true,
+                        end: false,
                         console:object.description.console,
                         property:object.description.property + '14',
                         color: object.description.color,
@@ -161,6 +161,33 @@ export default (...args)=>{
                         end: false,
                         console:object.description.console,
                         property:object.description.property + '15',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '16',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '17',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: true,
+                        console:object.description.console,
+                        property:object.description.property + '18',
                         color: object.description.color,
                         substrate: object.description.substrate,
                         relation:object.description.relation,

@@ -31,8 +31,10 @@ let handler = {
                                         relation:obj[0].relation,
                                     }
                                 }))
+                            }else{
+                                colorlog(obj[0].console,'Actions',obj[0].color, obj[0].substrate, obj[0].relation )
                             }
-                            console.log('~~~~~~~~~~~ Actions ~~~~~~~~~~~',obj[0])
+
                             obj.shift()
                             timerId = setTimeout(tick, 10);
                         }

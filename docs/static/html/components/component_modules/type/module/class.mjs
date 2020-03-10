@@ -19,17 +19,10 @@ let Class = class Type {
         queue(event['detail']['console'], '~end',event['detail']['color'],event['detail']['substrate'],event['detail']['relation']).then((data)=>{
 
 
-            console.assert(false, data)
+            console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~', data)
+
 
         })
-       switch (event['detail']['_']) {
-           case 'button':
-               break
-           default:
-               console.warn('событие не обрабатывается --->',event['detail']['_'],'--->',event['detail'] )
-               break
-
-       }
     }
     get self() {
         return object
