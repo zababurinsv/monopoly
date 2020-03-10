@@ -29,7 +29,9 @@ export default (...args)=>{
                 }else{
                     console.assert(false, 'параметр для отображения в консоли должен иметь тип boolean')
                 }
+
                 if(args[i+1] === ']'){
+
                     object.description.property = args[i]
                 }
                 if(args[i+2] === '[('){
@@ -37,10 +39,14 @@ export default (...args)=>{
                     object.description.relation = object.description.relation.replace('%c%O','')
                 }
                 if(args[i+1] === '*)'){
-                    object.description.substrate  = args[i]
-                }
-                if(i === 2){
-                    object.description.substrate  = args[i]
+                    for(let j =0; j < args[i].length;j++ ){
+                        if(args[i][j].hasOwnProperty('_')){
+                            object.description.substrate._ = args[i][j]._
+                        }
+                        if(args[i][j].hasOwnProperty('task')){
+                           object.description.substrate.queue = args[i][j].task
+                        }
+                    }
                 }
                 switch (typeof args[i]) {
                     case "string":
@@ -55,6 +61,67 @@ export default (...args)=>{
                         // console.warn('тип не отслеживается', typeof args[i], args[i])
                         break
                 }
+            }
+            switch (object.description.substrate._) {
+                case 'button':
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '1',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '2',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '3',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '4',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '5',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: true,
+                        console:object.description.console,
+                        property:object.description.property + '6',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    break
+                default:
+                    console.warn('объект не обрабатывается --->', object.description.substrate._,'--->',object.description)
+                    break
             }
             colorlog(object.description.console, object.description.property ,object.description.color, object, `${object.description.relation}`)
             out(object)

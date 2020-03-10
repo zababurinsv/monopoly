@@ -3,6 +3,7 @@ import mInterface from '/static/html/components/component_modules/monopoly/inter
 import square from '/static/html/components/component_modules/monopoly/square.mjs'
 import classicedition from '/static/html/components/component_modules/monopoly/classicedition.mjs'
 import gameplay from '/static/html/components/component_modules/monopoly/gameplay.mjs'
+import typeScript from '/static/html/components/component_modules/type/typeScript.mjs'
 import ai from '/static/html/components/component_modules/monopoly/ai.mjs'
 import Json from '/static/html/components/component_modules/json/json.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
@@ -507,35 +508,20 @@ export default {
                         jail: false,
                         cell:0
                     }
-                    let data  ={
-                        _:'button',
-                        type:'default',
-                        items: ['trade-leftp-money','trade-rightp-money'],
-                        event:['onkeydown', 'onfocus', 'onchange'],
-                        actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
-                    }
+                    let type = await typeScript()
+                    let button = await type.button(true, 'property','2',{_:'button'},'Button')
 
-                    let templateItem = {
-                        button: {
-                            "{{#each items}}": {
-                                _: "button",
-                                type: "{{this}}"
-                            }
-                        }
-                    }
-                    let json = (await Json())
-                    colorlog(true, 'json start','7',json, 'json-transform')
-                    let selected = await json.select(data)
-                    let jsonTemplate = await json.transformWith(templateItem, false, selected)
-                    let outRoot = await json.root(jsonTemplate)
-                    let outtt =  await monopolyObject(true, {
-                        key:'value',
-                        data:'items'
-                    },'7',outRoot, 'relation')
-                    await monopolyObject(true, 'end','7',outRoot, 'relation')
+                    // let json = (await Json())
+                    // colorlog(true, 'json start','7',json, 'json-transform')
+                    // let selected = await json.select(data)
+                    // let jsonTemplate = await json.transformWith(templateItem, false, selected)
+                    // let outRoot = await json.root(jsonTemplate)
+                    // let outtt =  await monopolyObject(true, 'test','7',outRoot, 'relation')
+                    // await monopolyObject(true, 'end','7',outRoot, 'relation')
                     // console.assert(false, outItem)
-                    colorlog(true, 'end','7',outRoot, 'json-transform')
-                    colorlog(true, 'stat','stat',outRoot, 'json')
+                    // colorlog(true, 'end','7',outRoot, 'json-transform')
+                    // colorlog(true, 'end','2',button, 'Button')
+                    colorlog(true, 'stat','stat','', 'json')
                     // console.assert(false, jsonTemplate)
                     // console.assert(false, selected)
                     //
