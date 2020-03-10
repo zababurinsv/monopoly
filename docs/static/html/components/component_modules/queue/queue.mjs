@@ -3,8 +3,7 @@ import description from '/static/html/components/component_modules/description/d
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
 let object = {}
 object.staticProperty = []
-object.staticProperty.task = undefined
-
+let output = {}
 let handler = {
     get: (obj, prop) => {
         return obj[prop];
@@ -21,6 +20,17 @@ let handler = {
                         }else{
                             if(obj[0].end){
                                 colorlog(obj[0].console,'end',obj[0].color, obj[0].substrate, obj[0].relation )
+                                delete obj[0].substrate.queue
+                                document.dispatchEvent( new CustomEvent('typeScript-end', {
+                                    detail: {
+                                        _:obj[0].substrate._,
+                                        console:obj[0].console,
+                                        property:obj[0].property,
+                                        color: obj[0].color,
+                                        substrate: obj[0].substrate,
+                                        relation:obj[0].relation,
+                                    }
+                                }))
                             }
                             console.log('~~~~~~~~~~~ Actions ~~~~~~~~~~~',obj[0])
                             obj.shift()
@@ -45,16 +55,26 @@ export default (show, message='default', color ='default', ...args) =>{
         }
         try {
             if(typeof args[args.length-1] === 'string'){
-                if(isEmpty(object.staticProperty.task)){
-                    object.staticProperty.task = []
-                    object.staticProperty.task = new Proxy(object.staticProperty.task, handler)
+                if(message === '~end'){
+                   delete object.staticProperty[`${args[args.length-1]}`]
+                    output = {
+                       _:`${args[args.length-1]}`,
+                       destruct:true,
+                       queue: object.staticProperty
+                    }
+                }else{
+                    if(isEmpty(object.staticProperty[`${args[args.length-1]}`])){
+                        object.staticProperty[`${args[args.length-1]}`] = []
+                        object.staticProperty[`${args[args.length-1]}`]['task'] = []
+                        object.staticProperty[`${args[args.length-1]}`]['task'] = new Proxy(object.staticProperty[`${args[args.length-1]}`]['task'], handler)
+                    }
+                    args.unshift(object.staticProperty[`${args[args.length-1]}`])
+                    output = description(show, '%c%O' + args[args.length-1],'color:' + color,'[(', args.slice(0, args.length-1),'*)',message,']')
                 }
-                args.unshift(object.staticProperty)
-                object = await description(show, '%c%O' + args[args.length-1],'color:' + color,'[(', args.slice(0, args.length-1),'*)',message,']')
             }else{
                 console.assert(false, 'не выбранно отношение')
             }
-            out(object)
+            out(output)
         }catch (e) {
             err({
                 _:'object',

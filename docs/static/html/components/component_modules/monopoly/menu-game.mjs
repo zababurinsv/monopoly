@@ -509,8 +509,8 @@ export default {
                         cell:0
                     }
                     let type = await typeScript()
-                    let button = await type.button(true, 'property','2',{_:'button'},'Button')
-
+                    let button = type.button(true, 'property','2',{_:'button'},'Button')
+                    let player = type.player(true, 'property','2',{_:'player'},'player')
                     // let json = (await Json())
                     // colorlog(true, 'json start','7',json, 'json-transform')
                     // let selected = await json.select(data)

@@ -119,6 +119,53 @@ export default (...args)=>{
                         relation:object.description.relation,
                     })
                     break
+                case 'player':
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: true,
+                        console:object.description.console,
+                        property:object.description.property + '11',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: true,
+                        console:object.description.console,
+                        property:object.description.property + '12',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: true,
+                        console:object.description.console,
+                        property:object.description.property + '13',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: true,
+                        console:object.description.console,
+                        property:object.description.property + '14',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: false,
+                        console:object.description.console,
+                        property:object.description.property + '15',
+                        color: object.description.color,
+                        substrate: object.description.substrate,
+                        relation:object.description.relation,
+                    })
+                    break
                 default:
                     console.warn('объект не обрабатывается --->', object.description.substrate._,'--->',object.description)
                     break
