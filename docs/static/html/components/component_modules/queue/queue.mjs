@@ -36,7 +36,7 @@ let handler = {
                             clearTimeout(timerId);
                         }else{
                             if(obj[0].end){
-                                await object.setEventsAction(obj[0].console,{ end:true, property:obj[0].property, },obj[0].color, obj[0].substrate, obj[0].relation )
+                               await object.setEventsAction(obj[0].console,{ end:true, property:obj[0].property, },obj[0].color, obj[0].substrate, obj[0].relation )
                                 colorlog(obj[0].console,{ end:true, property:obj[0].property, },obj[0].color, obj[0].substrate, obj[0].relation )
                                 delete obj[0].substrate.queue
                                 document.dispatchEvent( new CustomEvent('typeScript-end', {
@@ -50,8 +50,8 @@ let handler = {
                                     }
                                 }))
                             }else{
-                                await object.setEventsAction(obj[0].console,'Actions',obj[0].color, obj[0].substrate, obj[0].relation)
-                                colorlog(obj[0].console,'Actions',obj[0].color, obj[0].substrate, obj[0].relation )
+                               await object.setEventsAction(obj[0].console,obj[0].property,obj[0].color, obj[0].substrate, obj[0].relation)
+                                colorlog(obj[0].console,obj[0].property,obj[0].color, obj[0].substrate, obj[0].relation )
                             }
                             obj.shift()
                             timerId = setTimeout(tick, 10);
