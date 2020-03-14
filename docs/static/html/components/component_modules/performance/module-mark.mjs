@@ -11,6 +11,7 @@ mark.set = (obj={mark: 'performance',end:false, message:''})=>{
         mark.staticProperty[`${obj.mark}`] = []
         mark.staticProperty[`${obj.mark}`]['start'] = `${performanceEntries[0].startTime}:0`
         mark.staticProperty[`${obj.mark}`]['end'] = {}
+        mark.staticProperty[`${obj.mark}`]['timestamp'] = Date.now()
         mark.staticProperty[`${obj.mark}`]['all'] = 0
         mark.staticProperty[`${obj.mark}`]['sample'] = []
         mark.staticProperty[`${obj.mark}`]['message'] = []
@@ -54,8 +55,7 @@ mark.set = (obj={mark: 'performance',end:false, message:''})=>{
     return Mark
 }
 
-mark.getAll = (obj={mark: 'performance'})=>{
-    // .
+mark.relations = (obj={mark: 'performance'})=>{
     const allEntries = performance.getEntriesByType("mark");
 
     return allEntries

@@ -61,10 +61,16 @@
   padding: $padding;
   margin: $margin;
 }
+:host {
+  display: flex;
+  contain: content;
+}
 section#manager-deed {
   @include border();
   div#deed {
     @include padding(2vw, 0);
+    width: 35vw;
+    margin: auto;
     div#deed-normal{
       @include border();
       text-align: -webkit-center;
@@ -117,7 +123,7 @@ section#manager-deed {
             }
             td.options{
               @include display(column, nowrap, space-evenly, flex-start, stretch);
-              width: 25%;
+              width: 100%;
               div{
                 align-self: center;
               }
