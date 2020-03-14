@@ -16,8 +16,14 @@ export default async (show, message='time', color ='black', ...args) =>{
                 default:
                     break
             }
-            if(message === 'end'){end = true}
-
+            if(typeof message === 'object'){
+               if(message.hasOwnProperty('end') && message.end === true){
+                   end = true
+                   message = message.property
+               }
+            }else{
+                if(message === 'end'){end = true}
+            }
             if(message === 'stat'){
                console.log('%c статистика', 'color:' + color,'--->', performance.allMark)
             }else if(message === 'assert'){

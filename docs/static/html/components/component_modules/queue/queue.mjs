@@ -19,7 +19,10 @@ let handler = {
                             clearTimeout(timerId);
                         }else{
                             if(obj[0].end){
-                                colorlog(obj[0].console,'end',obj[0].color, obj[0].substrate, obj[0].relation )
+                                colorlog(obj[0].console,{
+                                    end:true,
+                                    property:obj[0].property,
+                                },obj[0].color, obj[0].substrate, obj[0].relation )
                                 delete obj[0].substrate.queue
                                 document.dispatchEvent( new CustomEvent('typeScript-end', {
                                     detail: {
