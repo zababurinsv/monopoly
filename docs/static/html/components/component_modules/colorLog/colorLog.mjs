@@ -25,12 +25,7 @@ export default async (show, message='time', color ='black', ...args) =>{
                 if(message === 'end'){end = true}
             }
             if(message === 'stat'){
-               console.log('%c статистика', 'color:' + color,'--->', performance.allMark)
-            }else if(message === 'assert'){
-
-                console.log(args[0])
-                console.assert(false,args )
-
+                console.log('%c' + args[args.length-1],'color:' + color,'[(', performance.allMark,'*)',message,']')
             }else{
                 console.log('%c%O' + args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
             }

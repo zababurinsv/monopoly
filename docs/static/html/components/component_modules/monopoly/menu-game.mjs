@@ -509,10 +509,10 @@ export default {
                         cell:0
                     }
                     let type = await typeScript()
-                    let button = type.button(true, 'property','2',{_:'button'},'Button')
-                    let player = type.player(true, 'property','5',{_:'player'},'player')
+                    let button = await type.button(true, 'monopoly/menu-game.mjs','2',{_:'button'},'button')
+                    let player = await type.player(true, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
                     // let json = (await Json())
-                    // colorlog(true, 'json start','7',json, 'json-transform')
+                    // colorlog(true, 'json start','7',button, 'json-transform')
                     // let selected = await json.select(data)
                     // let jsonTemplate = await json.transformWith(templateItem, false, selected)
                     // let outRoot = await json.root(jsonTemplate)
@@ -521,7 +521,6 @@ export default {
                     // console.assert(false, outItem)
                     // colorlog(true, 'end','7',outRoot, 'json-transform')
                     // colorlog(true, 'end','2',button, 'Button')
-                    colorlog(true, 'stat','stat','', 'json')
                     // console.assert(false, jsonTemplate)
                     // console.assert(false, selected)
                     //

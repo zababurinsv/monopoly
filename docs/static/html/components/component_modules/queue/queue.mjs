@@ -1,9 +1,26 @@
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 import description from '/static/html/components/component_modules/description/description.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
+import actions from '/static/html/components/component_modules/action/actions-monopoly.mjs'
 let object = {}
 object.staticProperty = []
 let output = {}
+object.setEventsAction = async (views, property, color, substrate, relation) => {
+    return new Promise(async function (resolve, reject) {
+        switch (relation) {
+            case 'button':
+                resolve(await actions(views,property,color,substrate,relation))
+                break
+            case 'player':
+                resolve({actions:true})
+                break
+            default:
+                console.warn('нет акшена на это отношение --->', relation, '--->', views, property, color, substrate, relation)
+                resolve({warning: 'нет акшена на это отношение'})
+                break
+        }
+    })
+}
 let handler = {
     get: (obj, prop) => {
         return obj[prop];
@@ -19,10 +36,8 @@ let handler = {
                             clearTimeout(timerId);
                         }else{
                             if(obj[0].end){
-                                colorlog(obj[0].console,{
-                                    end:true,
-                                    property:obj[0].property,
-                                },obj[0].color, obj[0].substrate, obj[0].relation )
+                                await object.setEventsAction(obj[0].console,{ end:true, property:obj[0].property, },obj[0].color, obj[0].substrate, obj[0].relation )
+                                colorlog(obj[0].console,{ end:true, property:obj[0].property, },obj[0].color, obj[0].substrate, obj[0].relation )
                                 delete obj[0].substrate.queue
                                 document.dispatchEvent( new CustomEvent('typeScript-end', {
                                     detail: {
@@ -35,9 +50,9 @@ let handler = {
                                     }
                                 }))
                             }else{
+                                await object.setEventsAction(obj[0].console,'Actions',obj[0].color, obj[0].substrate, obj[0].relation)
                                 colorlog(obj[0].console,'Actions',obj[0].color, obj[0].substrate, obj[0].relation )
                             }
-
                             obj.shift()
                             timerId = setTimeout(tick, 10);
                         }
