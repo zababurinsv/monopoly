@@ -6,7 +6,7 @@ export default (views,property,color,substrate,relation)=>{
         await colorlog(views,'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~',color, substrate, relation )
         switch (relation.toLowerCase()) {
             case 'button':
-                let json = (await Json())
+                let json = (await Json(views))
                 let selected = await json.select(substrate)
                 let jsonTemplate = await json.transformWith(property, false, selected)
                 let outRoot = await json.root(jsonTemplate)

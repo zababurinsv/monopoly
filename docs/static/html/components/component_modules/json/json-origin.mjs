@@ -325,7 +325,7 @@ TRANSFORM._fillout = (options) =>{
     })
 }
 
-TRANSFORM.fillout = (data, template, raw) =>{
+TRANSFORM.fillout = (data, template, raw, view= true) =>{
     return  new Promise(async function (resolve, reject) {
         let out = (obj) => {
             resolve(obj)
@@ -359,8 +359,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
                             variable: variables[0],
                             data: data,
                             template: null,
-                        });
-                        //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~_fillout~~~~~~<','#9beb34',replaced)
+                        },view);
                     } else {
                         // Fill out the template for each variable
 
@@ -370,9 +369,8 @@ TRANSFORM.fillout = (data, template, raw) =>{
                                 variable: variable,
                                 data: data,
                                 template: replaced,
-                            });
+                            },view);
                         }
-                        //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables_fillout~~2~~~~<','#9beb34',replaced)
                     }
                 } else {
                     console.warn('здесь был return пока не вижу зачем он')

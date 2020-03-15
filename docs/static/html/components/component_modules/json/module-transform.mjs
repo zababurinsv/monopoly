@@ -3,7 +3,7 @@ import colorlog from '/static/html/components/component_modules/colorLog/colorLo
 import  Conditional from '/static/html/components/component_modules/json/module-conditional.mjs'
 let  TRANSFORM = { }
 let root = { }
-TRANSFORM._fillout = (options) =>{
+TRANSFORM._fillout = (options, view = true) =>{
     return  new Promise(async function (resolve, reject) {
         let out = (obj) => {
             resolve(obj)
@@ -13,7 +13,7 @@ TRANSFORM._fillout = (options) =>{
             reject(error)
         }
         try {
-            colorlog(true, 'TRANSFORM._fillout', '3', options, 'TRANSFORM')
+            colorlog(view, 'TRANSFORM._fillout', '3', options, 'TRANSFORM')
             // Given a template and fill it out with passed slot and its corresponding data
             let re = /\{\{(.*?)\}\}/g;
             let full_re = /^\{\{((?!\}\}).)*\}\}$/;
@@ -107,7 +107,7 @@ TRANSFORM._fillout = (options) =>{
         }
     })
 }
-TRANSFORM.fillout = (data, template, raw) =>{
+TRANSFORM.fillout = (data, template, raw, view = true) =>{
     return  new Promise(async function (resolve, reject) {
         let out = (obj) => {
             resolve(obj)
@@ -117,7 +117,6 @@ TRANSFORM.fillout = (data, template, raw) =>{
             reject(error)
         }
         try {
-            //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~in~~~~~~<','#9beb34',data, template, raw)
             // 1. fill out if possible
             // 2. otherwise return the original
             let replaced = template;
@@ -130,7 +129,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
                 let variables = template.match(re);
 
                 if (variables) {
-                    //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables~~1~~~~<','#9beb34',variables)
+                 
                     if (raw) {
                         // 'raw' is true only for when this is called from #each
                         // Because #each is expecting an array, it shouldn't be stringified.
@@ -141,8 +140,8 @@ TRANSFORM.fillout = (data, template, raw) =>{
                             variable: variables[0],
                             data: data,
                             template: null,
-                        });
-                        //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~_fillout~~~~~~<','#9beb34',replaced)
+                        },view);
+                 
                     } else {
                         // Fill out the template for each variable
 
@@ -152,15 +151,15 @@ TRANSFORM.fillout = (data, template, raw) =>{
                                 variable: variable,
                                 data: data,
                                 template: replaced,
-                            });
+                            },view);
                         }
-                        //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~variables_fillout~~2~~~~<','#9beb34',replaced)
+          
                     }
                 } else {
                     console.warn('здесь был return пока не вижу зачем он')
                 }
             }
-            //colorlog('>~~~~~~~~~ TRANSFORM.fillout ~~~out~~~~<','red',replaced)
+          
             out(replaced);
         }catch (e) {
             err({
@@ -171,7 +170,7 @@ TRANSFORM.fillout = (data, template, raw) =>{
 
     })
 }
-TRANSFORM.tokenize =(str) => {
+TRANSFORM.tokenize =(str, view = true) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
             resolve(obj)
@@ -212,7 +211,7 @@ TRANSFORM.tokenize =(str) => {
         }
     })
 }
-TRANSFORM.run = (template, data, selectRoot) => {
+TRANSFORM.run = (template, data, selectRoot, view = true) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
             // console.log('~~~ out  ~~~', obj['input'])
@@ -226,17 +225,17 @@ TRANSFORM.run = (template, data, selectRoot) => {
         try {
             let result;
             let fun;
-            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~template~~~~~~<','#c203fc', template)
+         
             if (typeof template === 'string') {
                 // Leaf node, so call TRANSFORM.fillout()
                 if (await Helper.is_template(template)) {
                     let include_string_re = /\{\{([ ]*#include)[ ]*([^ ]*)\}\}/g;
-                    //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~include_string_re~~~~~~<','#c203fc', include_string_re)
+                  
                     if (include_string_re.test(template)) {
                         fun = await TRANSFORM.tokenize(template);
                         if (fun.expression) {
                             // if #include has arguments, evaluate it before attaching
-                            result = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true);
+                            result = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true,view);
                         } else {
                             // shouldn't happen =>
                             // {'wrapper': '{{#include}}'}
@@ -244,7 +243,7 @@ TRANSFORM.run = (template, data, selectRoot) => {
                         }
                     } else {
                         // non-#include
-                        result = await TRANSFORM.fillout(data, template);
+                        result = await TRANSFORM.fillout(data, template,false, view);
                     }
                 } else {
                     result = template;
@@ -278,7 +277,7 @@ TRANSFORM.run = (template, data, selectRoot) => {
                     fun = await TRANSFORM.tokenize(include_keys[0]);
                     if (fun.expression) {
                         // if #include has arguments, evaluate it before attaching
-                        result = await TRANSFORM.fillout(template[include_keys[0]], '{{' + fun.expression + '}}', true);
+                        result = await TRANSFORM.fillout(template[include_keys[0]], '{{' + fun.expression + '}}', true, view);
                     } else {
                         // no argument, simply attach the child
                         result = template[include_keys[0]];
@@ -364,16 +363,16 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                     }
                                 }
                             } else if (fun.name === '#each') {
-                                //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc', data, '{{' + fun.expression + '}}', true)
+                              
                                 // newData will be filled with parsed results
-                                let newData = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true);
+                                let newData = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true, view);
 
                                 // Ideally newData should be an array since it was prefixed by #each
                                 if (newData && await Helper.is_array(newData)) {
                                     result = [];
                                     for (let index = 0; index < newData.length; index++) {
                                         // temporarily set $index
-                                        //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#each~~~~~~<','#c203fc',newData[index])
+                                      
                                         if(typeof newData[index] === 'object') {
                                             newData[index]["$index"] = index;
                                             // #let handling
@@ -381,7 +380,7 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                                 newData[index][declared_vars] = TRANSFORM.memory[declared_vars];
                                             }
                                         } else {
-                                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',TRANSFORM.memory)
+                                      
                                             String.prototype.$index = index;
                                             Number.prototype.$index = index;
                                             Function.prototype.$index = index;
@@ -398,8 +397,8 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                         }
 
                                         // run
-                                        //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#memory~~~~~~<','#c203fc',template[key], newData[index])
-                                        let loop_item = await TRANSFORM.run(template[key], newData[index]);
+                                      
+                                        let loop_item = await TRANSFORM.run(template[key], newData[index], undefined, view);
 
                                         // clean up $index
                                         if(typeof newData[index] === 'object') {
@@ -409,7 +408,7 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                                 delete newData[index][declared_vars];
                                             }
                                         } else {
-                                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#delete~~~~~~<','#c203fc',template[key], newData[index])
+                                       
                                             delete String.prototype.$index;
                                             delete Number.prototype.$index;
                                             delete Function.prototype.$index;
@@ -429,7 +428,7 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                             // only push when the result is not null
                                             // null could mean #if clauses where nothing matched => In this case instead of rendering 'null', should just skip it completely
                                             result.push(loop_item);
-                                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result~~~~~~<','#c203fc',loop_item,result)
+                         
                                         }
                                     }
                                 } else {
@@ -439,7 +438,6 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                     // But don't get rid of it,
                                     // Instead, just leave it as template
                                     // So some other parse run could fill it in later.
-                                    //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~#result = template~~~~~~<','#c203fc',template)
 
                                     result = template;
                                 }
@@ -447,13 +445,10 @@ TRANSFORM.run = (template, data, selectRoot) => {
                         } else { // end of if (fun)
                             // If the key is a template expression but aren't either #include or #each,
                             // it needs to be parsed
-                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, key)
-                            //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~TRANSFORM.fillout~~~~~~<','#c203fc',data, template[key])
-                            let k = await TRANSFORM.fillout(data, key);
-                            let v = await TRANSFORM.fillout(data, template[key]);
+                            let k = await TRANSFORM.fillout(data, key,false, view);
+                            let v = await TRANSFORM.fillout(data, template[key],false,view);
                             if (k !== undefined && v !== undefined) {
                                 result[k] = v;
-                                //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~ result[k] = v;~~~~~~<','#c203fc',result,  result[k], k, v)
                             }
                         }
                     } else {
@@ -463,7 +458,7 @@ TRANSFORM.run = (template, data, selectRoot) => {
                             if (fun && fun.name === '#?') {
                                 // If the key is a template expression but aren't either #include or #each,
                                 // it needs to be parsed
-                                let filled = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}');
+                                let filled = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', false, view);
                                 if (filled === '{{' + fun.expression + '}}' || !filled) {
                                     // case 1.
                                     // not parsed, which means the evaluation failed.
@@ -477,13 +472,13 @@ TRANSFORM.run = (template, data, selectRoot) => {
                                     result[key] = filled;
                                 }
                             } else {
-                                let item = await TRANSFORM.run(template[key], data);
+                                let item = await TRANSFORM.run(template[key], data, undefined, view);
                                 if (item !== undefined) {
                                     result[key] = item;
                                 }
                             }
                         } else {
-                            let item = await TRANSFORM.run(template[key], data);
+                            let item = await TRANSFORM.run(template[key], data,  undefined, view);
                             if (item !== undefined) {
                                 result[key] = item;
                             }
@@ -491,10 +486,8 @@ TRANSFORM.run = (template, data, selectRoot) => {
                     }
                 }
             } else {
-                //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~template~~~<','red', template)
                 out(template)
             }
-            // //colorlog('>~~~~~~~~~ TRANSFORM.run ~~~out~~~result~~~<','red', result)
             out(result)
 
 

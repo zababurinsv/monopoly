@@ -40,7 +40,6 @@ export default (...args)=>{
         }
         function addEventsQueue(object) {
             return new Promise(async (resolve, reject) => {
-
                 switch (object.description.relation.toLowerCase()) {
                     case 'button':
                         if(isNotEmptyActions(action.button, object)){

@@ -3,7 +3,7 @@ import Class from '/static/html/components/component_modules/json/module-class.m
 let object = { }
 object.staticProperty = {}
 object.staticProperty.class = undefined
-export default (obj = {_:'json'})=>{
+export default (view = true)=>{
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
             // console.log('~~~ out  ~~~', obj['input'])
@@ -13,11 +13,13 @@ export default (obj = {_:'json'})=>{
             console.log('~~~ err ~~~', error)
             reject(error)
         }
-        object['class'] = ()=>{
-            if(isEmpty(object.staticProperty.class)){ object.staticProperty.class = new Class() }
+        if(typeof view !== 'boolean'){console.assert(false, 'значение для вывода на консоль должно быть true/false')}
+        object['class'] = (view = true)=>{
+            if(typeof view !== 'boolean'){console.assert(false, 'значение для вывода на консоль должно быть true/false')}
+            if(isEmpty(object.staticProperty.class)){ object.staticProperty.class = new Class(view) }
             return object.staticProperty.class
         }
-        if(isEmpty(object.staticProperty.class)){ object.staticProperty.class = new Class() }
+        if(isEmpty(object.staticProperty.class)){ object.staticProperty.class = new Class(view) }
         out(object.staticProperty.class)
     })
 }
