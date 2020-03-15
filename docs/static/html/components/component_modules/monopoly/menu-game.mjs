@@ -5,7 +5,6 @@ import classicedition from '/static/html/components/component_modules/monopoly/c
 import gameplay from '/static/html/components/component_modules/monopoly/gameplay.mjs'
 import typeScript from '/static/html/components/component_modules/type/typeScript.mjs'
 import ai from '/static/html/components/component_modules/monopoly/ai.mjs'
-import Json from '/static/html/components/component_modules/json/json.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
 import monopolyObject from '/static/html/components/component_modules/monopoly/monopoly-object.mjs'
 export default {

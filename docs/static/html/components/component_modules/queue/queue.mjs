@@ -12,7 +12,7 @@ object.setEventsAction = async (views, property, color, substrate, relation) => 
                 resolve(await actions(views,property,color,substrate,relation))
                 break
             case 'player':
-                resolve({actions:true})
+                resolve(await actions(views,property,color,substrate,relation))
                 break
             default:
                 console.warn('нет акшена на это отношение --->', relation, '--->', views, property, color, substrate, relation)

@@ -1,6 +1,7 @@
 import colors from '/static/html/components/component_modules/colors/colors.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
 import action from '/static/html/components/component_modules/action/relation-monopoly.mjs'
+import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 export default (...args)=>{
     return  new Promise(async (resolve, reject) => {
         let object = {}
@@ -23,35 +24,52 @@ export default (...args)=>{
         function err(obj) {
             reject(obj)
         }
-        function addEventQueue(object) {
-            return new Promise(function (resolve, reject) {
+        function isNotEmptyActions(actions, object) {
+            return new Promise(async (resolve, reject) => {
+                let out = false
+                if(isEmpty(actions)){
+                    colorlog(object.description.console, 'для этого отношения нет никаких действий' ,object.description.color,object.description.substrate, `${object.description.relation}`)
+                    object.description.property = {
+                        end: true,
+                        property:object.description.property,
+                    }
+                }else{ out = true }
+
+                resolve(out)
+            })
+        }
+        function addEventsQueue(object) {
+            return new Promise(async (resolve, reject) => {
 
                 switch (object.description.relation.toLowerCase()) {
                     case 'button':
-
-                        for(let i=0; i< action.button.length;i++){
-                            object.description.substrate.queue.push({
-                                _:object.description.substrate._,
-                                end: (i === action.button.length -1),
-                                console:object.description.console,
-                                property:action.button[i].property,
-                                color: object.description.color,
-                                substrate: action.button[i].substrate,
-                                relation:object.description.relation,
-                            })
+                        if(isNotEmptyActions(action.button, object)){
+                            for(let i=0; i< action.button.length;i++){
+                                object.description.substrate.queue.push({
+                                    _:object.description.substrate._,
+                                    end: (i === action.button.length -1),
+                                    console:object.description.console,
+                                    property:action.button[i].property,
+                                    color: object.description.color,
+                                    substrate: action.button[i].substrate,
+                                    relation:object.description.relation,
+                                })
+                            }
                         }
                         break
                     case 'player':
-                        for(let i=0; i< action.player.length;i++){
-                            object.description.substrate.queue.push({
-                                _:object.description.substrate._,
-                                end: (i === action.player.length -1),
-                                console:object.description.console,
-                                property:action.player[i].property,
-                                color: object.description.color,
-                                substrate: action.player[i].substrate,
-                                relation:object.description.relation,
-                            })
+                        if(isNotEmptyActions(action.player, object)){
+                            for(let i=0; i< action.player.length;i++){
+                                object.description.substrate.queue.push({
+                                    _:object.description.substrate._,
+                                    end: (i === action.player.length -1),
+                                    console:object.description.console,
+                                    property:action.player[i].property,
+                                    color: object.description.color,
+                                    substrate: action.player[i].substrate,
+                                    relation:object.description.relation,
+                                })
+                            }
                         }
                         break
                     default:
@@ -105,9 +123,9 @@ export default (...args)=>{
                         break
                 }
             }
-            addEventQueue(object)
-            // let description = object.description.substrate
-            // delete description.queue
+            addEventsQueue(object)
+            let description = object.description.substrate
+            delete description.queue
             colorlog(object.description.console, object.description.property ,object.description.color,object.description.substrate, `${object.description.relation}`)
             out(object)
         }catch (e) {

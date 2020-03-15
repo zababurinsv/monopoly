@@ -5,12 +5,10 @@ import TRANSFORM from '/static/html/components/component_modules/json/module-tra
 import Conditional from '/static/html/components/component_modules/json/module-conditional.mjs'
 let Class = class Json {
     constructor(self) {
-        colorlog(true, 'constructor' ,'constructor', this, 'constructor')
         this.select = this.select.bind(this)
         this.transformWith = this.transformWith.bind(this)
         this.transform = this.transform.bind(this)
         this.root = this.root.bind(this)
-        colorlog(true, 'end' ,'constructor', this, 'constructor')
     }
     root(obj){
         colorlog(true, 'root', '4', obj,'root')

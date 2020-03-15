@@ -14,6 +14,9 @@ export default (color)=>{
             case 'warning':
                 color = 'Orange'
                 break
+            case 'action':
+                color = '#49483dfc'
+                break
             case 'events':
                 color = 'blue'
                 break
