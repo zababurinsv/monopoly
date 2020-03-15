@@ -509,7 +509,7 @@ export default {
                     }
                     let type = await typeScript()
                     type.button(true, 'monopoly/menu-game.mjs','2',{_:'button'},'button')
-                    type.player(true, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
+                    type.player(false, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
                     // let json = (await Json())
                     // colorlog(true, 'json start','7',button, 'json-transform')
                     // let selected = await json.select(data)
