@@ -21,11 +21,18 @@ export default async (show, message='time', color ='black', ...args) =>{
                    end = true
                    message = message.property
                }
+                if(message.hasOwnProperty('assert') && message.assert === true){
+                    console.assert(false,'%c%O' + args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
+                }
             }else{
                 if(message === 'end'){end = true}
             }
             if(message === 'stat'){
                 console.log('%c' + args[args.length-1],'color:' + color,'[(', performance.allMark,'*)',message,']')
+            }else if(message === 'assert'){
+
+                console.assert(false,'%c%O' + args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
+
             }else{
                 console.log('%c%O' + args[args.length-1],'color:' + color,performance['now'](end, args[args.length-1], message),'[(', ...args.slice(0, args.length-1),'*)',message,']')
             }

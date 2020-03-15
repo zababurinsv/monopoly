@@ -320,9 +320,22 @@ SELECT.select = (obj,filter, serialized,view) =>{
                         SELECT.$selected_root = {};
                     }
                 }
+
+                let keys = Object.keys(json)
+                for(let i = 0; i < keys.length;i++){
+
+                    console.log('~~~~~~!!!!!~~~~~~~~~', keys, json)
+                    SELECT.$val[i] = json[i];
+                    SELECT.$selected_root[i] = json[i];
+                }
+                // console.assert(false)
+                colorlog(view, {
+                    assert:true,
+                    property: json
+                }, 'function',SELECT,'transformWith')
                 Object.keys(json).forEach(function(key) {
                     //for (let key in json) {
-              
+
                     SELECT.$val[key] = json[key];
                     SELECT.$selected_root[key] = json[key];
                 });

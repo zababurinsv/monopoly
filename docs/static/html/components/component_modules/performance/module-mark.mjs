@@ -28,28 +28,32 @@ mark.set = (obj={mark: 'performance',end:false, message:''})=>{
             }
         }))
     }else{
-        // console.log('~~~~~~~~~~~~~~~~', Object.keys(mark.staticProperty).length, performanceEntries)
-        time = performanceEntries[performanceEntries.length - 1].startTime - performanceEntries[performanceEntries.length - 2].startTime
-        mark.staticProperty[`${obj.mark}`]['sample'].push(time)
-        mark.staticProperty[`${obj.mark}`]['message'].push(obj.message)
-        mark.staticProperty[`${obj.mark}`]['all'] = mark.staticProperty[`${obj.mark}`]['all'] + time
-        Mark = mark.staticProperty[`${obj.mark}`]
-        if(obj.end){
-            // console.assert(false, obj.mark)
-            mark.staticProperty[`${obj.mark}`]['end'] = `${performanceEntries[performanceEntries.length - 1].startTime}:${0 + time}`
-            document.dispatchEvent( new CustomEvent('performance-end', {
-                detail: {
-                    _:obj.mark,
-                    data: {
-                        time:mark.staticProperty[`${obj.mark}`],
-                        mark:performanceEntries
-                    }
-                }
-            }))
-            Mark = mark.staticProperty[`${obj.mark}`]
-            performanceEntries = {}
-            delete mark.staticProperty[`${obj.mark}`]
+        if(mark.staticProperty[`${obj.mark}`] === undefined){
             performance.clearMarks(obj.mark);
+            mark.set(obj)
+        }else{
+            time = performanceEntries[performanceEntries.length - 1].startTime - performanceEntries[performanceEntries.length - 2].startTime
+            mark.staticProperty[`${obj.mark}`]['sample'].push(time)
+            mark.staticProperty[`${obj.mark}`]['message'].push(obj.message)
+            mark.staticProperty[`${obj.mark}`]['all'] = mark.staticProperty[`${obj.mark}`]['all'] + time
+            Mark = mark.staticProperty[`${obj.mark}`]
+            if(obj.end){
+                // console.assert(false, obj.mark)
+                mark.staticProperty[`${obj.mark}`]['end'] = `${performanceEntries[performanceEntries.length - 1].startTime}:${0 + time}`
+                document.dispatchEvent( new CustomEvent('performance-end', {
+                    detail: {
+                        _:obj.mark,
+                        data: {
+                            time:mark.staticProperty[`${obj.mark}`],
+                            mark:performanceEntries
+                        }
+                    }
+                }))
+                Mark = mark.staticProperty[`${obj.mark}`]
+                performanceEntries = {}
+                delete mark.staticProperty[`${obj.mark}`]
+                performance.clearMarks(obj.mark);
+            }
         }
     }
     return Mark

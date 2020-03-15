@@ -5,7 +5,8 @@ export default {
             property:{
                 "{{#each items}}": {
                     _: "button",
-                    type: "{{this}}"
+                    item: "{{this}}",
+                    "{{ #include }}": [ {key:'value'}]
                 },
             },
             substrate: {
