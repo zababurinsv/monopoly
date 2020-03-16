@@ -1,10 +1,14 @@
 import Helper from '/static/html/components/component_modules/json/module-helper.mjs'
+import TRANSFORM from '/static/html/components/component_modules/json/module-transform.mjs'
+import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
 let Conditional = {}
+Conditional.staticProperty = {}
 
-Conditional.is = (template) => {
+
+Conditional.run = (template, data, view) => {
     return new Promise( async (resolve, reject) => {
         let out = (obj) => {
-            // console.log('~~~ out  ~~~', obj['input'])
+            colorlog(Conditional.staticProperty.view , {end:true, property:'~~~ end Conditional.run end ~~~'},'6', obj, 'Conditional.run')
             resolve(obj)
         }
         let err = (error) => {
@@ -12,6 +16,78 @@ Conditional.is = (template) => {
             reject(error)
         }
         try {
+            Conditional.staticProperty.view = view
+            colorlog(view, '~~~ input Conditional.run input ~~~ ', '6', {
+                template:template,
+                data:data,
+            }, 'Conditional.run')
+
+            let outObject = null
+            // expecting template as an array of objects,
+            // each of which contains '#if', '#elseif', 'else' as key
+
+            // item should be in the format of:
+            // {'#if item': 'blahblah'}
+
+            // Step 1. get all the conditional keys of the template first.
+            // Step 2. then try evaluating one by one until something returns true
+            // Step 3. if it reaches the end, the last item shall be returned
+            for (let i = 0; i < template.length; i++) {
+                let item = template[i];
+                let keys = Object.keys(item);
+                // assuming that there's only a single kv pair for each item
+                let key = keys[0];
+                let func = await TRANSFORM.tokenize(key);
+                if (func.name === '#if' || func.name === '#elseif') {
+                    let expression = func.expression;
+                    let res = await TRANSFORM.fillout(data, '{{' + expression + '}}');
+                    if (res === ('{{' + expression + '}}')) {
+                        // if there was at least one item that was not evaluatable,
+                        // we halt parsing and return the template;
+                        outObject = template;
+                    } else {
+                        if (res) {
+                            // run the current one and return
+                            outObject = await TRANSFORM.run(item[key], data)
+                        } else {
+                            // res was falsy. Ignore this branch and go on to the next item
+                        }
+                    }
+                } else {
+                    // #else
+                    // if you reached this point, it means:
+                    //  1. there were no non-evaluatable expressions
+                    //  2. Yet all preceding expressions evaluated to falsy value
+                    //  Therefore we run this branch
+                    outObject = await TRANSFORM.run(item[key], data, Conditional.staticProperty.view)
+                }
+            }
+            // if you've reached this point, it means nothing matched.
+            // so return null
+          out(outObject)
+        }catch (e) {
+            err({
+                _:'run',
+                error: e
+            })
+        }
+    })
+}
+Conditional.is = (template, view) => {
+    return new Promise( async (resolve, reject) => {
+        let out = (obj) => {
+            colorlog(Conditional.staticProperty.view , {end:true, property:'~~~ end Conditional.is end ~~~'},'6', obj, 'Conditional.is')
+            resolve(obj)
+        }
+        let err = (error) => {
+            console.log('~~~ err ~~~', error)
+            reject(error)
+        }
+        try {
+            Conditional.staticProperty.view = view
+            colorlog(view, '~~~ input Conditional.is input ~~~ ', '7', {
+                template:template,
+            }, 'Conditional.is')
             //colorlog('>~~~~~~~~~ Conditional.is ~~~~~~~~~<','#8034eb', template)
             // TRUE ONLY IF it's in a correct format.
             // Otherwise return the original template

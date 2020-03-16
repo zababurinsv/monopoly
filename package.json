@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "scripts": {
-    "monopoly": "nodemon --experimental-modules server.mjs",
-    "start": "node --experimental-modules server.mjs",
+    "monopoly": "nodemon server.mjs",
+    "start": "node server.mjs",
     "deploy": "./deploy.sh",
     "gulp-watch-slyle": "gulp gulp-watch-slyle",
     "gitHub": "git status && git add -A && git commit -am 'update' && git push"

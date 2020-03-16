@@ -3,9 +3,12 @@ import colorlog from '/static/html/components/component_modules/colorLog/colorLo
 import  Conditional from '/static/html/components/component_modules/json/module-conditional.mjs'
 let  TRANSFORM = { }
 let root = { }
+TRANSFORM.staticProperty = {}
 TRANSFORM._fillout = (options, view = true) =>{
     return  new Promise(async function (resolve, reject) {
+        TRANSFORM.staticProperty.view = view
         let out = (obj) => {
+            colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ TRANSFORM._fillout end ~~~'},'3', obj, 'TRANSFORM._fillout')
             resolve(obj)
         }
         let err = (error) => {
@@ -13,7 +16,7 @@ TRANSFORM._fillout = (options, view = true) =>{
             reject(error)
         }
         try {
-            colorlog(view, 'TRANSFORM._fillout', '3', options, 'TRANSFORM')
+            colorlog(view, '~~~ input TRANSFORM._fillout input ~~~ ', '3', options, 'TRANSFORM._fillout')
             // Given a template and fill it out with passed slot and its corresponding data
             let re = /\{\{(.*?)\}\}/g;
             let full_re = /^\{\{((?!\}\}).)*\}\}$/;
@@ -110,6 +113,7 @@ TRANSFORM._fillout = (options, view = true) =>{
 TRANSFORM.fillout = (data, template, raw, view = true) =>{
     return  new Promise(async function (resolve, reject) {
         let out = (obj) => {
+            colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ TRANSFORM.fillout end ~~~'},'2', obj, 'TRANSFORM.fillout')
             resolve(obj)
         }
         let err = (error) => {
@@ -117,6 +121,13 @@ TRANSFORM.fillout = (data, template, raw, view = true) =>{
             reject(error)
         }
         try {
+            colorlog(view, '~~~ input TRANSFORM.fillout input ~~~', '2', {
+                data:data,
+                template:template,
+                raw:raw,
+                view:view,
+            }, 'TRANSFORM.fillout')
+
             // 1. fill out if possible
             // 2. otherwise return the original
             let replaced = template;
@@ -173,12 +184,19 @@ TRANSFORM.fillout = (data, template, raw, view = true) =>{
 TRANSFORM.tokenize =(str, view = true) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
+            colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ TRANSFORM.tokenize end ~~~'},'6', obj, 'TRANSFORM.tokenize')
             resolve(obj)
         }
         let err = (error) => {
             reject(error)
         }
         try {
+            colorlog(TRANSFORM.staticProperty.view, '~~~ input TRANSFORM.tokenize input ~~~ ', '6', {
+                str:str
+            }, 'TRANSFORM.tokenize')
+            if(str === '{{#each actions}}'){
+                console.assert(false)
+            }
             // INPUT : string
             // OUTPUT : {name: FUNCTION_NAME:STRING, args: ARGUMENT:ARRAY}
             let re = /\{\{(.+)\}\}/g;
@@ -214,7 +232,7 @@ TRANSFORM.tokenize =(str, view = true) => {
 TRANSFORM.run = (template, data, selectRoot, view = true) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
-            // console.log('~~~ out  ~~~', obj['input'])
+            colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ end TRANSFORM.run end ~~~'},'1', obj, 'TRANSFORM.run')
             resolve(obj)
         }
         let err = (error) => {
@@ -223,6 +241,14 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
         }
         root = selectRoot
         try {
+
+            colorlog(TRANSFORM.staticProperty.view, '~~~ input TRANSFORM.run input ~~~ ', '1', {
+                template:template,
+                data:data,
+                selectRoot:selectRoot
+            }, 'TRANSFORM.run')
+
+
             let result;
             let fun;
          
@@ -249,12 +275,19 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                     result = template;
                 }
             } else if (await Helper.is_array(template)) {
-                if (await Conditional.is(template)) {
-                    result =await Conditional.run(template, data);
+                if (await Conditional.is(template, view)) {
+                    colorlog(TRANSFORM.staticProperty.view, '~~~ input Conditional.run(template, data) input ~~~ ', '4', {
+                        template:template,
+                        data:data,
+                    }, 'Conditional.run')
+                    result = await Conditional.run(template, data, view);
+                    colorlog(TRANSFORM.staticProperty.view, {end:true,property:'~~~ input Conditional.run(template, data) input ~~~ '}, '4', {
+                        result:result,
+                    }, 'Conditional.run')
                 } else {
                     result = [];
                     for (let i = 0; i < template.length; i++) {
-                        let item = await TRANSFORM.run(template[i], data);
+                        let item = await TRANSFORM.run(template[i], data, view);
                         if (item) {
                             // only push when the result is not null
                             // null could mean #if clauses where nothing matched => In this case instead of rendering 'null', should just skip it completely
@@ -283,8 +316,9 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                         result = template[include_keys[0]];
                     }
                 }
-
                 for (let key in template) {
+                    if(key === 'actions'){console.assert(false)}
+                    colorlog(view, key, '7', template, 'transform cycle')
                     // Checking to see if the key contains template..
                     // Currently the only case for this are '#each' and '#include'
                     if (await Helper.is_template(key)) {
@@ -488,8 +522,8 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
             } else {
                 out(template)
             }
+            colorlog(TRANSFORM.staticProperty.view , {end:true,property:result}, '7', template, 'transform cycle')
             out(result)
-
 
         }catch (e) {
             err({

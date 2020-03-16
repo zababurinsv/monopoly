@@ -6,6 +6,8 @@ let SELECT ={}
 let root ={}
 SELECT['$progress'] = false
 SELECT['$selected'] = false
+SELECT.staticProperty = {}
+SELECT.staticProperty.view = {}
 SELECT.transform = (obj, serialized,view) => {
     return new Promise(async (resolve, reject) => {
         let out = (obj) => {
@@ -63,6 +65,7 @@ SELECT.transform = (obj, serialized,view) => {
                     return a.index - b.index;
                 });
             } else {
+                console.assert(false, SELECT.$selected_root, data)
                 let parsed_object = await TRANSFORM.run(SELECT.$selected_root, data, view);
                 // apply the result to root
                 SELECT.$template_root = await Helper.resolve(SELECT.$template_root, '', parsed_object);
@@ -85,6 +88,7 @@ SELECT.transform = (obj, serialized,view) => {
 }
 SELECT.transformWith = (obj,serialized, selected, view) => {
     return new Promise(async (resolve, reject) => {
+        SELECT.staticProperty.view = view
         let out = (obj) => {
             resolve(obj)
         }
@@ -258,20 +262,22 @@ SELECT.transformWith = (obj,serialized, selected,view= true) => {
 }
 SELECT.select = (obj,filter, serialized,view) =>{
     return new Promise(async function (resolve, reject) {
+        SELECT.staticProperty.view = view
         let out = (obj) => {
+            colorlog(SELECT.staticProperty.view , {end:true, property:'~~~ end SELECT.select end ~~~'},'function', obj, 'SELECT.select')
             resolve(obj)
         }
         let err = (error) => {
             reject(error)
         }
         try{
+
             if(!isEmpty(filter)){
                 obj.filter = filter
             }
             if(!isEmpty(serialized)){
                 obj.serialized = serialized
             }
-            // console.assert(false,obj )
             // iterate '$selected'
             //
             /*
@@ -323,22 +329,14 @@ SELECT.select = (obj,filter, serialized,view) =>{
 
                 let keys = Object.keys(json)
                 for(let i = 0; i < keys.length;i++){
-
-                    console.log('~~~~~~!!!!!~~~~~~~~~', keys, json)
-                    SELECT.$val[i] = json[i];
-                    SELECT.$selected_root[i] = json[i];
+                    SELECT.$val[`${keys[i]}`] = json[`${keys[i]}`];
+                    SELECT.$selected_root[`${keys[i]}`] = json[`${keys[i]}`];
                 }
                 // console.assert(false)
                 colorlog(view, {
-                    assert:true,
+                    assert:false,
                     property: json
-                }, 'function',SELECT,'transformWith')
-                Object.keys(json).forEach(function(key) {
-                    //for (let key in json) {
-
-                    SELECT.$val[key] = json[key];
-                    SELECT.$selected_root[key] = json[key];
-                });
+                }, 'function',SELECT,'SELECT.select')
             } else {
                 SELECT.$val = json;
                 SELECT.$selected_root = json;

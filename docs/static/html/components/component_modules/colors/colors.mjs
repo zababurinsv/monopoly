@@ -54,6 +54,8 @@ export default (color)=>{
                 break
             case '7':
                 color = '#921436'
+            case '8':
+                color = '#53b796'
                 break
             default:
         }
