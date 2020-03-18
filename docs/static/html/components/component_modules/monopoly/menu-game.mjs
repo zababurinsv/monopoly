@@ -508,8 +508,8 @@ export default {
                         cell:0
                     }
                     let type = await typeScript()
-                    type.button(false, 'monopoly/menu-game.mjs','2',{_:'button'},'button')
-                    type.player(true, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
+                    type.button(true, 'monopoly/menu-game.mjs','2',{_:'button'},'button')
+                    type.player(false, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
 
 
                     // for (let i = 0; i < 8; i++) {

@@ -36,7 +36,7 @@ export default {
             _:'create template',
             property:{
                 "{{#each items}}": {
-                    _: "button",
+                    _: "player",
                     item: "{{this}}",
                     action:{
                         "{{#concat}}":

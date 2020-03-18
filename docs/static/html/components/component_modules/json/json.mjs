@@ -19,7 +19,10 @@ export default (view = true)=>{
             if(isEmpty(object.staticProperty.class)){ object.staticProperty.class = new Class(view) }
             return object.staticProperty.class
         }
-        if(isEmpty(object.staticProperty.class)){ object.staticProperty.class = new Class(view) }
+        if(isEmpty(object.staticProperty.class)){
+            object.staticProperty.class = new Class(view)
+        }
+        object.staticProperty.class.view = view
         out(object.staticProperty.class)
     })
 }
