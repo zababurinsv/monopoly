@@ -508,22 +508,10 @@ export default {
                         cell:0
                     }
                     let type = await typeScript()
-                    type.button(true, 'monopoly/menu-game.mjs','2',{_:'button'},'button')
-                    type.player(false, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
-                    // let json = (await Json())
-                    // colorlog(true, 'json start','7',button, 'json-transform')
-                    // let selected = await json.select(data)
-                    // let jsonTemplate = await json.transformWith(templateItem, false, selected)
-                    // let outRoot = await json.root(jsonTemplate)
-                    // let outtt =  await monopolyObject(true, 'test','7',outRoot, 'relation')
-                    // await monopolyObject(true, 'end','7',outRoot, 'relation')
-                    // console.assert(false, outItem)
-                    // colorlog(true, 'end','7',outRoot, 'json-transform')
-                    // colorlog(true, 'end','2',button, 'Button')
-                    // console.assert(false, jsonTemplate)
-                    // console.assert(false, selected)
-                    //
-                    // console.assert(false, jsonTemplate)
+                    type.button(false, 'monopoly/menu-game.mjs','2',{_:'button'},'button')
+                    type.player(true, 'monopoly/menu-game.mjs','5',{_:'player'},'player')
+
+
                     // for (let i = 0; i < 8; i++) {
                     //     payload['player'][i] = await mInterface['get']({type:'player', color:''})
                     //     payload['player'][i].index = i;

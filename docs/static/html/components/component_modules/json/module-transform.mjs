@@ -45,6 +45,12 @@ TRANSFORM._fillout = (options, view = true) =>{
                     // Function expression with explicit 'return' expression
                     // Ordinary simple expression that
                     func = Function('with(this) {return (' + slot + ')}').bind(data);
+
+                    colorlog(view, {
+                        assert:false,
+                        property:'~~~ Устанавливаем this bind(data)~~~ ',
+                        func:func
+                    }, '3', data, 'TRANSFORM._fillout')
                 }
                 let evaluated = func();
                 delete data.$root;  // remove $root now that the parsing is over
@@ -184,19 +190,16 @@ TRANSFORM.fillout = (data, template, raw, view = true) =>{
 TRANSFORM.tokenize =(str, view = true) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
-            colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ TRANSFORM.tokenize end ~~~'},'6', obj, 'TRANSFORM.tokenize')
+            colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ get expression ~~~'},'6', obj, 'TRANSFORM.tokenize')
             resolve(obj)
         }
         let err = (error) => {
             reject(error)
         }
         try {
-            colorlog(TRANSFORM.staticProperty.view, '~~~ input TRANSFORM.tokenize input ~~~ ', '6', {
+            colorlog(TRANSFORM.staticProperty.view, '~~~ get expression input TRANSFORM.tokenize input ~~~ ', '6', {
                 str:str
             }, 'TRANSFORM.tokenize')
-            if(str === '{{#each actions}}'){
-                console.assert(false)
-            }
             // INPUT : string
             // OUTPUT : {name: FUNCTION_NAME:STRING, args: ARGUMENT:ARRAY}
             let re = /\{\{(.+)\}\}/g;
@@ -229,7 +232,7 @@ TRANSFORM.tokenize =(str, view = true) => {
         }
     })
 }
-TRANSFORM.run = (template, data, selectRoot, view = true) => {
+TRANSFORM.run = (template, data, view = true) => {
     return new Promise( async (resolve, reject) =>{
         let out = (obj) => {
             colorlog(TRANSFORM.staticProperty.view , {end:true, property:'~~~ end TRANSFORM.run end ~~~'},'1', obj, 'TRANSFORM.run')
@@ -239,13 +242,11 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
             console.log('~~~ err ~~~', error)
             reject(error)
         }
-        root = selectRoot
         try {
 
             colorlog(TRANSFORM.staticProperty.view, '~~~ input TRANSFORM.run input ~~~ ', '1', {
                 template:template,
                 data:data,
-                selectRoot:selectRoot
             }, 'TRANSFORM.run')
 
 
@@ -287,7 +288,7 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                 } else {
                     result = [];
                     for (let i = 0; i < template.length; i++) {
-                        let item = await TRANSFORM.run(template[i], data, view);
+                        let item = await TRANSFORM.run(template[i], data, TRANSFORM.staticProperty.view);
                         if (item) {
                             // only push when the result is not null
                             // null could mean #if clauses where nothing matched => In this case instead of rendering 'null', should just skip it completely
@@ -316,9 +317,16 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                         result = template[include_keys[0]];
                     }
                 }
+
                 for (let key in template) {
-                    if(key === 'actions'){console.assert(false)}
-                    colorlog(view, key, '7', template, 'transform cycle')
+                    colorlog(view, {
+                        end:false,
+                        property:{
+                            key:key,
+                            path:`/json/module-transform.mjs`
+                        },
+                        assert:false
+                    }, '10', {template:template}, 'for (let key in template)')
                     // Checking to see if the key contains template..
                     // Currently the only case for this are '#each' and '#include'
                     if (await Helper.is_template(key)) {
@@ -332,7 +340,7 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                                     let real_template = template[key][1];
 
                                     // 1. Parse the first item to assign variables
-                                    let parsed_keys = TRANSFORM.run(defs, data);
+                                    let parsed_keys = await TRANSFORM.run(defs, data,TRANSFORM.staticProperty.view);
 
                                     // 2. modify the data
                                     for(let parsed_key in parsed_keys) {
@@ -341,15 +349,23 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                                     }
 
                                     // 2. Pass it into TRANSFORM.run
-                                    result = await TRANSFORM.run(real_template, data);
+                                    result = await TRANSFORM.run(real_template, data, TRANSFORM.staticProperty.view);
                                 }
                             } else if (fun.name === '#concat') {
                                 if (await Helper.is_array(template[key])) {
                                     result = [];
-                                    template[key].forEach(function(concat_item) {
-                                        let res = TRANSFORM.run(concat_item, data);
-                                        result = result.concat(res);
-                                    });
+                                    colorlog(view, {
+                                        assert:false,
+                                        key:key,
+                                        message:'~~~~~~~~~~~~что то объединяем',
+                                        path:'/json/module-transform.mjs',
+                                    }, '7', template, '#concat')
+
+
+                                    for(let i =0; i < template[key].length; i++){
+                                        let res = await TRANSFORM.run(template[key][i], data,TRANSFORM.staticProperty.view);
+                                        result =  result.concat(res);
+                                    }
 
                                     if (/\{\{(.*?)\}\}/.test(JSON.stringify(result))) {
                                         // concat should only trigger if all of its children
@@ -362,12 +378,30 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                             } else if (fun.name === '#merge') {
                                 if (await Helper.is_array(template[key])) {
                                     result = {};
-                                    template[key].forEach(function(merge_item) {
-                                        let res = TRANSFORM.run(merge_item, data);
+                                    // console.assert(false)
+
+                                    // colorlog(view, {
+                                    //     key:key,
+                                    //     message:`/json/module-transform.mjs`
+                                    // }, '10', template, '#merge')
+
+                                    for(let i =0; i < template[key].length; i++){
+                                        let res = await TRANSFORM.run(template[key][i], data,TRANSFORM.staticProperty.view);
                                         for (let key in res) {
                                             result[key] = res[key];
                                         }
-                                    });
+                                    }
+                                    // colorlog(view, {
+                                    //     end:true,
+                                    //     key:key,
+                                    //     message:`/json/module-transform.mjs =result`
+                                    // }, '10', result, '#merge')
+                                    // template[key].forEach(function(merge_item) {
+                                    //     let res = TRANSFORM.run(merge_item, data,TRANSFORM.staticProperty.view);
+                                    //     for (let key in res) {
+                                    //         result[key] = res[key];
+                                    //     }
+                                    // });
                                     // clean up $index from the result
                                     // necessary because #merge merges multiple objects into one,
                                     // and one of them may be 'this', in which case the $index attribute
@@ -397,7 +431,8 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                                     }
                                 }
                             } else if (fun.name === '#each') {
-                              
+                                colorlog(view, `${key} /json/module-transform.mjs`, '10', template, 'for (let key in template) ~~~ newData')
+
                                 // newData will be filled with parsed results
                                 let newData = await TRANSFORM.fillout(data, '{{' + fun.expression + '}}', true, view);
 
@@ -432,7 +467,7 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
 
                                         // run
                                       
-                                        let loop_item = await TRANSFORM.run(template[key], newData[index], undefined, view);
+                                        let loop_item = await TRANSFORM.run(template[key], newData[index], TRANSFORM.staticProperty.view);
 
                                         // clean up $index
                                         if(typeof newData[index] === 'object') {
@@ -476,6 +511,7 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                                     result = template;
                                 }
                             } // end of #each
+                            colorlog(view, {end:true,property:`${key} end of #each`}, '10', result, 'for (let key in template) ~~~ newData')
                         } else { // end of if (fun)
                             // If the key is a template expression but aren't either #include or #each,
                             // it needs to be parsed
@@ -506,13 +542,22 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                                     result[key] = filled;
                                 }
                             } else {
-                                let item = await TRANSFORM.run(template[key], data, undefined, view);
+                                colorlog(TRANSFORM.staticProperty.view , {end:false,property:'Получает item'}, '11', {
+                                    template:template[key],
+                                    data:data,
+                                }, 'create item')
+                                let item = await TRANSFORM.run(template[key], data, TRANSFORM.staticProperty.view);
+                                colorlog(TRANSFORM.staticProperty.view , {assert:false,end:true,property:'Получает item'}, '11', {
+                                    result:result,
+                                    item:item,
+                                    key:key
+                                }, 'create item')
                                 if (item !== undefined) {
                                     result[key] = item;
                                 }
                             }
                         } else {
-                            let item = await TRANSFORM.run(template[key], data,  undefined, view);
+                            let item = await TRANSFORM.run(template[key], data,  TRANSFORM.staticProperty.view);
                             if (item !== undefined) {
                                 result[key] = item;
                             }
@@ -520,9 +565,9 @@ TRANSFORM.run = (template, data, selectRoot, view = true) => {
                     }
                 }
             } else {
-                out(template)
+                result = template
             }
-            colorlog(TRANSFORM.staticProperty.view , {end:true,property:result}, '7', template, 'transform cycle')
+            colorlog(TRANSFORM.staticProperty.view , {end:true,property:'Получает результат преобразования'}, '10', result, 'for (let key in template)')
             out(result)
 
         }catch (e) {

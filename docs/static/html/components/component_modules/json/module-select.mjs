@@ -138,7 +138,7 @@ SELECT.transformWith = (obj,serialized, selected, view) => {
                     console.assert(false)
                     //SELECT.$selected.forEach(function(selection) {
                     // parse selected
-                    let parsed_object = TRANSFORM.run(template, selection.object, root, view);
+                    let parsed_object = TRANSFORM.run(template, selection.object, view);
 
                     // apply the result to root
                     SELECT.$selected_root =  Helper.resolve(SELECT.$selected_root, selection.path, parsed_object);
@@ -151,7 +151,7 @@ SELECT.transformWith = (obj,serialized, selected, view) => {
                 });
             } else {
                 colorlog(view, 'TRANSFORM', '2', obj,'transformWith')
-                let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root,root, view);
+                let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root, view);
                 colorlog(view, 'out TRANSFORM in Helper.resolve', '2', obj,'transformWith')
                 // apply the result to root
                 SELECT.$selected_root = await Helper.resolve(SELECT.$selected_root, '', parsed_object);
@@ -190,6 +190,7 @@ SELECT.transformWith = (obj,serialized, selected,view= true) => {
             if(isEmpty(SELECT.$parsed)){
                 SELECT.$parsed = [];
             }
+
             if(isEmpty(selected)){
             }else{
                 SELECT = Object.assign(SELECT,selected);
@@ -226,7 +227,7 @@ SELECT.transformWith = (obj,serialized, selected,view= true) => {
                     console.assert(false)
                     //SELECT.$selected.forEach(function(selection) {
                     // parse selected
-                    let parsed_object = TRANSFORM.run(template, selection.object, root, view);
+                    let parsed_object = TRANSFORM.run(template, selection.object, view);
 
                     // apply the result to root
                     SELECT.$selected_root =  Helper.resolve(SELECT.$selected_root, selection.path, parsed_object);
@@ -239,7 +240,7 @@ SELECT.transformWith = (obj,serialized, selected,view= true) => {
                 });
             } else {
                 colorlog(view, 'TRANSFORM', '2', obj,'transformWith')
-                let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root,root, view);
+                let parsed_object = await TRANSFORM.run(template, SELECT.$selected_root, view);
                 colorlog(view, 'out TRANSFORM in Helper.resolve', '2', obj,'transformWith')
                 // apply the result to root
                 SELECT.$selected_root = await Helper.resolve(SELECT.$selected_root, '', parsed_object);
@@ -316,9 +317,9 @@ SELECT.select = (obj,filter, serialized,view) =>{
 
             if (json && (await Helper.is_array(json) || typeof json === 'object')) {
                 if (!SELECT.$progress) {
-                 
+
                     // initialize
-                    if (Helper.is_array(json)) {
+                    if (await Helper.is_array(json)) {
                         SELECT.$val = [];
                         SELECT.$selected_root = [];
                     } else {

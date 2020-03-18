@@ -44,18 +44,27 @@ export default (color)=>{
                 color = '#13c510'
                 break
             case '4':
-                color = '#71bdac'
+                color = '#bd953f'
                 break
             case '5':
-                color = '#3fbace'
+                color = '#05b0ce'
                 break
             case '6':
-                color = '#7928d2'
+                color = '#53b796'
                 break
             case '7':
-                color = '#921436'
+                color = '#7928d2'
             case '8':
-                color = '#53b796'
+                color = '#921436'
+                break
+            case '9':
+                color = 'rgba(201,81,3,0.84)'
+                break
+            case '10':
+                color = '#84305e'
+                break
+            case '11':
+                color = '#6b4c17'
                 break
             default:
         }

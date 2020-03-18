@@ -666,7 +666,12 @@ customElements.define('manager-menu',
                 }, 'set', 'type')
                 let menu = new (await Menu(obj))['class'](obj)
                 let menuGame = await menu.menu({_:'init', this:obj['this']})
+                document.addEventListener('actionButton',async (event)=>{
 
+                    console.log('~~~~~~~~~~ Button ~~~~~~~~~~', event.detail)
+                    // console.assert(false, event.detail)
+
+                })
 
 
                // await Menu(obj)

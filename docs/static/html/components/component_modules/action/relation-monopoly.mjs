@@ -6,15 +6,21 @@ export default {
                 "{{#each items}}": {
                     _: "button",
                     item: "{{this}}",
-                    actions:[
-                        {
-                            "{{#each actions}}": {
-                                _: "actions",
-                                action: "{{this}}",
-                            },
-                        }
-                    ]
-                },
+                    action:{
+                        "{{#concat}}":
+                            [{
+                            _:'tradeMoneyOnKeyDown',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                            }, {
+                            _:'tradeMoneyOnFocus',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                            },{
+                            _:'tradeMoneyOnChange',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                        }]
+                    }
+
+                }
             },
             substrate: {
                 _:'button',
@@ -24,27 +30,38 @@ export default {
                 actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
             },
         },
-        // {
-        //     _:'create template',
-        //     property:{
-        //         '{{#include}}': {
-        //             '{{#each items}}': {
-        //                 'type': 'label',
-        //                 'text': '{{name}}'
-        //             }
-        //         }
-        //     },
-        //     substrate: {
-        //         _:'button',
-        //         type:'default',
-        //         items: ['trade-leftp-money','trade-rightp-money'],
-        //         event:['onkeydown', 'onfocus', 'onchange'],
-        //         actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
-        //     },
-        // },
     ],
     player:[
+        {
+            _:'create template',
+            property:{
+                "{{#each items}}": {
+                    _: "button",
+                    item: "{{this}}",
+                    action:{
+                        "{{#concat}}":
+                            [{
+                                _:'tradeMoneyOnKeyDown',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                            }, {
+                                _:'tradeMoneyOnFocus',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                            },{
+                                _:'tradeMoneyOnChange',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                            }]
+                    }
 
+                }
+            },
+            substrate: {
+                _:'button',
+                type:'default',
+                items: ['trade-leftp-money','trade-rightp-money'],
+                event:['onkeydown', 'onfocus', 'onchange'],
+                actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
+            },
+        },
     ],
 }
 
