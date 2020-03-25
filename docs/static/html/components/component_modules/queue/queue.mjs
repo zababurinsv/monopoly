@@ -1,7 +1,7 @@
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 import description from '/static/html/components/component_modules/description/description.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
-import actions from '/static/html/components/component_modules/action/actions-monopoly.mjs'
+import actions from '/static/html/components/component_modules/action/monopoly.mjs'
 let object = {}
 object.staticProperty = []
 let output = {}

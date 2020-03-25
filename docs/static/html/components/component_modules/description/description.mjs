@@ -1,6 +1,6 @@
 import colors from '/static/html/components/component_modules/colors/colors.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
-import action from '/static/html/components/component_modules/action/relation-monopoly.mjs'
+import action from '/static/html/components/component_modules/action/monopoly.mjs'
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 export default (...args)=>{
     return  new Promise(async (resolve, reject) => {

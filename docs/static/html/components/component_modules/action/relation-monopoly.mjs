@@ -1,21 +1,21 @@
 export default {
     button:[
         {
-            _:'create template',
+            '/':'button',
             property:{
                 "{{#each items}}": {
-                    _: "button",
+                    '/': "button",
                     item: "{{this}}",
                     action:{
                         "{{#concat}}":
                             [{
-                            _:'tradeMoneyOnKeyDown',
+                                '/':'tradeMoneyOnKeyDown',
                                 event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
                             }, {
-                            _:'tradeMoneyOnFocus',
+                                '/':'tradeMoneyOnFocus',
                                 event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
                             },{
-                            _:'tradeMoneyOnChange',
+                                '/':'tradeMoneyOnChange',
                                 event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
                         }]
                     }
@@ -23,45 +23,87 @@ export default {
                 }
             },
             substrate: {
-                _:'button',
+                '/':'button',
                 type:'default',
                 items: ['trade-leftp-money','trade-rightp-money'],
-                event:['onkeydown', 'onfocus', 'onchange'],
-                actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
             },
         },
     ],
     player:[
         {
-            _:'create template',
+            '/':'player',
             property:{
                 "{{#each items}}": {
-                    _: "player",
+                    '/': "player",
                     item: "{{this}}",
+                    type:'default',
                     action:{
                         "{{#concat}}":
                             [{
-                                _:'tradeMoneyOnKeyDown',
+                                '/':'playernumber_onchange',
                                 event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
                             }, {
-                                _:'tradeMoneyOnFocus',
+                                '/':'tradeMoneyOnFocus',
                                 event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
                             },{
-                                _:'tradeMoneyOnChange',
+                                '/':'tradeMoneyOnChange',
+                                event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
+                            },{
+                                '/':'playernumber_onchange',
                                 event:  {"{{#concat}}":['onkeydown', 'onfocus', 'onchange']}
                             }]
-                    }
+                    },
 
+                    relations:{
+                        "{{#concat}}":[
+                            {
+                                '/':'name',
+                                name:'default',
+                            },
+                            {
+                                '/':'type',
+                                type: 'default',
+
+                            },{
+                                '/':'pcount',
+                                pcount: false,
+                            },{
+                                '/':'currentCell',
+                                currentCell: 0,
+
+                            },{
+                                '/':'currentCellAnchor',
+                                currentCellAnchor: 0,
+
+                            },{
+                                '/':'currentCellPositionHolder',
+                                currentCellPositionHolder: 0,
+
+                            },{
+                                '/':'currentCellName',
+                                currentCellName: 0,
+
+                            },{
+                                '/':'currentCellOwner',
+                                currentCellOwner: 0,
+
+                            },{
+                                '/':'jail',
+                                jail: false,
+
+                            },{
+                                '/':'cell',
+                                cell:0
+                            }
+                        ]
+                    }
                 }
             },
             substrate: {
-                _:'button',
+                player: [],
                 type:'default',
-                items: ['trade-leftp-money','trade-rightp-money'],
-                event:['onkeydown', 'onfocus', 'onchange'],
-                actions:['tradeMoneyOnKeyDown', 'tradeMoneyOnFocus','tradeMoneyOnChange'],
+                items: ['bank','player 1','player 2','player 3','player 4','player 5','player 6','player 7','player 8'],
             },
         },
     ],
 }
-
