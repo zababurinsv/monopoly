@@ -32,33 +32,6 @@ let corsOptions = {
 }
 
 app.use(formidableMiddleware());
-
-var githubOAuth = github({
-    githubClient: config.GITHUB_KEY,
-    githubSecret: config.GITHUB_SECRET,
-    baseURL: 'http://localhost:' + '5401',
-    loginURI: '/auth/github',
-    callbackURI: '/auth/github/callback'
-})
-
-app.get("/auth/github", function(req, res){
-    console.log("started oauth");
-    return githubOAuth.login(req, res);
-});
-
-app.get("/auth/github/callback", function(req, res){
-    console.log("received callback");
-    return githubOAuth.callback(req, res);
-});
-githubOAuth.on('error', function(err) {
-    console.error('there was a login error', err)
-})
-
-githubOAuth.on('token', function(token, res) {
-    console.log('~~~~~~token~~~~~~~~~~~', token)
-    res.redirect('http://localhost:5401/singIn')
-})
-
 app.use( express.static('docs'));
 app.use( express.static('static'));
 app.options('/*', cors(corsOptions))
