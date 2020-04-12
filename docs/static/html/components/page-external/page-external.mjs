@@ -12,7 +12,27 @@ customElements.define('page-external',
       constructor () {
         super();
         const shadow = this.attachShadow({mode: 'open'});
-        shadow.innerHTML = `<div style="height:100%"><slot name="jason"></slot></div>`;
+        shadow.innerHTML = `
+<div id="external"><slot name="jason"></slot></div>
+<style>
+div#external{
+    box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
+    border-radius: 0.5vw;
+    height:100%;
+}
+</style>`;
+       
+        if(this.dataset.height){
+          this.style.height =`${this.dataset.height}vw`;
+        }else{
+          this.style.height ="auto";
+        }
+        if(this.dataset.width){
+          this.style.width =`${this.dataset.width}vw`;
+        }else{
+          this.style.width ="100%";
+        }
+    
         (async (obj)=>{
 
           // console.assert(false, this)
@@ -721,10 +741,8 @@ customElements.define('page-external',
           this.NodeList = this.childNodes
           this.NodeList.prototype = Array.prototype
           this.HTMLElement = window.HTMLElement
-
           let Jason = await loader('./static/html/components/component_modules/cell-index/jason.mjs','Jason')
           let ST = await loader('./static/html/components/component_modules/cell-index/st.mjs','ST')
-          let dragula = await loader('https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js','dragula')
           let url = {}
           if(obj.this.dataset.url){
             url =  obj.this.dataset.url

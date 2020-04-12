@@ -1,7 +1,8 @@
 import store from '/static/html/components/component_modules/staticProperty/staticProperty.mjs'
 import Net from '/static/html/components/component_modules/monopoly/net.mjs'
 import Menu from '/static/html/components/component_modules/monopoly/menu.mjs'
-
+import player from '/static/html/components/manager-menu/template/player.mjs'
+import events from '/static/html/components/component_modules/CustomEvent/index.mjs'
 customElements.define('manager-menu',
     class extends HTMLElement {
         constructor () {
@@ -664,10 +665,116 @@ customElements.define('manager-menu',
                     obj: obj,
                     type:'obj'
                 }, 'set', 'type')
-                let menu = new (await Menu(obj))['class'](obj)
-                let menuGame = await menu.menu({_:'init', this:obj['this']})
-                document.addEventListener('actionButton',async (event)=>{
+                // let menu = new (await Menu(obj))['class'](obj)
+                // let menuGame = await menu.menu({_:'init', this:obj['this']})
+    
+                // let postMessage = await PostMessage()
+                
+             
+                let playernumber = obj['this']['shadowRoot'].querySelector('#playernumber')
+                
+                let player1 = obj['this']['shadowRoot'].querySelector('#player1name')
+                let player1Input = obj['this']['shadowRoot'].querySelector('#player1input')
+                let player1color =  obj['this']['shadowRoot'].querySelector('#player1color')
+                let name = player1Input.querySelector('.player1preview')
+                player1Input.style.backgroundColor = player1color.value
+                player1color.addEventListener('change', async (event)=>{
+                    player1Input.style.backgroundColor = event.target.value
+                })
+                player1.addEventListener('input',async (event)=>{
+                    name.innerHTML = ''
+                    name.innerHTML = event.target.value
+                })
+                player1.addEventListener("keyup", function(event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        player1.blur()
+                        player1.value = ''
+                    }
+                });
+                
+                let items = obj['this']['shadowRoot'].querySelector('#items')
+                let item = await player(true, {color:2}, '3',{id:2}, 'player')
+                items.insertAdjacentHTML('beforeend',item)
+                let player2 = obj['this']['shadowRoot'].querySelector('#player2name')
+                let player2color =  obj['this']['shadowRoot'].querySelector('#player2color')
+                let player2Input = obj['this']['shadowRoot'].querySelector('#player2input')
+                let name2 = player2Input.querySelector(`.player2preview`)
+                player2Input.style.backgroundColor = player2color.value
+                player2color.addEventListener('change', async (event)=>{
+                    player2Input.style.backgroundColor = event.target.value
+                })
+                player2.addEventListener('input',async (event)=>{
+                    name2.innerHTML = ''
+                    name2.innerHTML = event.target.value
+                })
+                player2.addEventListener("keyup", function(event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        player2.blur()
+                        player2.value = ''
+                    }
+                });
 
+                playernumber.addEventListener("change", async (event) => {
+                    let p = parseInt(event.target.value.split(' ')[0], 10)
+                    let itemsOut = obj['this']['shadowRoot'].querySelector('#items')
+                    itemsOut.innerHTML = ''
+                    let items = []
+                    for(let i =0; i < p -1;i++){
+                    let item =await player(true,{color:i+2}, '3',{id:i+2}, 'player')
+                        itemsOut.insertAdjacentHTML('beforeend',item)
+                        let playerInput = obj['this']['shadowRoot'].querySelector(`#player${i+2}input`)
+                        items.push(playerInput)
+                        items[i].querySelector(`#player${i+2}color`)
+                        items[i].style.backgroundColor = items[i].querySelector(`#player${i+2}color`).value
+                        items[i].querySelector(`#player${i+2}color`).addEventListener('change', async (event)=>{
+                            items[i].style.backgroundColor = event.target.value
+                        })
+                        items[i].querySelector(`#player${i+2}name`).addEventListener('input',async (event)=>{
+                            items[i].querySelector(`.player${i+2}preview`).innerHTML = ''
+                            items[i].querySelector(`.player${i+2}preview`).innerHTML = event.target.value
+                        })
+                        items[i].querySelector(`#player${i+2}name`).addEventListener("keyup", function(event) {
+                            if (event.keyCode === 13) {
+                                event.preventDefault();
+                                items[i].querySelector(`#player${i+2}name`).blur()
+                                items[i].querySelector(`#player${i+2}name`).value = ''
+                            }
+                        });
+                    }
+                  });
+                
+                obj['this']['shadowRoot'].querySelector('#playGame').addEventListener('click',async (event)=>{
+    
+                    let name =  obj['this']['shadowRoot'].querySelector('.player1preview').innerText
+                    let color =  obj['this']['shadowRoot'].querySelector('#player1color').value
+                    let items = obj['this']['shadowRoot'].querySelector('#items')
+                    if(name.length === 0) name = 'anonymous';
+                    if(name === 'Your Name') name = 'anonymous';
+                    let object = {}
+                    object['player'] = []
+                    object['player'][0] = {}
+                    object['player'][1] = {}
+                    object['player'][1]['name'] = name
+                    object['player'][1]['color'] = color
+                    for(let item of items.childNodes){
+    
+                        if(item.tagName !== undefined){
+                           let id = (item.querySelector('.player-input')).id
+                            const regEx = /[^\d]/g;
+                            id = id.replace(regEx, '')
+                            object['player'][`${id}`] = {}
+                            object['player'][`${id}`]['name'] = item.querySelector(`.player${id}preview`).innerText
+                            object['player'][`${id}`]['color'] = item.querySelector(`#player${id}color`).value
+                            object['player'][`${id}`]['type'] = item.querySelector(`#player${id}ai`).value
+                            
+                        }
+                    }
+                })
+                document.addEventListener('actionButton',async (event)=>{
+    
+             
                     console.log('~~~~~~~~~~ Button ~~~~~~~~~~', event.detail)
                     // console.assert(false, event.detail)
 
