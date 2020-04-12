@@ -79,7 +79,7 @@ section#manager-menu{
   div#setup{
     @include display(column, nowrap, space-evenly, flex-start, stretch);
     @include border();
-    padding: 5vw;
+    //padding: 5vw;
     div#configuration{
       @include display(row, nowrap, space-evenly, center, stretch);
       div.setup{
