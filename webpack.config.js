@@ -1,12 +1,12 @@
 module.exports = {
     mode: 'development',
     entry: {
-        index: `${__dirname}/app.waves.mjs`
+        index: `${__dirname}/app.console.mjs`
     },
     output: {
         path: __dirname + "/temp",
-        filename: 'waves.mjs',
-        chunkFilename: 'waves.mjs',
-        library: 'waves'
+        filename: 'console.mjs',
+        chunkFilename: 'console.mjs',
+        library: 'console'
     }
 };

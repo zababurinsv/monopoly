@@ -9,12 +9,12 @@
 </body>
 <script type="module" src="./static/html/components/manager-menu/manager-menu.mjs" async></script>
 <script type="module">
-    import Post from '/static/html/components/component_modules/postMessage/postMessage.mjs'
-    // import Tests from '/static/html/components/component_modules/tests/tests.mjs'
-    // import ConsoleLogHTML from '/static/html/components/component_modules/console/console.mjs'
-    // ConsoleLogHTML.connect(document.body.querySelector('#mocha'));
+    // import Post from '/static/html/components/component_modules/postMessage/postMessage.mjs'
+    import consol from '/static/html/components/component_modules/bundle/console/console.mjs'
+
+    console.assert(false, consol)
     window.onload = async () => {
-        // let post = await Post()
+        let post = await Post()
         // await post.listener()
         // await Tests()
     }

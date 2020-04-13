@@ -34,13 +34,13 @@ gulp.task('gulp.build', function (cb) {
 });
 
 gulp.task(`gulp.replace`, function () {
-    return  gulp.src(`./temp/waves.mjs`)
+    return  gulp.src(`./temp/console.mjs`)
         .pipe(replace('','', callback))
         .pipe(gulp.dest(`./temp`));
 });
 
 gulp.task('gulp.minify', function() {
-    return  gulp.src(['./temp/waves.mjs'])
+    return  gulp.src(['./temp/console.mjs'])
         .pipe(minify({
             ext:{
                 src:'-origin.mjs',
@@ -48,13 +48,13 @@ gulp.task('gulp.minify', function() {
             },
             noSource: true
         }))
-        .pipe(gulp.dest('./docs/static/html/components/component_modules/bundle/waves'))
+        .pipe(gulp.dest('./docs/static/html/components/component_modules/bundle/console'))
 });
 
 gulp.task('gulp.remove.temp', function(){
         return del('./temp', {force:true});
     });
 
-gulp.task('gulp-bundle-waves', gulp.series('gulp.build', 'gulp.replace', 'gulp.minify', 'gulp.remove.temp'))
+gulp.task('gulp-bundle-console', gulp.series('gulp.build', 'gulp.replace', 'gulp.minify', 'gulp.remove.temp'))
 gulp.task('gulp-watch-slyle', gulp.series('sass','sass:watch'))
-gulp.task('default', gulp.parallel('gulp-watch-slyle', 'gulp-bundle-waves'))
+gulp.task('default', gulp.parallel('gulp-watch-slyle', 'gulp-bundle-console'))

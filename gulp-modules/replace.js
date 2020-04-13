@@ -15,7 +15,7 @@ export default (event, context, callback) => {
 
                 let content = file.contents.toString('utf8');
 
-                content = content.replace(`var waves =`, 'export default')
+                content = content.replace(`var console =`, 'export default')
 
                 file.contents = new Buffer(content, 'utf8');
                 callback({
