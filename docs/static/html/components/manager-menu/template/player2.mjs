@@ -38,6 +38,9 @@ export default (view, property, color, substrate, relation)=>{
         resolve(`
        <div id="player${substrate.id}input" class="player-input">
                     <label for="player${substrate.id}name" class="player-label">
+                        <div class="preview">
+                            <p class="player${substrate.id}preview">Player ${substrate.id}</p>
+                        </div>
                         <div class="option">
                             <input type="text" id="player${substrate.id}name" title="Player name" maxlength="16" class="player-input" placeholder="Player ${substrate.id}" />
                             <select id="player${substrate.id}color" title="Player color">

@@ -21,7 +21,6 @@
   width: 100%;
   box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
   box-sizing: border-box;
-  padding: 1vw;
   text-align: center;
   cursor: pointer;
   @include fonts(8);
@@ -78,17 +77,20 @@ section#manager-menu{
   box-sizing: border-box;
   div#setup{
     @include display(column, nowrap, space-evenly, flex-start, stretch);
-    @include border();
+    //@include border();
     //padding: 5vw;
     div#configuration{
       @include display(row, nowrap, space-evenly, center, stretch);
+      padding: 1vw;
       div.setup{
         @include display(column, nowrap, space-evenly, center, flex-start);
-        @include border();
+        //@include border();
+        min-width: 46.6vw;
+        //padding: 1vw;
         //width: 60vw;
         //padding: 5vw;
         cursor: default;
-        margin: 1vw;
+        //margin: 1vw;
         border-radius: 0.5vw;
         //margin-bottom: 3vw;
         div#player1input{
@@ -117,12 +119,15 @@ section#manager-menu{
               p{
                 margin: 0.25vw;
                 border-radius: 0.25vw;
+                min-height: 3.4vw;
               }
             }
             div.option{
               input#player1name{
                 border: none;
                 border-radius: 0.25vw;
+                //@include fonts(3);
+                //font-family: Roboto,serif;
               }
               select#player1color{
                 border: none;
@@ -137,7 +142,7 @@ section#manager-menu{
         select#playernumber{
           @include border();
           width: 100%;
-          margin-bottom: 2vw;
+          margin-bottom: 3.7vw;
           border: none;
           border-radius: 0.5vw;
           option{
@@ -157,24 +162,36 @@ section#manager-menu{
           input.game{
             @include border();
             border: none;
-            margin: 1vw;
             border-radius: 0.5vw;
+            margin-bottom: 1vw;
+          }
+          label[for="connectGame"]{
+            @include fonts(8);
+            font-family: Roboto,serif;
+            margin-bottom: 1vw;
           }
           input#connectGame{
             cursor: text;
+            margin-bottom: 0;
           }
         }
       }
       div.options{
         @include display(column, nowrap, flex-start, center, stretch);
+        box-sizing: border-box;
+        padding: 0;
+        margin-left: 0.5vw;
         @include border();
         //width: 60vw;
         //padding: 5vw;
         cursor: default;
-        margin: 1vw;
+        //margin: 1vw;
         border-radius: 0.5vw;
-        h1{
-          margin-top: 0;
+        h2{
+          margin-top: 1vw;
+          margin-bottom: 1.7vw;
+          @include fonts(8);
+          font-family: Roboto,serif;
         }
         div#items{
           div.player-input{
@@ -184,7 +201,7 @@ section#manager-menu{
             width: 100%;
             box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
             box-sizing: border-box;
-            padding: 1vw;
+            padding: 0.2vw;
             text-align: center;
             cursor: pointer;
             position: relative;
@@ -217,6 +234,12 @@ section#manager-menu{
               }
 
             }
+          }
+          //div#player2input{
+          //  margin-top: 0;
+          //}
+          div#player7input{
+            margin-bottom: 0;
           }
         }
       }
