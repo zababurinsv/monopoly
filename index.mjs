@@ -38,6 +38,12 @@ app.options('/import', cors(corsOptions))
 app.get('/import', async (req, res) => {
     res.sendFile('/docs/import.html', { root: __dirname });
 })
+
+app.options('/post', cors(corsOptions))
+app.get('/post', async (req, res) => {
+    res.sendFile('/docs/import.html', { root: __dirname });
+})
+
 app.options('/*', cors(corsOptions))
 app.get('/*', async (req, res) => {
     res.sendFile('/docs/index.html', { root: __dirname });

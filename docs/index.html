@@ -28,6 +28,7 @@
     <hr>
     <div id="components">
         <manager-menu></manager-menu>
+        <page-external slot ="crypto-dex" data-url="http://localhost:3070/import" data-height=41></page-external>
 <!--        <manager-board></manager-board>-->
 <!--        <manager-trade>-->
 <!--            <varan-card-news></varan-card-news>-->
@@ -76,7 +77,7 @@
    // let hh = console.getMessages()
    //  console.log(hh)
     window.onload = async () => {
-        let post = await Post('waves-game')
+        let post = await Post('monopoly')
         await post.iframe('http://localhost:4060','/post',true, `${emoji('pouting_woman')}`, '2',{key:'value'}, 'save-wallet')
         // await post.listener()
         // await Tests()

@@ -56,7 +56,6 @@ let Class = class Post {
                 try {
                     window.addEventListener ("message", async (event) => {
                         if(event.origin === access){
-                            console.log('sdfsdfsdfsdfsd')
                             console.log(`${emoji('smile')} Allowed`, event.data)
                             if(isEmpty(event.data.view)) console.assert(false,`${emoji('thinking')} нет аргумента view`)
                             if(isEmpty(event.data.property)) console.assert(false,`${emoji('thinking')} нет аргумента property`)

@@ -15,8 +15,9 @@ customElements.define('page-external',
         shadow.innerHTML = `
 <div id="external"><slot name="jason"></slot></div>
 <style>
+:host{
+}
 div#external{
-    box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
     border-radius: 0.5vw;
     height:100%;
 }
@@ -772,24 +773,10 @@ div#external{
           })
           this.app = app
           obj['function']['create'](obj)
-          // let iframe = obj['this'].querySelector('iframe')
-          // iframe.onload = function () {
-          //
-          //   if(iframe.src ==='http://localhost:5008/'){
-          //     console.log('~~~~~~~~~~', iframe.postMessage)
-          //   }
-          // }
-          // let observer = {}
-          // let config = { attributes: true, childList: true, characterData: true }
-          //
-          // observer = new MutationObserver(function (mutations) {
-          //   mutations.forEach(function (mutation) {
-          //     let event = new CustomEvent('loadIframe', { })
-          //     document.dispatchEvent(event)
-          //   })
-          // })
-          // observer.observe(obj['this'], config)
-          // document.addEventListener('loadIframe', function (event) {})
+          let iframe = obj['this'].querySelector('iframe')
+          iframe.onload = function () {
+            obj.this.dataset.status = true
+          }
         })(this)
       }
     })

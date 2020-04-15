@@ -9,14 +9,14 @@
 </body>
 <script type="module" src="./static/html/components/manager-menu/manager-menu.mjs" async></script>
 <script type="module">
-    // import Post from '/static/html/components/component_modules/postMessage/postMessage.mjs'
+    import Post from '/static/html/components/component_modules/postMessage/postMessage.mjs'
     // import consol from '/static/html/components/component_modules/bundle/console/console.mjs'
     // console.assert(false, consol)
-    // window.onload = async () => {
-    //     let post = await Post('monopoly')
-    //     await post.listener('http://localhost:6040')
-    //     await Tests()
-    // }
+    window.onload = async () => {
+        let post = await Post('monopoly')
+        await post.iframeListener('http://localhost:6040')
+        // await Tests()
+    }
 </script>
 <style>
  body{
