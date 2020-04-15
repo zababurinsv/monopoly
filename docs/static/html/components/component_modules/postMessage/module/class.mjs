@@ -2,6 +2,8 @@ import colorlog from '/static/html/components/component_modules/colorLog/colorLo
 import queue from '/static/html/components/component_modules/queue/queue.mjs'
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 import emoji from '/static/html/components/component_modules/emoji/emoji.mjs';
+let iframe = {}
+iframe.staticProperty = {}
 let Class = class Post {
     constructor() {
         this.iframe = this.iframe.bind(this)

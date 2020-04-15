@@ -1,4 +1,6 @@
 import loader from '/static/html/components/component_modules/loader/loader.mjs'
+import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
+
 if (!Object.keys) {
   Object.keys = function (o) {
     if (o !== Object(o)) { throw new TypeError('Object.keys called on a non-object') }
@@ -33,7 +35,17 @@ div#external{
         }else{
           this.style.width ="100%";
         }
-    
+        let host = this.dataset.url.replace('/import','')
+        window.addEventListener("message",(event)=>{
+          if(event.origin === host){
+            iframe.set(this.slot, event)
+            this.dataset.status = true
+            document.dispatchEvent( new CustomEvent(`iframe`,{
+              detail:event
+            }))
+            
+          }
+        });
         (async (obj)=>{
 
           // console.assert(false, this)
@@ -773,10 +785,6 @@ div#external{
           })
           this.app = app
           obj['function']['create'](obj)
-          let iframe = obj['this'].querySelector('iframe')
-          iframe.onload = function () {
-            obj.this.dataset.status = true
-          }
         })(this)
       }
     })

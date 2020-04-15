@@ -29,6 +29,9 @@
     <div id="components">
         <manager-menu></manager-menu>
         <page-external slot ="crypto-dex" data-url="http://localhost:3070/import" data-height=41></page-external>
+        <page-external slot ="crypto-dex" data-url="http://localhost:9010/import" data-height=42></page-external>
+
+
 <!--        <manager-board></manager-board>-->
 <!--        <manager-trade>-->
 <!--            <varan-card-news></varan-card-news>-->
@@ -67,6 +70,7 @@
 <script type="module">
     import Post from '/static/html/components/component_modules/postMessage/postMessage.mjs'
     import emoji from '/static/html/components/component_modules/emoji/emoji.mjs';
+    import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
     // import Tests from '/static/html/components/component_modules/tests/tests.mjs'
     // import ConsoleLogHTML from '/static/html/components/component_modules/console/console.mjs'
     // ConsoleLogHTML.connect(document.body.querySelector('#mocha'));
@@ -76,8 +80,15 @@
     // console.log('sdfsdfsdf')
    // let hh = console.getMessages()
    //  console.log(hh)
+    document.addEventListener('iframe',async(event)=>{
+        let dex = iframe.getAll()
+        event.detail.source.postMessage('asdasdasd',event.detail.origin)
+        dex['crypto-dex'].source.postMessage('!!!!!!!!!!!!!!!!',dex['crypto-dex'].origin)
+    })
     window.onload = async () => {
         let post = await Post('monopoly')
+        // let dex = iframe.getAll()
+        // console.assert(false, dex)
         await post.iframe('http://localhost:4060','/post',true, `${emoji('pouting_woman')}`, '2',{key:'value'}, 'save-wallet')
         // await post.listener()
         // await Tests()
