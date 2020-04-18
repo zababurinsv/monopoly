@@ -1,6 +1,5 @@
 import loader from '/static/html/components/component_modules/loader/loader.mjs'
 import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
-
 if (!Object.keys) {
   Object.keys = function (o) {
     if (o !== Object(o)) { throw new TypeError('Object.keys called on a non-object') }
@@ -17,7 +16,11 @@ customElements.define('page-external',
         shadow.innerHTML = `
 <div id="external"><slot name="jason"></slot></div>
 <style>
+:host(.hidden){
+display: none;
+}
 :host{
+
 }
 div#external{
     border-radius: 0.5vw;
@@ -35,21 +38,8 @@ div#external{
         }else{
           this.style.width ="100%";
         }
-        let host = this.dataset.url.replace('/import','')
-        window.addEventListener("message",(event)=>{
-          if(event.origin === host){
-            iframe.set(this.slot, event)
-            this.dataset.status = true
-            document.dispatchEvent( new CustomEvent(`iframe`,{
-              detail:event
-            }))
-            
-          }
-        });
+        
         (async (obj)=>{
-
-          // console.assert(false, this)
-
           obj['function'] = {}
           obj['function']['create'] = function ($root) {
             return new Promise(function (resolve, reject) {
@@ -785,6 +775,15 @@ div#external{
           })
           this.app = app
           obj['function']['create'](obj)
+            let channel = new MessageChannel();
+            let host = this.dataset.url.replace('/import','')
+            let ifr = obj['this'].querySelector('iframe')
+            iframe.set(host, ifr, channel, obj['this'])
+            ifr.onload = function () {
+              document.dispatchEvent( new CustomEvent(`iframe`,{
+                detail:host
+              }))
+            }
         })(this)
       }
     })

@@ -83,7 +83,7 @@ section#manager-menu{
       @include display(row, nowrap, space-evenly, center, stretch);
       padding: 1vw;
       div.setup{
-        @include display(column, nowrap, space-evenly, center, flex-start);
+        @include display(column, nowrap, space-evenly, start, flex-start);
         //@include border();
         min-width: 46.6vw;
         //padding: 1vw;
@@ -145,15 +145,15 @@ section#manager-menu{
           margin-bottom: 3.7vw;
           border: none;
           border-radius: 0.5vw;
+          padding: 1vw;
           option{
             text-align: center;
             cursor: pointer;
             text-align-last:center;
           }
         }
-
         div.playGame{
-          @include display(column, nowrap, space-evenly, center, stretch);
+          @include display(column, nowrap, space-evenly, start, stretch);
           //@include border();
           //width: 60vw;
           //padding: 5vw;
@@ -164,6 +164,7 @@ section#manager-menu{
             border: none;
             border-radius: 0.5vw;
             margin-bottom: 1vw;
+            padding: 1vw;
           }
           label[for="connectGame"]{
             @include fonts(8);
@@ -172,7 +173,11 @@ section#manager-menu{
           }
           input#connectGame{
             cursor: text;
+            margin-bottom: 1vw;
+          }
+          input#playGame{
             margin-bottom: 0;
+            cursor: pointer;
           }
         }
       }
@@ -194,6 +199,11 @@ section#manager-menu{
           font-family: Roboto,serif;
         }
         div#items{
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          border-radius: 0.5vw;
+          justify-content: space-between;
           div.player-input{
             @include display(row, nowrap, space-evenly, center, stretch);
             @include palyer();

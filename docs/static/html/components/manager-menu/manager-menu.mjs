@@ -3,6 +3,7 @@ import Net from '/static/html/components/component_modules/monopoly/net.mjs'
 import Menu from '/static/html/components/component_modules/monopoly/menu.mjs'
 import player from '/static/html/components/manager-menu/template/player.mjs'
 import events from '/static/html/components/component_modules/CustomEvent/index.mjs'
+import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
 customElements.define('manager-menu',
     class extends HTMLElement {
         constructor () {
@@ -667,12 +668,8 @@ customElements.define('manager-menu',
                 }, 'set', 'type')
                 // let menu = new (await Menu(obj))['class'](obj)
                 // let menuGame = await menu.menu({_:'init', this:obj['this']})
-    
-                // let postMessage = await PostMessage()
                 
-             
                 let playernumber = obj['this']['shadowRoot'].querySelector('#playernumber')
-                
                 let player1 = obj['this']['shadowRoot'].querySelector('#player1name')
                 let player1Input = obj['this']['shadowRoot'].querySelector('#player1input')
                 let player1color =  obj['this']['shadowRoot'].querySelector('#player1color')
@@ -699,23 +696,28 @@ customElements.define('manager-menu',
                 let player2 = obj['this']['shadowRoot'].querySelector('#player2name')
                 let player2color =  obj['this']['shadowRoot'].querySelector('#player2color')
                 let player2Input = obj['this']['shadowRoot'].querySelector('#player2input')
-                let name2 = player2Input.querySelector(`.player2preview`)
+                let player2type = obj['this']['shadowRoot'].querySelector('#player2ai')
                 player2Input.style.backgroundColor = player2color.value
                 player2color.addEventListener('change', async (event)=>{
                     player2Input.style.backgroundColor = event.target.value
-                })
-                player2.addEventListener('input',async (event)=>{
-                    name2.innerHTML = ''
-                    name2.innerHTML = event.target.value
                 })
                 player2.addEventListener("keyup", function(event) {
                     if (event.keyCode === 13) {
                         event.preventDefault();
                         player2.blur()
-                        player2.value = ''
+                        // player2.value = ''
                     }
                 });
-
+                player2type.addEventListener("change", function(event) {
+                  console.log('fffffffffff', event.target.value)
+                    if(event.target.value === "2"){
+                        player2.value = 'Player 2'
+                        player2.setAttribute('readonly','')
+                    }else{
+                        player2.value = ''
+                        player2.removeAttribute('readonly')
+                    }
+                });
                 playernumber.addEventListener("change", async (event) => {
                     let p = parseInt(event.target.value.split(' ')[0], 10)
                     let itemsOut = obj['this']['shadowRoot'].querySelector('#items')
@@ -731,15 +733,20 @@ customElements.define('manager-menu',
                         items[i].querySelector(`#player${i+2}color`).addEventListener('change', async (event)=>{
                             items[i].style.backgroundColor = event.target.value
                         })
-                        items[i].querySelector(`#player${i+2}name`).addEventListener('input',async (event)=>{
-                            items[i].querySelector(`.player${i+2}preview`).innerHTML = ''
-                            items[i].querySelector(`.player${i+2}preview`).innerHTML = event.target.value
+                        items[i].querySelector(`#player${i+2}ai`).addEventListener("change", function(event) {
+                            if(event.target.value === "2"){
+                                items[i].querySelector(`#player${i+2}name`).value = `Player ${i+2}`
+                                items[i].querySelector(`#player${i+2}name`).setAttribute('readonly','')
+                            }else{
+                                items[i].querySelector(`#player${i+2}name`).value = ''
+                                items[i].querySelector(`#player${i+2}name`).removeAttribute('readonly')
+                            }
                         })
                         items[i].querySelector(`#player${i+2}name`).addEventListener("keyup", function(event) {
                             if (event.keyCode === 13) {
                                 event.preventDefault();
                                 items[i].querySelector(`#player${i+2}name`).blur()
-                                items[i].querySelector(`#player${i+2}name`).value = ''
+                                // items[i].querySelector(`#player${i+2}name`).value = ''
                             }
                         });
                     }
@@ -765,22 +772,31 @@ customElements.define('manager-menu',
                             const regEx = /[^\d]/g;
                             id = id.replace(regEx, '')
                             object['player'][`${id}`] = {}
-                            object['player'][`${id}`]['name'] = item.querySelector(`.player${id}preview`).innerText
+                            object['player'][`${id}`]['name'] = item.querySelector(`#player${id}name`).value
                             object['player'][`${id}`]['color'] = item.querySelector(`#player${id}color`).value
                             object['player'][`${id}`]['type'] = item.querySelector(`#player${id}ai`).value
                             
                         }
                     }
+                    if(iframe.get('http://localhost:4060')['component'].classList.contains('hidden')){
+                        iframe.get('http://localhost:4060')['component'].classList.remove("hidden");
+                    }
+                    if(iframe.get('http://localhost:3070')['component'].classList.contains('hidden')){
+                        iframe.get('http://localhost:3070')['component'].classList.remove("hidden");
+                    }
+                    iframe.post('http://localhost:3070', {
+                        view:true,
+                        property:'~~~',
+                        color:'3',
+                        substrate:object,
+                        relation:'object-player'
+                    },async (event)=>{
+
+                        console.log(event.data)
+
+                    })
                 })
-                document.addEventListener('actionButton',async (event)=>{
-    
-             
-                    console.log('~~~~~~~~~~ Button ~~~~~~~~~~', event.detail)
-                    // console.assert(false, event.detail)
-
-                })
-
-
+                
                // await Menu(obj)
                // await monopoly(obj)
 

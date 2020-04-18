@@ -46,6 +46,7 @@ export default (view, property, color, substrate, relation)=>{
                             <select id="player${substrate.id}ai" title="Choose whether this player is controled by a human or by the computer.">
                                 <option value="0" selected="selected">Human</option>
                                 <option value="1">AI (Test)</option>
+                                <option value="2">Net</option>
                             </select>
                         </div>
                     </label>
