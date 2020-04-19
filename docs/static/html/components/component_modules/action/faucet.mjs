@@ -1,6 +1,6 @@
 import Waves from '/static/html/components/component_modules/waves/waves.mjs'
 import emoji from '/static/html/components/component_modules/emoji/emoji.mjs';
-import customEvents from '/static/html/components/component_modules/CustomEvent/callback.mjs'
+import events from '/static/html/components/component_modules/CustomEvent/index.mjs'
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 export default (views,property,color,substrate,relation)=>{
     return  new Promise(async (resolve, reject) => {

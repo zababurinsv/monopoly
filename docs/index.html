@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/css.escape@1.5.1/css.escape.min.js"></script>
     <link rel="stylesheet" href="./static/html/components/component_modules/mocha/mocha.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/7.0.1/mocha.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js"></script>
+<!--    <script src="https://cdn.jsdelivr.net/npm/sinon@3/pkg/sinon.js"></script>-->
     <link rel="preload" href="./static/html/components/component_modules/cell-index/jason.css" as="style" onload="this.rel='stylesheet'">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chai/4.2.0/chai.min.js"></script>
     <script>
@@ -30,7 +30,7 @@
         <manager-menu></manager-menu>
         <page-external class="hidden" slot ="waves-game" data-url="http://localhost:4060/import" data-height=42></page-external>
         <page-external class="hidden" slot ="await-game" data-url="http://localhost:8011/import" data-height=54></page-external>
-        <page-external class="hidden" slot ="crypto-dex" data-url="http://localhost:3070/import" data-height=41></page-external>
+        <page-external class="hidden" slot ="blockchain-dex" data-url="http://localhost:3070/import" data-height=41></page-external>
         <page-external class="hidden" slot ="blockchain-bank" data-url="http://localhost:9010/import" data-height=42></page-external>
 
 <!--        <manager-board></manager-board>-->
@@ -69,27 +69,20 @@
 <script type="module" src="./static/html/components/page-external/page-external.mjs" async></script>
 <script type="module" src="./static/html/components/codemirror-main/codemirror-main.mjs" async></script>
 <script type="module">
-    import emoji from '/static/html/components/component_modules/emoji/emoji.mjs';
-    import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
-    document.addEventListener('iframe',async(event)=>{
-        switch (event.detail) {
-            case 'http://localhost:8011':
-                iframe.count()
-                // iframe.post('http://localhost:8011',{ key:'value' },(event)=>{
-                //     console.log(`${emoji('fire')} response >>>>>`,event.data)
-                // })
-                break
-            default:
-                iframe.count()
-                break
-        }
-        console.log(iframe.getCount())
-    })
+    import tests from '/static/html/components/component_modules/tests/tests.mjs'
+    window.onload = async () =>{
+        tests()
+    }
 </script>
 <style>
     :root {
         --width: 30vw;
         --height: 100%;
+    }
+    body{
+        display: flex;
+        flex-direction: column;
+        margin: 0;
     }
     p{
         justify-content: center;

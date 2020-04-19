@@ -2,6 +2,11 @@ import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t
 import description from '/static/html/components/component_modules/description/description.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
 import actions from '/static/html/components/component_modules/action/monopoly.mjs'
+import postoffice from '/static/html/components/component_modules/action/postOffice.mjs'
+import waves from '/static/html/components/component_modules/action/waves.mjs'
+import emoji from '/static/html/components/component_modules/emoji/emoji.mjs'
+import faucet from '/static/html/components/component_modules/action/faucet.mjs'
+import wavesGame from '/static/html/components/component_modules/action/wavesGame.mjs'
 let object = {}
 object.staticProperty = []
 let output = {}
@@ -14,9 +19,27 @@ object.setEventsAction = async (views, property, color, substrate, relation) => 
             case 'player':
                 resolve(await actions(views,property,color,substrate,relation))
                 break
+            case 'authtorization':
+                resolve(await postoffice(views,property,color,substrate,relation))
+                break
+            case 'bank':
+                resolve(await waves(views,property,color,substrate,relation))
+                break
+            case 'wallet':
+                resolve(await waves(views,property,color,substrate,relation))
+                break
+            case 'transfer':
+                resolve(await waves(views,property,color,substrate,relation))
+                break
+            case 'faucet-wallet':
+                resolve(await faucet(views,property,color,substrate,relation))
+                break
+            case 'create-nft':
+                resolve(await wavesGame(views,property,color,substrate,relation))
+                break
             default:
-                console.warn('нет акшена на это отношение --->', relation, '--->', views, property, color, substrate, relation)
-                resolve({warning: 'нет акшена на это отношение'})
+                console.warn(`${emoji('kissing_heart')} queue.mjs ---> нет акшена на это отношение ---> ${relation}`)
+                resolve(true)
                 break
         }
     })
@@ -36,7 +59,7 @@ let handler = {
                             clearTimeout(timerId);
                         }else{
                             if(obj[0].end){
-                               await object.setEventsAction(obj[0].console,{end:true, property:obj[0].property},obj[0].color, obj[0].substrate, obj[0].relation )
+                                await object.setEventsAction(obj[0].console,{end:true, property:obj[0].property},obj[0].color, obj[0].substrate, obj[0].relation )
                                 colorlog(obj[0].console,{ end:true, property:obj[0].property, },obj[0].color, obj[0].substrate, obj[0].relation )
                                 delete obj[0].substrate.queue
                                 document.dispatchEvent( new CustomEvent('typeScript-end', {
@@ -50,9 +73,12 @@ let handler = {
                                     }
                                 }))
                             }else{
-                               await object.setEventsAction(obj[0].console,obj[0].property,obj[0].color, obj[0].substrate, obj[0].relation)
+                                // console.assert(false)
+                                await object.setEventsAction(obj[0].console,obj[0].property,obj[0].color, obj[0].substrate, obj[0].relation)
                                 colorlog(obj[0].console,obj[0].property,obj[0].color, obj[0].substrate, obj[0].relation )
+                                
                             }
+                            
                             obj.shift()
                             timerId = setTimeout(tick, 10);
                         }
@@ -76,11 +102,11 @@ export default (show, message='default', color ='default', ...args) =>{
         try {
             if(typeof args[args.length-1] === 'string'){
                 if(message === '~end'){
-                   delete object.staticProperty[`${args[args.length-1]}`]
+                    delete object.staticProperty[`${args[args.length-1]}`]
                     output = {
-                       _:`${args[args.length-1]}`,
-                       destruct:true,
-                       queue: object.staticProperty
+                        _:`${args[args.length-1]}`,
+                        destruct:true,
+                        queue: object.staticProperty
                     }
                 }else{
                     if(isEmpty(object.staticProperty[`${args[args.length-1]}`])){
@@ -101,6 +127,6 @@ export default (show, message='default', color ='default', ...args) =>{
                 error: e
             })
         }
-
+        
     })
 }

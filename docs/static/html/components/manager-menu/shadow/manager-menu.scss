@@ -18,7 +18,7 @@
 }
 
 @mixin border() {
-  width: 100%;
+  //width: 100%;
   box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
   box-sizing: border-box;
   text-align: center;
@@ -38,7 +38,7 @@
 
   label{
   @include display(column, nowrap, space-evenly, center, stretch);
-    width: 100%;
+    //width: 100%;
     //align-items: center;
     @include fonts(8);
     font-family: Roboto,serif;
@@ -75,17 +75,19 @@
 section#manager-menu{
   display: flex;
   box-sizing: border-box;
+  padding: 1vw;
+  margin: 0;
   div#setup{
     @include display(column, nowrap, space-evenly, flex-start, stretch);
     //@include border();
     //padding: 5vw;
     div#configuration{
       @include display(row, nowrap, space-evenly, center, stretch);
-      padding: 1vw;
+      //padding: 1vw;
       div.setup{
         @include display(column, nowrap, space-evenly, start, flex-start);
         //@include border();
-        min-width: 46.6vw;
+        width: 47.5vw;
         //padding: 1vw;
         //width: 60vw;
         //padding: 5vw;
@@ -97,7 +99,7 @@ section#manager-menu{
           @include display(row, nowrap, space-evenly, center, stretch);
           @include palyer();
           border-radius: 0.5vw;
-          width: 100%;
+          //width: 100%;
           box-shadow: inset 0vw 0vw 1vw 0px #7694f4;
           box-sizing: border-box;
           padding: 1vw;
@@ -155,7 +157,7 @@ section#manager-menu{
         div.playGame{
           @include display(column, nowrap, space-evenly, start, stretch);
           //@include border();
-          //width: 60vw;
+
           //padding: 5vw;
           cursor: default;
           //margin-bottom: 3vw;
@@ -165,6 +167,7 @@ section#manager-menu{
             border-radius: 0.5vw;
             margin-bottom: 1vw;
             padding: 1vw;
+            width: 100%;
           }
           label[for="connectGame"]{
             @include fonts(8);
@@ -172,6 +175,7 @@ section#manager-menu{
             margin-bottom: 1vw;
           }
           input#connectGame{
+            @include fonts(5);
             cursor: text;
             margin-bottom: 1vw;
           }
@@ -203,7 +207,10 @@ section#manager-menu{
           flex-direction: column;
           height: 100%;
           border-radius: 0.5vw;
-          justify-content: space-between;
+          justify-content: start;
+          &:last-child{
+            margin-bottom: 0;
+          }
           div.player-input{
             @include display(row, nowrap, space-evenly, center, stretch);
             @include palyer();
@@ -219,7 +226,7 @@ section#manager-menu{
             -moz-appearance: none;
             appearance: none;
             text-align-last:center;
-            margin-bottom: 1vw;
+            margin-bottom: 1.2vw;
             margin-top: 1vw;
             label.player-label{
               background-color: white;

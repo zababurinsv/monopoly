@@ -4,7 +4,7 @@ import emoji from '/static/html/components/component_modules/emoji/emoji.mjs'
 import Recursion from '/static/html/components/component_modules/recursion/recursion.mjs'
 import treeBundle from '/static/html/components/component_modules/recursion/module/tree-bundle.mjs'
 import Waves from '/static/html/components/component_modules/waves/module/waves-bundle.mjs'
-import customEvents from '/static/html/components/component_modules/CustomEvent/callback.mjs'
+import events from '/static/html/components/component_modules/CustomEvent/index.mjs'
 function bestCopyEver(src) {
     return Object.assign({}, src);
 }
@@ -28,7 +28,7 @@ export default (views,property,color,substrate,relation)=>{
                                 break
 
                         }
-                        document.dispatchEvent( new CustomEvent('connected-bank', {
+                        document.dispatchEvent( new CustomEvent('bank-end', {
                             detail: {
                                 '/':`${substrate[`${relation}`]['/']}`,
                                 dAppData:dAppData

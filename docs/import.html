@@ -9,19 +9,42 @@
 </body>
 <script type="module" src="./static/html/components/manager-menu/manager-menu.mjs" async></script>
 <script type="module">
-    // import Post from '/static/html/components/component_modules/postMessage/postMessage.mjs'
-    // import consol from '/static/html/components/component_modules/bundle/console/console.mjs'
-    // console.assert(false, consol)
-    // window.onload = async () => {
-    //     let post = await Post('monopoly')
-    //     await post.listener('http://localhost:6040')
-    //     await Tests()
-    // }
+    import emoji from '/static/html/components/component_modules/emoji/emoji.mjs'
+    import white from '/static/html/components/component_modules/white/white.mjs'
+    import events from '/static/html/components/component_modules/CustomEvent/index.mjs'
+    import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
+    window.addEventListener ("message", async (event) => {
+        if(white.includes(event.origin)){
+           if(location.origin !== event.origin){
+               iframe.setPort2(event.origin, event.ports[0],async (event)=>{
+                   console.log(`<<<<< request waves-game ${emoji('fire')}`, event.data)
+                   let response = await events.customEvent(event.data.view,event.data.property,event.data.color,event.data.substrate,event.data.relation)
+                   iframe.getPort2(event.data.property).postMessage({
+                       view:true,
+                       propery:`${emoji('fire')} waves-game response >>>>>`,
+                       color:event.data.color,
+                       substrate:{},
+                       relation:event.data.relation
+                   })
+               })
+               console.log(`<<<<< request waves-game ${emoji('fire')}`,event.data)
+               let response = await events.customEvent(event.data.view,event.data.property,event.data.color,event.data.substrate,event.data.relation)
+               iframe.getPort2(event.origin).postMessage({
+                   view:true,
+                   propery:`${emoji('fire')} waves-game response >>>>>`,
+                   color:event.data.color,
+                   substrate:{},
+                   relation:event.data.relation
+               });
+           }
+        }
+    })
 </script>
 <style>
  body{
      display: flex;
      flex-direction: column;
+     margin: 0;
  }
 </style>
 </html>

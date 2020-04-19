@@ -1,7 +1,7 @@
 import colors from '/static/html/components/component_modules/colors/colors.mjs'
 import colorlog from '/static/html/components/component_modules/colorLog/colorLog.mjs'
-import action from '/static/html/components/component_modules/action/monopoly.mjs'
 import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
+import emoji from '/static/html/components/component_modules/emoji/emoji.mjs'
 export default (...args)=>{
     return  new Promise(async (resolve, reject) => {
         let object = {}
@@ -13,6 +13,7 @@ export default (...args)=>{
         object.pointers.push('%o')
         object.pointers.push('%O')
         object.pointers.push('%c')
+        object.action = {}
         object.description = {}
         object.description.property = {}
         object.description.relation = {}
@@ -25,23 +26,39 @@ export default (...args)=>{
             reject(obj)
         }
         function isNotEmptyActions(actions, object) {
+            let out = false
+            if(isEmpty(actions)){
+                colorlog(object.description.console, 'для этого отношения нет никаких действий' ,object.description.color,object.description.substrate, `${object.description.relation}`)
+                object.description.property = {
+                    end: true,
+                    property:object.description.property,
+                }
+            }else{ out = true }
+            return out
+        }
+        function sendToQueue(actions) {
             return new Promise(async (resolve, reject) => {
-                let out = false
-                if(isEmpty(actions)){
-                    colorlog(object.description.console, 'для этого отношения нет никаких действий' ,object.description.color,object.description.substrate, `${object.description.relation}`)
-                    object.description.property = {
-                        end: true,
+                for(let i=0; i< actions.length;i++){
+                    object.description.substrate.queue.push({
+                        _:object.description.substrate._,
+                        end: (i === actions.length -1),
+                        console:object.description.console,
                         property:object.description.property,
-                    }
-                }else{ out = true }
-
-                resolve(out)
+                        color: object.description.color,
+                        substrate:{
+                            [object.description.relation]:actions[i]
+                        },
+                        relation:object.description.relation,
+                    })
+                }
+                resolve({send:'sendToQueue true'})
             })
         }
         function addEventsQueue(object) {
             return new Promise(async (resolve, reject) => {
                 switch (object.description.relation.toLowerCase()) {
                     case 'button':
+                        console.assert(false)
                         if(isNotEmptyActions(action.button, object)){
                             for(let i=0; i< action.button.length;i++){
                                 object.description.substrate.queue.push({
@@ -71,10 +88,118 @@ export default (...args)=>{
                             }
                         }
                         break
-                    default:
-                        console.warn('не обрабатывается добавление в очередь --->',object.description.relation.toLowerCase(),'--->', object )
+                    case 'authtorization':
+                        if(isNotEmptyActions(object['action'][`${object.description.relation}`], object)){
+                            
+                            
+                            sendToQueue(object['action'][`${object['description']['relation']}`])
+                            
+                        }else{
+                            object.description.substrate.queue.push({
+                                _:object.description.substrate._,
+                                end: true,
+                                console:object.description.console,
+                                property:object.description.property,
+                                color: object.description.color,
+                                substrate: object.description.substrate,
+                                relation:object.description.relation,
+                            })
+                        }
                         break
-
+                    case 'transfer':
+                        if(isNotEmptyActions(object['action'][`${object.description.relation}`], object)){
+                            
+                            
+                            sendToQueue(object['action'][`${object['description']['relation']}`])
+                            
+                        }else{
+                            object.description.substrate.queue.push({
+                                _:object.description.substrate._,
+                                end: true,
+                                console:object.description.console,
+                                property:object.description.property,
+                                color: object.description.color,
+                                substrate: object.description.substrate,
+                                relation:object.description.relation,
+                            })
+                        }
+                        break
+                    case 'bank':
+                        if(isNotEmptyActions(object['action'][`${object.description.relation}`], object)){
+                            
+                            
+                            sendToQueue(object['action'][`${object['description']['relation']}`])
+                            
+                        }else{
+                            object.description.substrate.queue.push({
+                                _:object.description.substrate._,
+                                end: true,
+                                console:object.description.console,
+                                property:object.description.property,
+                                color: object.description.color,
+                                substrate: object.description.substrate,
+                                relation:object.description.relation,
+                            })
+                        }
+                        break
+                    case 'wallet':
+                        if(isNotEmptyActions(object['action'][`${object.description.relation}`], object)){
+                            
+                            
+                            sendToQueue(object['action'][`${object['description']['relation']}`])
+                            
+                        }else{
+                            object.description.substrate.queue.push({
+                                _:object.description.substrate._,
+                                end: true,
+                                console:object.description.console,
+                                property:object.description.property,
+                                color: object.description.color,
+                                substrate: object.description.substrate,
+                                relation:object.description.relation,
+                            })
+                        }
+                        break
+                    case 'faucet-wallet':
+                        if(isNotEmptyActions(object['action'][`${object.description.relation}`], object)){
+                            
+                            
+                            sendToQueue(object['action'][`${object['description']['relation']}`])
+                            
+                        }else{
+                            object.description.substrate.queue.push({
+                                _:object.description.substrate._,
+                                end: true,
+                                console:object.description.console,
+                                property:object.description.property,
+                                color: object.description.color,
+                                substrate: object.description.substrate,
+                                relation:object.description.relation,
+                            })
+                        }
+                        break
+                    case 'create-nft':
+                        if(isNotEmptyActions(object['action'][`${object.description.relation}`], object)){
+                            
+                            
+                            sendToQueue(object['action'][`${object['description']['relation']}`])
+                            
+                        }else{
+                            object.description.substrate.queue.push({
+                                _:object.description.substrate._,
+                                end: true,
+                                console:object.description.console,
+                                property:object.description.property,
+                                color: object.description.color,
+                                substrate: object.description.substrate,
+                                relation:object.description.relation,
+                            })
+                        }
+                        break
+                    default:
+                        console.warn(`${emoji('bank')} description.mjs не обрабатывается добавление в очередь --->`,object.description.relation.toLowerCase(),'--->', object )
+                        break
+                    
                 }
                 resolve({queue:true})
             })
@@ -86,28 +211,34 @@ export default (...args)=>{
                 }else{
                     console.assert(false, 'параметр для отображения в консоли должен иметь тип boolean')
                 }
-
+                
                 if(args[i+1] === ']'){
-
+                    
                     object.description.property = args[i]
                 }
-
+                
                 if(args[i+2] === '[('){
                     object.description.relation = args[i]
                     object.description.relation = object.description.relation.replace('%c%O','')
                 }
-
+                
                 if(args[i+1] === '*)'){
+                    object.action[`${object.description.relation}`] = undefined
                     for(let j =0; j < args[i].length;j++ ){
                         if(args[i][j].hasOwnProperty('_')){
                             object.description.substrate._ = args[i][j]._
                         }
                         if(args[i][j].hasOwnProperty('task')){
-                           object.description.substrate.queue = args[i][j].task
+                            object.description.substrate.queue = args[i][j].task
+                        }else{
+                            
+                            if(args[i][j].hasOwnProperty(`${object.description.relation}`)){
+                                object.action[`${object.description.relation}`] = args[i][j][`${object.description.relation}`]
+                            }
                         }
                     }
                 }
-
+                
                 switch (typeof args[i]) {
                     case "string":
                         let temp = args[i].split(':')
