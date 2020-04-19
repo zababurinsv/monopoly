@@ -21,6 +21,14 @@ waves.then((waves)=>{
             console.log('emoji', emoji('all'))
             console.thinking('(((~~~))) waves (((~~~)))',emoji('thinking'), waves)
         });
+    
+        it('Create Account(создание аккаунта)', function () {
+            return new Promise(async (resolve, reject) => {
+                waves.bank(true, `${emoji('thinking')} какие то свойства`,'3', actions,'bank')
+                let bank = await events.addEventListener(true, `${emoji('thinking')} какие то свойства`,'3', actions,'bank')
+                resolve(bank.dAppData)
+            })
+        })
         
         it('Connect bank(подключение банка)', function () {
             return new Promise(async (resolve, reject) => {
