@@ -784,7 +784,7 @@ customElements.define('manager-menu',
                     if(iframe.get('http://localhost:3070')['component'].classList.contains('hidden')){
                         iframe.get('http://localhost:3070')['component'].classList.remove("hidden");
                     }
-                    iframe.post('http://localhost:3070', {
+                    iframe.post('http://localhost:4060', {
                         view:true,
                         property:'~~~',
                         color:'3',
