@@ -4,6 +4,7 @@ import Menu from '/static/html/components/component_modules/monopoly/menu.mjs'
 import player from '/static/html/components/manager-menu/template/player.mjs'
 import events from '/static/html/components/component_modules/CustomEvent/index.mjs'
 import iframe from '/static/html/components/component_modules/iframe/iframe.mjs'
+import isEmpty from '/static/html/components/component_modules/isEmpty/isEmpty_t.mjs'
 customElements.define('manager-menu',
     class extends HTMLElement {
         constructor () {
@@ -668,6 +669,14 @@ customElements.define('manager-menu',
                 }, 'set', 'type')
                 // let menu = new (await Menu(obj))['class'](obj)
                 // let menuGame = await menu.menu({_:'init', this:obj['this']})
+                obj.this.callback = {}
+                obj['this']['callback']['search-game-id'] = {};
+                
+                document.addEventListener('search-game-id', async (event)=>{
+                    obj.this.shadowRoot.querySelector('#connectGame').value = event.detail.substrate
+                    obj.this.shadowRoot.querySelector('#playGame').click()
+                    obj['this']['callback']['search-game-id'] = event.detail.callback
+                })
                 
                 let playernumber = obj['this']['shadowRoot'].querySelector('#playernumber')
                 let player1 = obj['this']['shadowRoot'].querySelector('#player1name')
@@ -760,13 +769,20 @@ customElements.define('manager-menu',
                     if(name.length === 0) name = 'anonymous';
                     if(name === 'Your Name') name = 'anonymous';
                     let object = {}
+                    object['game'] ={}
                     object['player'] = []
                     object['player'][0] = {}
                     object['player'][1] = {}
                     object['player'][1]['name'] = name
                     object['player'][1]['color'] = color
+                    object['game']['id'] = undefined
+                    object['game']['type'] = undefined
+                   if(!isEmpty(obj['this']['shadowRoot'].querySelector('#connectGame').value)){
+                       object['game']['id'] = obj['this']['shadowRoot'].querySelector('#connectGame').value
+                       obj['this']['shadowRoot'].querySelector('#connectGame').value = ''
+                   }
+                    object['game']['type'] = obj['this']['shadowRoot'].querySelector('#player1ai').value
                     for(let item of items.childNodes){
-    
                         if(item.tagName !== undefined){
                            let id = (item.querySelector('.player-input')).id
                             const regEx = /[^\d]/g;
@@ -791,9 +807,8 @@ customElements.define('manager-menu',
                         substrate:object,
                         relation:'object-player'
                     },async (event)=>{
-
-                        console.log(event.data)
-
+                        obj['this']['callback']['search-game-id'](event.data)
+                        delete obj['this']['callback']['search-game-id']
                     })
                 })
                 

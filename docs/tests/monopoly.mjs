@@ -31,40 +31,8 @@ waves.then((waves)=>{
         })
         it('Find game by ID (найти игру по ID)', function () {
             return new Promise(async (resolve, reject) => {
-                // let gameObject = await customEvents(true,'получить параметры игры','3', {
-                //     'gameName':[
-                //         {
-                //             '/':'waves',
-                //             get:'name',
-                //         },
-                //         {
-                //             '/':'waves',
-                //             description:'it is test token for monopoly',
-                //         }
-                //     ]
-                // },'gameName')
-                //
-                // listener(true, 'ждём ответа от запроса', '3', '', 'create-nft').then(async (nft)=>{
-                //     await waves.waitForTx(nft.data.id,nft.apiBase)
-                //     console.log(`${emoji('beer')} game.mjs`,nft.data)
-                //     await customEvents(true, 'отобразить данные на странице','3',JSON.stringify(nft.data,null,4),'nft-game-params')
-                // })
-                // await waves.nft(true, callback,'3', {'create-nft':[
-                //         {
-                //         '/':'create-nft',
-                //          name:gameObject.data,
-                //          description:'it is test token for monopoly',
-                //          dapp:'zone tower six sound oblige horn false blue enroll flash pact all',
-                //          proofs:[
-                //              'convince bubble claim case tube domain grief eyebrow decline witness bachelor mansion',
-                //              'kitten tooth maze behave purity dance differ stereo faint immune century peace',
-                //              'discover swim emerge demise dwarf inmate utility cycle hospital pistol sugar emotion'
-                //          ],
-                //          node:'http://testnodes.wavesnodes.com'
-                //         }
-                //     ]},'create-nft')
-            
-                reject(true)
+               let click = await events.customEvent(true,`${emoji('ecktie')}`, '4', '2gaEJYWWRdW1Xkt4oij78EuXCWtyJsis3fo5RqtiZoeM',  'search-game-id')
+                resolve(click)
             })
         })
         it('Create ID(создание ID)', function () {
