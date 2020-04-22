@@ -2,6 +2,17 @@ import emoji from '/static/html/components/component_modules/emoji/emoji.mjs';
 let iframe = {}
 iframe.staticProperty = {}
 iframe.staticProperty.count = -1
+window.addEventListener("message", async (event) => {
+    let channel = new MessageChannel();
+    let port1 = channel.port1
+    let port2 = channel.port2
+    if(location.origin !== event.origin){
+        if(event.data === 'init'){
+            console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            event.source.postMessage({window:true},event.origin,[port2])
+        }
+    }
+})
 export default {
     set:(host='', object= {}, chanel = {}, self,alias=undefined)=>{
         
@@ -56,7 +67,7 @@ export default {
     getPort2:(name)=>{
         return iframe.staticProperty[`${name}`]['port2']
     },
-    getAllPort2:()=>{
+    open:()=>{
         return iframe.staticProperty
     }
 }

@@ -56,9 +56,24 @@ waves.then((waves)=>{
                 `)
     
                 document.body.addEventListener('click',async ()=>{
-    
-                    window.open(`http://localhost:8110/import`,`test`,`height=${scrollWidth/3},width=${scrollWidth/1.5},scrollbars=no,toolbar=no,menubar=no,status=no,resizable=no,scrollbars=no,location=no,top=${scrollWidth/2-((scrollWidth/1.5)/2)},left=${scrollWidth/2-((scrollWidth/1.8)/2)}`);
-    
+                    let channel = new MessageChannel();
+                    let port1 = channel.port1
+                    let port2 = channel.port2
+                    port1.onmessage = function(event){
+        
+                        console.log('~~~~~~~~~~~!!!!>>>>', event)
+                        
+                        resolve(true)
+                    }
+                    window.addEventListener("message", async (event) => {
+                        if(location.origin !== event.origin){
+                            if(event.data === 'init'){
+                                console.log('!!!!!!!!!!!!!!333!!!')
+                                event.source.postMessage({window:true},event.origin,[port2])
+                            }
+                        }
+                    })
+                 window.open(`http://localhost:8110/import`,`test`,`height=${scrollWidth/3},width=${scrollWidth/1.5},scrollbars=no,toolbar=no,menubar=no,status=no,resizable=no,scrollbars=no,location=no,top=${scrollWidth/2-((scrollWidth/1.5)/2)},left=${scrollWidth/2-((scrollWidth/1.8)/2)}`);
                 })
     
                 document.body.querySelector('#testOpen').click()
