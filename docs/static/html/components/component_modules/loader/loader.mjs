@@ -59,16 +59,36 @@ export let add = (url, target)=>{
 
 export default (url, name)=>{
     return new Promise(function (resolve, reject) {
-        if( isEmpty(window[name])){
-            let load = document.createElement('script');
-            load.src = url
-            document.body.appendChild(load)
-            load.onload = (out) =>{
+        let verifyScript = true
+        let verifyName = name.toLowerCase()
+        let Script = {}
+        for(let item of document.body.querySelectorAll('script')){
+            if(item.src.indexOf(`${verifyName}.mjs`) > 0){
+                verifyScript =false
+                Script = item
+            }
+        }
+        if(verifyScript){
+            if( isEmpty(window[name])){
+                let load = document.createElement('script');
+                load.src = url
+                document.body.appendChild(load)
+                load.onload = (out) =>{
+                    document.dispatchEvent( new CustomEvent(`${name}-loading`))
+                    resolve(window[name])
+                }
+            }else{
                 resolve(window[name])
             }
         }else{
-            resolve(window[name])
+            if( isEmpty(window[name])){
+              document.addEventListener(`${name}-loading`,()=>{
+                  resolve(window[name])
+              })
+            }else{
+                console.log('#####3#######', window[name])
+                resolve(window[name])
+            }
         }
-
     })
 }

@@ -745,14 +745,13 @@ div#external{
           this.NodeList.prototype = Array.prototype
           this.HTMLElement = window.HTMLElement
           let Jason = await loader('./static/html/components/component_modules/cell-index/jason.mjs','Jason')
-          let ST = await loader('./static/html/components/component_modules/cell-index/st.mjs','ST')
+          await loader('./static/html/components/component_modules/cell-index/st.mjs','ST')
           let url = {}
           if(obj.this.dataset.url){
             url =  obj.this.dataset.url
           }else{
             url = 'https://zababurinsv.github.io/dashboard/'
           }
-          // console.assert(false, ST)
           let app = Jason({
             $cell: true,
             style: {
