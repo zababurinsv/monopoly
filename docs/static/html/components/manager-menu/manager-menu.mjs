@@ -807,8 +807,12 @@ customElements.define('manager-menu',
                         substrate:object,
                         relation:'object-player'
                     },async (event)=>{
-                        obj['this']['callback']['search-game-id'](event.data)
-                        delete obj['this']['callback']['search-game-id']
+                        if(isEmpty(obj['this']['callback']['search-game-id'])){
+                        
+                        }else{
+                            obj['this']['callback']['search-game-id'](event.data)
+                            delete obj['this']['callback']['search-game-id']
+                        }
                     })
                 })
                 
