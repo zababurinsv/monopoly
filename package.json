@@ -12,7 +12,8 @@
     "build": "webpack",
     "gulp-bundle-console": "gulp gulp-bundle-console",
     "gulp-watch-slyle": "gulp gulp-watch-slyle",
-    "gitHub": "git status && git add -A && git commit -am 'update' && git push"
+    "gitHub": "git status && git add -A && git commit -am 'update' && git push",
+    "kill:6040": "kill $(lsof -t -i:6040)"
   },
   "repository": {
     "type": "git",
