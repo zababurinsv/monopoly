@@ -1,0 +1,12 @@
+@import "interface";
+@import "develope";
+@mixin media($type, $property1,$property2,$property3, $property4,$property5,$property6, $property7,$property8,$property9,$property10)
+{
+  @if ($type == dafault) {
+    @include develope('default')
+  }
+  @else if($type == body)
+  {
+    @include develope('default')
+  }
+}

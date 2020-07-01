@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Property</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" href="/static/html/components/component_modules/mocha/mocha.css">
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <script src="/static/html/components/component_modules/mocha/mocha.js"></script>
+    <script>
+        mocha.setup('bdd');
+    </script>
+</head>
+<body>
+<section id="property">
+    <hr>
+    <div class="preview">CORE Backend Property</div>
+    <hr>
+    <div id="components"></div>
+    <div id="info"></div>
+    <div id="tests">
+        <ul id="mocha"></ul>
+    </div>
+</section>
+</body>
+<script type="module">
+    // import tests from '/static/html/components/component_modules/tests/tests.mjs'
+    // tests()
+    import bundle from '/static/html/components/component_modules/bundle/rxdb/rxdb.mjs'
+    (async ()=>{
+        console.log('~~~~~~~~~~~~~~~~~~~',bundle['default'] )
+        let html =  await fetch(`${location.origin}/render`,{
+            method: 'POST',
+            body:JSON.stringify({test:'key'}),
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            }
+        })
+        html = await html.text()
+        document.querySelector('#components').insertAdjacentHTML('beforeend',html)
+    })()
+</script>
+<style>
+    div.preview{
+        text-align: center;
+        font-size: 3vw;
+    }
+</style>
+</html>

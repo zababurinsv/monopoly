@@ -1,0 +1,84 @@
+@mixin fonts($obj) {
+  @if $obj ==  0 {
+    font-size: 0.781vw;
+  }
+  @else if($obj == 1)
+  {
+    font-size: 0.859vw;
+  }
+  @else if($obj == 2)
+  {
+    font-size: 0.898vw;
+  }
+  @else if($obj == 3)
+  {
+    font-size: 1.015vw;
+  }
+  @else if($obj == 4)
+  {
+    font-size: 1.25vw;
+  }
+  @else if($obj == 5)
+  {
+    font-size: 1.640vw;
+  }
+  @else if($obj == 6)
+  {
+    font-size: 1.992vw;
+  }
+  @else if($obj == 7)
+  {
+    font-size: 2.226vw;
+  }
+  @else if($obj == 8)
+  {
+    font-size: 2.422vw;
+  }
+  @else if($obj == 8)
+  {
+    font-size: 2.773vw;
+  }
+  @else if($obj == 9)
+  {
+    font-size: 3.398vw;
+  }
+  @else if($obj == 10)
+  {
+    font-size: 3.638vw;
+  }
+  @else if($obj == 11)
+  {
+    font-size: 3.638vw;
+  }
+  @else if($obj == 12)
+  {
+    font-size: 3.895vw;
+  }
+  @else if($obj == 13)
+  {
+    font-size: 4.171vw;
+  }
+  @else if($obj == 14)
+  {
+    font-size: 4.466vw;
+  }
+  @else if($obj == 15)
+  {
+    font-size: 4.782vw;
+  }
+  @else if($obj == 16)
+  {
+    font-size: 5.151vw;
+  }
+  @else if($obj == '8vw')
+  {
+    font-size: 8vw;
+  }
+  @else if($obj == '9vw')
+  {
+    font-size: 9vw;
+  }
+
+}
+
+

@@ -1,0 +1,281 @@
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv"
+import express from "express";
+import cors from "cors";
+import Enqueue from "express-enqueue";
+import compression from "compression";
+import bodyParser from 'body-parser'
+import whitelist from './whitelist/whitelist.mjs'
+import stylelint from 'stylelint'
+let __dirname = path.dirname(process.argv[1]);
+__dirname = __dirname.replace(/\/node_modules\/pm2\/lib/gi, '')
+dotenv.config()
+const highWaterMark =  2;
+let app = express();
+app.use(compression())
+app.use(cors({ credentials: true }));
+
+const queue = new Enqueue({
+    concurrentWorkers: 4,
+    maxSize: 200,
+    timeout: 30000
+});
+app.use(queue.getMiddleware());
+let corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}
+
+app.use('/routes/to/save/text/body/*', bodyParser.text({type: 'text/plain'})); //this type is actually the default
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+app.use( express.static('core-views'));
+
+app.options('/lint', cors(corsOptions))
+app.post('/lint', async (req, res) => {
+    
+    console.log('@@@@@@@@@@@@@@@@@@@@@@@2222', req.body.code)
+    stylelint
+        .lint({
+            config: {
+                "rules": {
+                    "at-rule-no-unknown": true,
+                    "block-no-empty": true,
+                    "color-no-invalid-hex": true,
+                    "comment-no-empty": true,
+                    "declaration-block-no-duplicate-properties": [
+                        true,
+                        {
+                            "ignore": [
+                                "consecutive-duplicates-with-different-values"
+                            ]
+                        }
+                    ],
+                    "declaration-block-no-shorthand-property-overrides": true,
+                    "font-family-no-duplicate-names": true,
+                    "font-family-no-missing-generic-family-keyword": true,
+                    "function-calc-no-invalid": true,
+                    "function-calc-no-unspaced-operator": true,
+                    "function-linear-gradient-no-nonstandard-direction": true,
+                    "keyframe-declaration-no-important": true,
+                    "media-feature-name-no-unknown": true,
+                    "no-descending-specificity": true,
+                    "no-duplicate-at-import-rules": true,
+                    "no-duplicate-selectors": true,
+                    "no-empty-source": true,
+                    "no-extra-semicolons": true,
+                    "no-invalid-double-slash-comments": true,
+                    "property-no-unknown": true,
+                    "selector-pseudo-class-no-unknown": true,
+                    "selector-pseudo-element-no-unknown": true,
+                    "selector-type-no-unknown": true,
+                    "string-no-newline": true,
+                    "unit-no-unknown": true,
+                    "at-rule-empty-line-before": [
+                        "always",
+                        {
+                            "except": [
+                                "blockless-after-same-name-blockless",
+                                "first-nested"
+                            ],
+                            "ignore": [
+                                "after-comment"
+                            ]
+                        }
+                    ],
+                    "at-rule-name-case": "lower",
+                    "at-rule-name-space-after": "always-single-line",
+                    "at-rule-semicolon-newline-after": "always",
+                    "block-closing-brace-empty-line-before": "never",
+                    "block-closing-brace-newline-after": "always",
+                    "block-closing-brace-newline-before": "always-multi-line",
+                    "block-closing-brace-space-before": "always-single-line",
+                    "block-opening-brace-newline-after": "always-multi-line",
+                    "block-opening-brace-space-after": "always-single-line",
+                    "block-opening-brace-space-before": "always",
+                    "color-hex-case": "lower",
+                    "color-hex-length": "short",
+                    "comment-empty-line-before": [
+                        "always",
+                        {
+                            "except": [
+                                "first-nested"
+                            ],
+                            "ignore": [
+                                "stylelint-commands"
+                            ]
+                        }
+                    ],
+                    "comment-whitespace-inside": "always",
+                    "custom-property-empty-line-before": [
+                        "always",
+                        {
+                            "except": [
+                                "after-custom-property",
+                                "first-nested"
+                            ],
+                            "ignore": [
+                                "after-comment",
+                                "inside-single-line-block"
+                            ]
+                        }
+                    ],
+                    "declaration-bang-space-after": "never",
+                    "declaration-bang-space-before": "always",
+                    "declaration-block-semicolon-newline-after": "always-multi-line",
+                    "declaration-block-semicolon-space-after": "always-single-line",
+                    "declaration-block-semicolon-space-before": "never",
+                    "declaration-block-single-line-max-declarations": 1,
+                    "declaration-block-trailing-semicolon": "always",
+                    "declaration-colon-newline-after": "always-multi-line",
+                    "declaration-colon-space-after": "always-single-line",
+                    "declaration-colon-space-before": "never",
+                    "declaration-empty-line-before": [
+                        "always",
+                        {
+                            "except": [
+                                "after-declaration",
+                                "first-nested"
+                            ],
+                            "ignore": [
+                                "after-comment",
+                                "inside-single-line-block"
+                            ]
+                        }
+                    ],
+                    "function-comma-newline-after": "always-multi-line",
+                    "function-comma-space-after": "always-single-line",
+                    "function-comma-space-before": "never",
+                    "function-max-empty-lines": 0,
+                    "function-name-case": "lower",
+                    "function-parentheses-newline-inside": "always-multi-line",
+                    "function-parentheses-space-inside": "never-single-line",
+                    "function-whitespace-after": "always",
+                    "indentation": 2,
+                    "length-zero-no-unit": true,
+                    "max-empty-lines": 1,
+                    "media-feature-colon-space-after": "always",
+                    "media-feature-colon-space-before": "never",
+                    "media-feature-name-case": "lower",
+                    "media-feature-parentheses-space-inside": "never",
+                    "media-feature-range-operator-space-after": "always",
+                    "media-feature-range-operator-space-before": "always",
+                    "media-query-list-comma-newline-after": "always-multi-line",
+                    "media-query-list-comma-space-after": "always-single-line",
+                    "media-query-list-comma-space-before": "never",
+                    "no-eol-whitespace": true,
+                    "no-missing-end-of-source-newline": true,
+                    "number-leading-zero": "always",
+                    "number-no-trailing-zeros": true,
+                    "property-case": "lower",
+                    "rule-empty-line-before": [
+                        "always-multi-line",
+                        {
+                            "except": [
+                                "first-nested"
+                            ],
+                            "ignore": [
+                                "after-comment"
+                            ]
+                        }
+                    ],
+                    "selector-attribute-brackets-space-inside": "never",
+                    "selector-attribute-operator-space-after": "never",
+                    "selector-attribute-operator-space-before": "never",
+                    "selector-combinator-space-after": "always",
+                    "selector-combinator-space-before": "always",
+                    "selector-descendant-combinator-no-non-space": true,
+                    "selector-list-comma-newline-after": "always",
+                    "selector-list-comma-space-before": "never",
+                    "selector-max-empty-lines": 0,
+                    "selector-pseudo-class-case": "lower",
+                    "selector-pseudo-class-parentheses-space-inside": "never",
+                    "selector-pseudo-element-case": "lower",
+                    "selector-pseudo-element-colon-notation": "double",
+                    "selector-type-case": "lower",
+                    "unit-case": "lower",
+                    "value-keyword-case": "lower",
+                    "value-list-comma-newline-after": "always-multi-line",
+                    "value-list-comma-space-after": "always-single-line",
+                    "value-list-comma-space-before": "never",
+                    "value-list-max-empty-lines": 0
+                }
+            },
+            code: req.body.code,
+            formatter: "verbose"
+        })
+        .then(function (data) {
+            console.log('~~~~~~~~~~~~~~~~~~~~~~>>>>', data.results[0])
+            // console.log('~~~~~~~~~~~~~~~~~~~~~~>>>>', data.results[0].warnings[0])
+            res.json({
+                "invalidOptionWarnings":[
+    
+                ],
+                "parseErrors":[
+    
+                ],
+                "warnings":[
+                    {
+                        "line":1,
+                        "column":4,
+                        "rule":"block-opening-brace-space-after",
+                        "severity":"error",
+                        "text":"Expected single space after \"{\" of a single-line block (block-opening-brace-space-after)"
+                    },
+                    {
+                        "line":1,
+                        "column":11,
+                        "rule":"color-hex-case",
+                        "severity":"error",
+                        "text":"Expected \"#FFF\" to be \"#fff\" (color-hex-case)"
+                    },
+                    {
+                        "line":3,
+                        "column":1,
+                        "rule":"max-empty-lines",
+                        "severity":"error",
+                        "text":"Expected no more than 1 empty line (max-empty-lines)"
+                    },
+                    {
+                        "line":4,
+                        "column":1,
+                        "rule":"max-empty-lines",
+                        "severity":"error",
+                        "text":"Expected no more than 1 empty line (max-empty-lines)"
+                    },
+                    {
+                        "line":5,
+                        "column":1,
+                        "rule":"max-empty-lines",
+                        "severity":"error",
+                        "text":"Expected no more than 1 empty line (max-empty-lines)"
+                    }
+                ]
+            });
+        })
+        
+        .catch(function (err) {
+            console.error(err.stack);
+        });
+})
+
+app.options('/import', cors(corsOptions))
+app.get('/import', async (req, res) => {
+    res.sendFile('/core-views/import.html', { root: __dirname });
+})
+
+app.options('/*', cors(corsOptions))
+app.get('/*', async (req, res) => {
+    res.sendFile('/core-views/index.html', { root: __dirname });
+})
+
+app.use(queue.getErrorMiddleware())
+export default app
+

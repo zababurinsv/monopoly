@@ -1,17 +1,15 @@
 import path from "path";
-let __dirname = path.dirname(process.argv[1]);
 import express from "express";
 import cors from "cors";
 import Enqueue from "express-enqueue";
 import compression from "compression";
-import formidableMiddleware from "express-formidable";
+import bodyParser from 'body-parser'
 import {promisify} from "util";
 import dotenv from "dotenv"
+import whitelist from './whitelist/whitelist.mjs'
+let __dirname = path.dirname(process.argv[1]);
 dotenv.config()
 const highWaterMark =  2;
-import whitelist from './whitelist/whitelist.mjs'
-import config from './config.mjs'
-import github from "github-oauth";
 let app = express();
 app.use(compression())
 app.use(cors({ credentials: true }));
@@ -31,9 +29,9 @@ let corsOptions = {
     }
 }
 
-app.use(formidableMiddleware());
+app.use(bodyParser.json())
 app.use( express.static('docs'));
-app.use( express.static('static'));
+
 app.options('/import', cors(corsOptions))
 app.get('/import', async (req, res) => {
     res.sendFile('/docs/import.html', { root: __dirname });

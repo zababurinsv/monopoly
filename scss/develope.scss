@@ -1,0 +1,49 @@
+@mixin develope($processor) {
+  @if $processor ==  "default" {
+    @include respond-to(phones) {
+      background-color: blueviolet;
+    }
+    @include respond-to(wide-phones) {
+      background-color: blue;
+    }
+    @include respond-to(tablets) {
+      background-color: cyan;
+    }
+    @include respond-to(small-desktops) {
+      background-color: green;
+    }
+    @include respond-to(lg-desktops) {
+      background-color: yellow;
+    }
+    @include respond-to(xlg-desktops) {
+      background-color: orange;
+    }
+    @include respond-to(max) {
+      background-color: red;
+    }
+  }
+  @else if($processor == color){
+
+    @include respond-to(phones) {
+      color: blueviolet;
+    }
+    @include respond-to(wide-phones) {
+      color: blue;
+    }
+    @include respond-to(tablets) {
+      color: cyan;
+    }
+    @include respond-to(small-desktops) {
+      color: green;
+    }
+    @include respond-to(lg-desktops) {
+      color: yellow;
+    }
+    @include respond-to(xlg-desktops) {
+      color: orange;
+    }
+    @include respond-to(max) {
+      color: red;
+    }
+  }
+}

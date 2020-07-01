@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="icon" type="image/png" href="assets/img/favicon-16x16.png" sizes="16x16"/>
+    <link rel="icon" type="image/png" href="assets/img/favicon-32x32.png" sizes="32x32"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap&subset=cyrillic" rel="stylesheet">
+    <base href="/">
+    <link rel="stylesheet" href="./assets/fonts/roboto.css">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            padding: 0;
+            margin: 0;
+            background-color: var(--app-background);
+        }
+
+        @font-face {
+            font-family: Monaco;
+            src: url("./assets/fonts/monaco.ttf");
+        }
+
+        body {
+            font-family: Monaco;
+            font-size: 12px
+        }
+    </style>
+    <meta charset="UTF-8"/>
+    <title>WAVES IDE</title>
+</head>
+
+<body>
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KR7HQLF" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe>
+</noscript>
+
+<div id="container" style="width: 100%; height: 100%"></div>
+
+<script src="editor.bundle.js"></script>
+<!--<script src="ride-language.bundle.js"></script>-->
+<script type="text/javascript" src="/vendor/react/umd/react.development.js?fd6508ac5f0cd6efeb4d"></script><script type="text/javascript" src="/vendor/react-dom/umd/react-dom.development.js?fd6508ac5f0cd6efeb4d"></script><script type="text/javascript" src="/vendor/@waves/ride-js/dist/ride.min.js?fd6508ac5f0cd6efeb4d"></script><script type="text/javascript" src="/app.fd6508ac5f0cd6efeb4d.bundle.js?fd6508ac5f0cd6efeb4d"></script></body>
+</html>

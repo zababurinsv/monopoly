@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Substrate</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="/static/html/components/component_modules/mocha/mocha.css">
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+	<script src="/static/html/components/component_modules/mocha/mocha.js"></script>
+	<script>
+		mocha.setup('bdd');
+	</script>
+	<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+	<script>
+		eruda.init();
+	</script>
+</head>
+
+<body>
+	<section id="substrate">
+		<hr>
+		<div class="preview">CORE Substrate</div>
+		<hr>
+		<div id="components">
+			<router-api></router-api>
+			<page-external data-url="http://localhost:5410" data-height=27></page-external>
+		</div>
+		<div id="info">
+			<ul>
+				<li>
+					<a href="http://localhost:7003"> transport</a>
+				</li>
+				<li>
+					<a href="http://localhost:5140">interface </a>
+				</li>
+				<li>
+					<a href="http://localhost:5410">views</a>
+				</li>
+				<li>
+					<a href="http://localhost:1540">backend</a>
+				</li>
+				<li>
+					<a href="http://localhost:1450">puppeteer</a>
+				</li>
+				<li>
+					<a href="http://localhost:4510">frontend</a>
+				</li>
+
+				<li>
+					<a href="http://localhost:2611">openbazaar</a>
+				</li>
+				<li>
+					<a href="http://localhost:3700">Wasm</a>
+				</li>
+			</ul> 
+			<div>
+					<p>IDE</p>
+				  <div>
+					  <a href="http://localhost:3511">Waves</a>
+				  </div>
+				  <div>
+					  <a href="http://localhost:3142">Wasm</a>
+				  </div>
+			</div>
+		</div>
+		<div id="tests">
+			<ul id="mocha"></ul>
+		</div>
+	</section>
+</body>
+
+<script type="module" src="/static/html/components/router-api/router-api.mjs"></script>
+
+<script type="module">
+	import tests from '/static/html/components/component_modules/tests/tests.mjs'
+	 tests() 
+	 let el = document.querySelector('#info')
+//	eruda.init({ container: el, tool: ['console', 'elements'] });
+</script>
+<style>
+	@import "index.css";
+</style>
+
+</html>
