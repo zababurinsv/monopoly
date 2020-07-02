@@ -6,11 +6,12 @@
   "directories": {
     "doc": "docs"
   },
+  "type": "module",
   "author": "Zababurin Sergey",
   "license": "GPL-3.0-or-later",
   "homepage": "https://github.com/zababurinsv/monopoly#readme",
   "scripts": {
-    "monopoly": "nodemon server.mjs",
+    "monopoly": "nodemon server.interface.localhost.mjs",
     "start": "node server.mjs",
     "build": "webpack",
     "gulp-bundle-console": "gulp gulp-bundle-console",
