@@ -34,11 +34,15 @@ section#manager {
         td.board-left, td.board-right, td.board-top{
           @include size();
           padding: 0;
-          div#chance,div#marvin,div#kentuky,div#waterWorks, div#ventnor, div#indiana,div#illinous,div#atlantic{
+          div#chance,div#marvin,div#kentuky,div#waterWorks,div#ventnor, div#indiana,div#illinous,div#atlantic-avenue,div#james,div#charles,div#city-tax,div#boardwalk,div#park-place,div#short-line,div#comminuty-chest,div#tennessee-avenue,div#new-york{
             display: flex;
             width: 100%;
             height: calc(100vw * 0.101);
-            img.chance, img.marvin,img.kentuky, img.waterWorks, img.ventnor, img.indiana,img,illinous,img.atlantic{
+            img.chance,img.marvin,img.kentuky,img.waterWorks,img.ventnor,img.indiana,img.illinous,img.atlantic-avenue,img.james,img.charles,img.city-tax,img.boardwalk,img.park-place,img.short-line,img.comminuty-chest,img.tennessee-avenue,img.new-york{
+              width: 100%;
+              height: calc(100vw * 0.101);
+            }
+            img.atlantic-avenue, img.illinous {
               width: 100%;
               height: calc(100vw * 0.101);
             }
@@ -50,11 +54,11 @@ section#manager {
         }
         td.board-corner{
           padding: 0;
-          div#jail, div#free{
+          div#jail, div#free,div#new-york{
             display: flex;
             width: 100%;
             height: calc(100vw * 0.101);
-            img.jail, img.free{
+            img.jail, img.free, img.new-york{
               width: 100%;
               height: calc(100vw * 0.101);
             }
