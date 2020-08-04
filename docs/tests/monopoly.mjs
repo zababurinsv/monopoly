@@ -135,7 +135,7 @@ waves.then((waves)=>{
                 //              'kitten tooth maze behave purity dance differ stereo faint immune century peace',
                 //              'discover swim emerge demise dwarf inmate utility cycle hospital pistol sugar emotion'
                 //          ],
-                //          node:'http://testnodes.wavesnodes.com'
+                //          node:'https://testnodes.wavesnodes.com'
                 //         }
                 //     ]},'create-nft')
             })
@@ -221,7 +221,7 @@ waves.then((waves)=>{
                 //              'kitten tooth maze behave purity dance differ stereo faint immune century peace',
                 //              'discover swim emerge demise dwarf inmate utility cycle hospital pistol sugar emotion'
                 //          ],
-                //          node:'http://testnodes.wavesnodes.com'
+                //          node:'https://testnodes.wavesnodes.com'
                 //         }
                 //     ]},'create-nft')
             })
