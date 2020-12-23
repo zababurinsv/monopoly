@@ -212,8 +212,6 @@ app.post('/lint', async (req, res) => {
             formatter: "verbose"
         })
         .then(function (data) {
-            console.log('~~~~~~~~~~~~~~~~~~~~~~>>>>', data.results[0])
-            // console.log('~~~~~~~~~~~~~~~~~~~~~~>>>>', data.results[0].warnings[0])
             res.json({
                 "invalidOptionWarnings":[
     
