@@ -11,7 +11,7 @@ waves.then((waves)=>{
     const wvs = 10 ** 8;
     let object = {}
     object.dapp = '3N8n4Lc8BMsPPyVHJXTivQWs7ER61bB7wQn'
-    object.testnodes = 'https://testnodes.wavesnodes.com'
+    object.testnodes = 'https://nodes-testnet.wavesnodes.com'
     object.client = []
     object.client.alice = '3MvegjWphvbYgEgQmqJiJhYWXnqPNTpieVc'
     
@@ -135,7 +135,7 @@ waves.then((waves)=>{
                 //              'kitten tooth maze behave purity dance differ stereo faint immune century peace',
                 //              'discover swim emerge demise dwarf inmate utility cycle hospital pistol sugar emotion'
                 //          ],
-                //          node:'https://testnodes.wavesnodes.com'
+                //          node:'https://nodes-testnet.wavesnodes.com'
                 //         }
                 //     ]},'create-nft')
             })
@@ -221,7 +221,7 @@ waves.then((waves)=>{
                 //              'kitten tooth maze behave purity dance differ stereo faint immune century peace',
                 //              'discover swim emerge demise dwarf inmate utility cycle hospital pistol sugar emotion'
                 //          ],
-                //          node:'https://testnodes.wavesnodes.com'
+                //          node:'https://nodes-testnet.wavesnodes.com'
                 //         }
                 //     ]},'create-nft')
             })
