@@ -49,7 +49,7 @@ app.get('/*', async (req, res) => {
 app.options('/render', cors(corsOptions))
 app.post('/render', async (req, res) => {
     try{
-        let object =  await chronium(true,'','6', 'https://zababurinsv.github.io/blockchain-dex/',req.url)
+        let object =  await chronium(true,'','6', 'https://zababurinsv.github.io/dex/',req.url)
         res.send(object['html'])
     }catch (e) {
         console.log('----->', e)
