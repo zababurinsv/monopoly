@@ -1,1 +1,1 @@
-fiat-form{width:100%}fiat-form section.news{display:flex;flex-direction:column;align-items:center;padding:2vw}fiat-form section.news details>summary{list-style:none}fiat-form section.news details>summary::-webkit-details-marker{display:none}
+fiat-form{width:100%}fiat-form section.news{display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;padding:2vw}fiat-form section.news details>summary{list-style:none}fiat-form section.news details>summary::-webkit-details-marker{display:none}
